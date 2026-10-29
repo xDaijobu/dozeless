@@ -1,0 +1,9 @@
+# Published package: library, example, README, CHANGELOG, LICENSE.
+doc/
+.github/
+build/
+.dart_tool/
+**/.gradle/
+**/local.properties
+*.iml
+.idea/
