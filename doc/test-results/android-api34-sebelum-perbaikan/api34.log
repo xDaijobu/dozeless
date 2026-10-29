@@ -1,0 +1,12 @@
+[20:53:39] == api34: Android 14 API 34
+[20:53:53] install: Success
+[20:54:17] Start ditekan
+[20:56:23] 1. App terbuka (foreground): ✅ 2/2 alarm(0s) alarm(0s)
+[20:57:25] 2. App di background (Home): ✅ 1/1 alarm(0s)
+[20:59:45] 3. Di-swipe dari Recents: ✅ 2/2 proses mati setelah swipe; alarm(0s) alarm(20s)
+[21:01:40] 4. Proses dibunuh (kill -9): ✅ 2/2 pid 5770 -> mati; alarm(0s) alarm(0s)
+[21:02:44] 5. Layar mati: ✅ 1/1 alarm(0s,layar-mati)
+[21:04:47] 6. Doze (deep IDLE): ✅ 2/2 idle=true di 2 run; alarm(0s,idle,layar-mati) alarm(0s,idle,layar-mati)
+[21:07:26] 7. HP reboot (app tidak dibuka): ✅ 2/2 run trigger=boot: 1; boot(24s) alarm(0s)
+[21:12:12] 8. Force stop → app dibuka lagi: ❌ 0/1 selama force stop: berhenti (aturan Android untuk force stop); setelah dibuka: pulih, event processExit di 0 run; 
+[21:12:13] SELESAI api34

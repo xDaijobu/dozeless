@@ -1,0 +1,12 @@
+[21:51:54] == api31: Android 12 API 31
+[21:52:00] install: Success
+[21:52:20] Start ditekan
+[21:54:26] 1. App terbuka (foreground): ✅ 2/2 alarm(0s) alarm(0s)
+[21:55:28] 2. App di background (Home): ✅ 1/1 alarm(0s)
+[21:57:47] 3. Di-swipe dari Recents: ✅ 2/2 proses mati setelah swipe; alarm(0s) alarm(19s)
+[21:59:47] 4. Proses dibunuh: ✅ 2/2 pid 6417 -> mati (am kill); alarm(0s) alarm(0s)
+[22:00:41] 5. Layar mati: ✅ 1/1 alarm(0s,layar-mati)
+[22:02:44] 6. Doze (deep IDLE): ✅ 2/2 idle=true di 2 run; alarm(0s,idle,layar-mati) alarm(0s,idle,layar-mati)
+[22:05:14] 7. HP reboot (app tidak dibuka): ✅ 2/2 run trigger=boot: 1; boot(26s) alarm(0s)
+[22:07:48] 8. Force stop → app dibuka lagi: ✅ 1/1 selama force stop: berhenti (aturan Android untuk force stop); setelah dibuka: pulih, event processExit di 1 run; alarm(4s)
+[22:07:48] SELESAI api31

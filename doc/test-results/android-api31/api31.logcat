@@ -1,0 +1,96 @@
+--------- beginning of main
+10-29 21:52:03.946 E/flutter ( 3846): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:52:03.947 E/flutter ( 3846): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:52:04.066 I/flutter ( 3846): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 21:52:04.262 I/flutter ( 3846): The Dart VM service is listening on http://127.0.0.1:35217/jDu_K1qnXBw=/
+10-29 21:52:05.376 I/BgJobs  ( 3846): watchdog armed
+10-29 21:52:20.353 I/BgJobs  ( 3846): schedule id=spike everyMs=60000 next=1793285600344 mode=exact
+10-29 21:52:20.379 I/BgJobs  ( 3846): schedule id=slow everyMs=300000 next=1793285840355 mode=exact
+10-29 21:53:20.349 I/BgJobs  ( 3846): fire id=spike trigger=alarm delayMs=4
+10-29 21:53:20.456 E/flutter ( 3846): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:53:20.460 E/flutter ( 3846): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:53:20.491 I/flutter ( 3846): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 21:53:20.646 I/BgJobs  ( 3846): engine ready in 268ms
+10-29 21:53:25.047 I/flutter ( 3846): BGJOBS_ROW job=spike trigger=alarm delayMs=4 durMs=4324 idle=false loc=OK fixAgeS=0 events=
+10-29 21:53:25.054 I/BgJobs  ( 3846): done id=spike result=ok durMs=4700
+10-29 21:54:20.358 I/BgJobs  ( 3846): fire id=spike trigger=alarm delayMs=10
+10-29 21:54:24.012 I/flutter ( 3846): BGJOBS_ROW job=spike trigger=alarm delayMs=10 durMs=3636 idle=false loc=OK fixAgeS=0 events=
+10-29 21:54:24.016 I/BgJobs  ( 3846): done id=spike result=ok durMs=3655
+10-29 21:55:20.367 I/BgJobs  ( 3846): fire id=spike trigger=alarm delayMs=8
+10-29 21:55:20.402 I/flutter ( 3846): BGJOBS_ROW job=spike trigger=alarm delayMs=8 durMs=18 idle=false loc=OK fixAgeS=0 events=
+10-29 21:55:20.406 I/BgJobs  ( 3846): done id=spike result=ok durMs=36
+10-29 21:55:28.535 I/BgJobs  ( 3846): watchdog armed
+10-29 21:55:28.551 I/BgJobs  ( 3846): reconcile armed id=slow at=1793285840355
+10-29 21:55:28.553 I/BgJobs  ( 3846): reconcile armed id=spike at=1793285780366
+10-29 21:56:20.536 I/BgJobs  ( 6417): fire id=spike trigger=alarm delayMs=156
+10-29 21:56:20.549 I/BgJobs  ( 6417): event #1 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=remove task}
+10-29 21:56:20.620 E/flutter ( 6417): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:56:20.620 E/flutter ( 6417): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:56:20.627 I/flutter ( 6417): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 21:56:20.751 I/flutter ( 6417): The Dart VM service is listening on http://127.0.0.1:39523/fFtEHON4_KA=/
+10-29 21:56:20.927 I/BgJobs  ( 6417): engine ready in 370ms
+10-29 21:56:21.017 I/flutter ( 6417): BGJOBS_ROW job=spike trigger=alarm delayMs=156 durMs=36 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 21:56:21.026 I/BgJobs  ( 6417): done id=spike result=ok durMs=496
+10-29 21:57:20.370 I/BgJobs  ( 6417): fire id=slow trigger=alarm delayMs=14
+10-29 21:57:40.393 I/flutter ( 6417): BGJOBS_ROW job=slow trigger=alarm delayMs=14 durMs=20002 idle=false loc=SLOW fixAgeS=- events=processExit
+10-29 21:57:40.402 I/BgJobs  ( 6417): done id=slow result=ok durMs=20024
+10-29 21:57:40.408 I/BgJobs  ( 6417): fire id=spike trigger=alarm delayMs=19886
+10-29 21:57:40.445 I/flutter ( 6417): BGJOBS_ROW job=spike trigger=alarm delayMs=19886 durMs=13 idle=false loc=OK fixAgeS=0 events=
+10-29 21:57:40.449 I/BgJobs  ( 6417): done id=spike result=ok durMs=37
+10-29 21:58:40.566 I/BgJobs  ( 6555): fire id=spike trigger=alarm delayMs=142
+10-29 21:58:40.578 I/BgJobs  ( 6555): event #2 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=kill background}
+10-29 21:58:40.656 E/flutter ( 6555): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:58:40.656 E/flutter ( 6555): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 21:58:40.664 I/flutter ( 6555): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 21:58:40.780 I/flutter ( 6555): The Dart VM service is listening on http://127.0.0.1:39187/UhY_qeGly2g=/
+10-29 21:58:40.938 I/BgJobs  ( 6555): engine ready in 350ms
+10-29 21:58:41.036 I/flutter ( 6555): BGJOBS_ROW job=spike trigger=alarm delayMs=142 durMs=42 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 21:58:41.041 I/BgJobs  ( 6555): done id=spike result=ok durMs=487
+10-29 21:59:40.554 I/BgJobs  ( 6555): fire id=spike trigger=alarm delayMs=3
+10-29 21:59:40.589 I/flutter ( 6555): BGJOBS_ROW job=spike trigger=alarm delayMs=3 durMs=16 idle=false loc=OK fixAgeS=0 events=
+10-29 21:59:40.593 I/BgJobs  ( 6555): done id=spike result=ok durMs=37
+10-29 22:00:40.560 I/BgJobs  ( 6555): fire id=spike trigger=alarm delayMs=6
+10-29 22:00:40.595 I/flutter ( 6555): BGJOBS_ROW job=spike trigger=alarm delayMs=6 durMs=12 idle=false loc=OK fixAgeS=0 events=
+10-29 22:00:40.598 I/BgJobs  ( 6555): done id=spike result=ok durMs=37
+10-29 22:01:40.569 I/BgJobs  ( 6555): fire id=spike trigger=alarm delayMs=9
+10-29 22:01:40.605 I/flutter ( 6555): BGJOBS_ROW job=spike trigger=alarm delayMs=9 durMs=9 idle=true loc=OK fixAgeS=0 events=
+10-29 22:01:40.608 I/BgJobs  ( 6555): done id=spike result=ok durMs=38
+10-29 22:02:20.374 I/BgJobs  ( 6555): fire id=slow trigger=alarm delayMs=5
+10-29 22:02:40.399 I/flutter ( 6555): BGJOBS_ROW job=slow trigger=alarm delayMs=5 durMs=20004 idle=true loc=SLOW fixAgeS=- events=processExit
+10-29 22:02:40.403 I/BgJobs  ( 6555): done id=slow result=ok durMs=20026
+10-29 22:02:40.572 I/BgJobs  ( 6555): fire id=spike trigger=alarm delayMs=3
+10-29 22:02:40.597 I/flutter ( 6555): BGJOBS_ROW job=spike trigger=alarm delayMs=3 durMs=9 idle=true loc=OK fixAgeS=0 events=
+10-29 22:02:40.601 I/BgJobs  ( 6555): done id=spike result=ok durMs=27
+--------- beginning of main
+10-29 22:03:33.684 I/BgJobs  ( 3415): watchdog armed
+10-29 22:03:33.771 I/BgJobs  ( 3415): event #3 boot {bootCount=2, bootTime=1793286167943, shutdownAt=1793286160598, shutdownSource=lastJob, viaBroadcast=true}
+10-29 22:03:33.771 I/BgJobs  ( 3415): boot bootCount=2 viaBroadcast=true shutdown=lastJob
+10-29 22:03:36.003 I/BgJobs  ( 3415): fire id=slow trigger=boot delayMs=2232
+10-29 22:03:36.330 E/flutter ( 3415): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:03:36.330 E/flutter ( 3415): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:03:36.368 I/flutter ( 3415): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:03:36.883 I/flutter ( 3415): The Dart VM service is listening on http://127.0.0.1:42217/K8soJlO-OSw=/
+10-29 22:03:37.932 I/BgJobs  ( 3415): engine ready in 1881ms
+10-29 22:03:58.010 I/flutter ( 3415): BGJOBS_ROW job=slow trigger=boot delayMs=2232 durMs=20005 idle=false loc=SLOW fixAgeS=- events=boot
+10-29 22:03:58.017 I/BgJobs  ( 3415): done id=slow result=ok durMs=22008
+10-29 22:04:00.390 I/BgJobs  ( 3415): fire id=spike trigger=boot delayMs=26617
+10-29 22:04:10.427 I/flutter ( 3415): BGJOBS_ROW job=spike trigger=boot delayMs=26617 durMs=10017 idle=false loc=FAILED fixAgeS=- events=boot
+10-29 22:04:10.436 I/BgJobs  ( 3415): done id=spike result=ok durMs=10038
+10-29 22:05:00.398 I/BgJobs  ( 3415): fire id=spike trigger=alarm delayMs=8
+10-29 22:05:10.430 I/flutter ( 3415): BGJOBS_ROW job=spike trigger=alarm delayMs=8 durMs=10009 idle=false loc=FAILED fixAgeS=- events=
+10-29 22:05:10.433 I/BgJobs  ( 3415): done id=spike result=ok durMs=10033
+10-29 22:07:27.875 E/flutter ( 4258): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:07:27.876 E/flutter ( 4258): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:07:27.903 I/flutter ( 4258): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:07:28.033 I/flutter ( 4258): The Dart VM service is listening on http://127.0.0.1:44363/PKPyIqYkgpk=/
+10-29 22:07:28.494 I/BgJobs  ( 4258): event #4 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=stop com.example.bg_jobs_example due to from pid 4139}
+10-29 22:07:28.498 I/BgJobs  ( 4258): watchdog armed
+10-29 22:07:28.511 I/BgJobs  ( 4258): reconcile armed id=slow at=1793286516003
+10-29 22:07:28.519 I/BgJobs  ( 4258): reconcile armed id=spike at=1793286449501
+10-29 22:07:33.519 I/BgJobs  ( 4258): fire id=spike trigger=alarm delayMs=4017
+10-29 22:07:33.538 E/flutter ( 4258): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:07:33.538 E/flutter ( 4258): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:07:33.550 I/flutter ( 4258): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:07:33.731 I/BgJobs  ( 4258): engine ready in 199ms
+10-29 22:07:37.806 I/flutter ( 4258): BGJOBS_ROW job=spike trigger=alarm delayMs=4017 durMs=3973 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 22:07:37.812 I/BgJobs  ( 4258): done id=spike result=ok durMs=4290

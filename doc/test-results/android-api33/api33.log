@@ -1,0 +1,12 @@
+[21:34:18] == api33: Android 13 API 33
+[21:34:24] install: Success
+[21:34:45] Start ditekan
+[21:36:51] 1. App terbuka (foreground): ✅ 2/2 alarm(0s) alarm(0s)
+[21:37:53] 2. App di background (Home): ✅ 1/1 alarm(0s)
+[21:40:12] 3. Di-swipe dari Recents: ✅ 2/2 proses mati setelah swipe; alarm(0s) alarm(19s)
+[21:42:07] 4. Proses dibunuh (kill -9): ✅ 2/2 pid 6188 -> 6188; alarm(0s) alarm(0s)
+[21:43:12] 5. Layar mati: ✅ 1/1 alarm(0s,layar-mati)
+[21:45:15] 6. Doze (deep IDLE): ✅ 2/2 idle=true di 2 run; alarm(0s,idle,layar-mati) alarm(0s,idle,layar-mati)
+[21:47:54] 7. HP reboot (app tidak dibuka): ✅ 2/2 run trigger=boot: 1; boot(24s) alarm(0s)
+[21:50:28] 8. Force stop → app dibuka lagi: ✅ 1/1 selama force stop: berhenti (aturan Android untuk force stop); setelah dibuka: pulih, event processExit di 1 run; alarm(4s)
+[21:50:29] SELESAI api33

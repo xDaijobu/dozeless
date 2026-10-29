@@ -1,0 +1,9 @@
+[22:36:48] == api35: Android 15 API 35
+[22:36:58] install: Success
+[22:37:23] Start ditekan
+[22:39:40] 1. App terbuka (foreground): ✅ 2/2 alarm(0s) alarm(0s)
+[22:40:32] 2. App di background (Home): ✅ 1/1 alarm(0s,layar-mati)
+[22:42:32] 3. Di-swipe dari Recents: ✅ 2/2 proses mati setelah swipe; alarm(0s,idle) alarm(0s,idle)
+[22:46:02] 4. Proses dibunuh: ❌ 0/2 pid ? -> mati (kill -9); 
+[22:47:17] 5. Layar mati: ✅ 1/1 alarm(4s)
+[22:50:41] 6. Doze (deep IDLE): ❌ 0/2 idle=true di 0 run; 

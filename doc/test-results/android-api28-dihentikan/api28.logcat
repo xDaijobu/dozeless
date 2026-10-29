@@ -1,0 +1,70 @@
+--------- beginning of main
+--------- beginning of system
+--------- beginning of crash
+10-29 22:26:16.851 I/flutter ( 4984): [IMPORTANT:flutter/shell/common/shell.cc(528)] [Action Required]: Impeller opt-out deprecated.
+10-29 22:26:16.851 I/flutter ( 4984):     The application opted out of Impeller by either using the
+10-29 22:26:16.851 I/flutter ( 4984):     `--no-enable-impeller` flag or the
+10-29 22:26:16.851 I/flutter ( 4984):     `io.flutter.embedding.android.EnableImpeller` `AndroidManifest.xml` entry.
+10-29 22:26:16.851 I/flutter ( 4984):     These options are going to go away in an upcoming Flutter release. Remove
+10-29 22:26:16.851 I/flutter ( 4984):     the explicit opt-out. If you need to opt-out, please report a bug describing
+10-29 22:26:16.851 I/flutter ( 4984):     the issue.
+10-29 22:26:16.851 I/flutter ( 4984): 
+10-29 22:26:16.851 I/flutter ( 4984):     https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+10-29 22:26:16.851 I/flutter ( 4984): 
+10-29 22:26:17.147 I/flutter ( 4984): The Dart VM service is listening on http://127.0.0.1:40378/uBC4_JzgeIc=/
+10-29 22:26:17.649 I/BgJobs  ( 4984): watchdog armed
+10-29 22:26:30.858 I/BgJobs  ( 4984): schedule id=spike everyMs=60000 next=1793287650855 mode=exact
+10-29 22:26:30.865 I/BgJobs  ( 4984): schedule id=slow everyMs=300000 next=1793287890861 mode=exact
+10-29 22:27:30.864 I/BgJobs  ( 4984): fire id=spike trigger=alarm delayMs=8
+10-29 22:27:30.886 I/flutter ( 4984): [IMPORTANT:flutter/shell/common/shell.cc(528)] [Action Required]: Impeller opt-out deprecated.
+10-29 22:27:30.886 I/flutter ( 4984):     The application opted out of Impeller by either using the
+10-29 22:27:30.886 I/flutter ( 4984):     `--no-enable-impeller` flag or the
+10-29 22:27:30.886 I/flutter ( 4984):     `io.flutter.embedding.android.EnableImpeller` `AndroidManifest.xml` entry.
+10-29 22:27:30.886 I/flutter ( 4984):     These options are going to go away in an upcoming Flutter release. Remove
+10-29 22:27:30.886 I/flutter ( 4984):     the explicit opt-out. If you need to opt-out, please report a bug describing
+10-29 22:27:30.886 I/flutter ( 4984):     the issue.
+10-29 22:27:30.886 I/flutter ( 4984): 
+10-29 22:27:30.886 I/flutter ( 4984):     https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+10-29 22:27:30.886 I/flutter ( 4984): 
+10-29 22:27:31.099 I/BgJobs  ( 4984): engine ready in 216ms
+10-29 22:27:31.196 I/flutter ( 4984): BGJOBS_ROW job=spike trigger=alarm delayMs=8 durMs=44 idle=false loc=LAST_KNOWN fixAgeS=80 events=
+10-29 22:27:31.203 I/BgJobs  ( 4984): done id=spike result=ok durMs=335
+10-29 22:28:30.867 I/BgJobs  ( 4984): fire id=spike trigger=alarm delayMs=4
+10-29 22:28:30.890 I/flutter ( 4984): BGJOBS_ROW job=spike trigger=alarm delayMs=4 durMs=12 idle=false loc=LAST_KNOWN fixAgeS=139 events=
+10-29 22:28:30.895 I/BgJobs  ( 4984): done id=spike result=ok durMs=24
+10-29 22:29:30.869 I/BgJobs  ( 4984): fire id=spike trigger=alarm delayMs=1
+10-29 22:29:30.893 I/flutter ( 4984): BGJOBS_ROW job=spike trigger=alarm delayMs=1 durMs=15 idle=false loc=LAST_KNOWN fixAgeS=199 events=
+10-29 22:29:30.895 I/BgJobs  ( 4984): done id=spike result=ok durMs=25
+10-29 22:30:30.870 I/BgJobs  ( 4984): fire id=spike trigger=alarm delayMs=2
+10-29 22:30:30.902 I/flutter ( 4984): BGJOBS_ROW job=spike trigger=alarm delayMs=2 durMs=13 idle=false loc=LAST_KNOWN fixAgeS=31 events=
+10-29 22:30:30.908 I/BgJobs  ( 4984): done id=spike result=ok durMs=33
+10-29 22:31:30.862 I/BgJobs  ( 4984): fire id=slow trigger=alarm delayMs=1
+10-29 22:31:50.880 I/flutter ( 4984): BGJOBS_ROW job=slow trigger=alarm delayMs=1 durMs=20005 idle=false loc=SLOW fixAgeS=- events=
+10-29 22:31:50.886 I/BgJobs  ( 4984): done id=slow result=ok durMs=20021
+10-29 22:31:50.888 I/BgJobs  ( 4984): fire id=spike trigger=alarm delayMs=20018
+10-29 22:31:50.908 I/flutter ( 4984): BGJOBS_ROW job=spike trigger=alarm delayMs=20018 durMs=11 idle=false loc=LAST_KNOWN fixAgeS=111 events=
+10-29 22:31:50.914 I/BgJobs  ( 4984): done id=spike result=ok durMs=21
+10-29 22:32:12.389 I/BgJobs  ( 4984): watchdog armed
+10-29 22:32:12.390 I/BgJobs  ( 4984): reconcile armed id=spike at=1793287970888
+10-29 22:32:12.391 I/BgJobs  ( 4984): reconcile armed id=slow at=1793288190862
+10-29 22:32:50.925 I/BgJobs  ( 5904): fire id=spike trigger=alarm delayMs=35
+10-29 22:32:50.959 I/flutter ( 5904): [IMPORTANT:flutter/shell/common/shell.cc(528)] [Action Required]: Impeller opt-out deprecated.
+10-29 22:32:50.959 I/flutter ( 5904):     The application opted out of Impeller by either using the
+10-29 22:32:50.959 I/flutter ( 5904):     `--no-enable-impeller` flag or the
+10-29 22:32:50.959 I/flutter ( 5904):     `io.flutter.embedding.android.EnableImpeller` `AndroidManifest.xml` entry.
+10-29 22:32:50.959 I/flutter ( 5904):     These options are going to go away in an upcoming Flutter release. Remove
+10-29 22:32:50.959 I/flutter ( 5904):     the explicit opt-out. If you need to opt-out, please report a bug describing
+10-29 22:32:50.959 I/flutter ( 5904):     the issue.
+10-29 22:32:50.959 I/flutter ( 5904): 
+10-29 22:32:50.959 I/flutter ( 5904):     https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+10-29 22:32:50.959 I/flutter ( 5904): 
+10-29 22:32:51.085 I/flutter ( 5904): The Dart VM service is listening on http://127.0.0.1:33761/mNXPBXaK4f8=/
+10-29 22:32:51.234 I/BgJobs  ( 5904): engine ready in 297ms
+10-29 22:32:51.309 I/flutter ( 5904): BGJOBS_ROW job=spike trigger=alarm delayMs=35 durMs=25 idle=false loc=LAST_KNOWN fixAgeS=32 events=
+10-29 22:32:51.314 I/BgJobs  ( 5904): done id=spike result=ok durMs=387
+10-29 22:33:50.929 I/BgJobs  ( 5904): fire id=spike trigger=alarm delayMs=4
+10-29 22:33:50.956 I/flutter ( 5904): BGJOBS_ROW job=spike trigger=alarm delayMs=4 durMs=13 idle=false loc=LAST_KNOWN fixAgeS=91 events=
+10-29 22:33:50.959 I/BgJobs  ( 5904): done id=spike result=ok durMs=29
+10-29 22:34:50.928 I/BgJobs  ( 5904): fire id=spike trigger=alarm delayMs=0
+10-29 22:34:50.953 I/flutter ( 5904): BGJOBS_ROW job=spike trigger=alarm delayMs=0 durMs=13 idle=false loc=LAST_KNOWN fixAgeS=151 events=
+10-29 22:34:50.957 I/BgJobs  ( 5904): done id=spike result=ok durMs=27

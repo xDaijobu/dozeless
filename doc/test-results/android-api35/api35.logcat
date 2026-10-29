@@ -1,0 +1,87 @@
+--------- beginning of main
+10-29 22:53:47.964 I/BgJobs  ( 2294): watchdog armed
+10-29 22:53:48.011 I/BgJobs  ( 2294): event #4 boot {bootCount=4, bootTime=1793289177394, shutdownAt=1793288833243, shutdownSource=lastJob, viaBroadcast=true}
+10-29 22:53:48.011 I/BgJobs  ( 2294): boot bootCount=4 viaBroadcast=true shutdown=lastJob
+10-29 22:53:48.034 I/BgJobs  ( 2294): fire id=spike trigger=boot delayMs=18
+10-29 22:53:48.658 I/flutter ( 2294): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:53:49.268 I/flutter ( 2294): The Dart VM service is listening on http://127.0.0.1:45617/G64b5crCK30=/
+10-29 22:53:50.892 I/BgJobs  ( 2294): engine ready in 2641ms
+10-29 22:54:22.015 I/flutter ( 3204): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:54:22.060 I/flutter ( 3204): The Dart VM service is listening on http://127.0.0.1:45011/4F3z8-c0Yz8=/
+10-29 22:54:22.815 I/BgJobs  ( 3204): watchdog armed
+10-29 22:54:26.442 I/BgJobs  ( 3204): schedule id=spike everyMs=60000 next=1793289326150 mode=exact
+10-29 22:54:26.650 I/BgJobs  ( 3204): schedule id=slow everyMs=300000 next=1793289566447 mode=exact
+10-29 22:55:26.156 I/BgJobs  ( 3204): fire id=spike trigger=alarm delayMs=5
+10-29 22:55:26.209 I/flutter ( 3204): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:55:26.405 I/BgJobs  ( 3204): engine ready in 225ms
+10-29 22:55:30.117 I/flutter ( 3204): BGJOBS_ROW job=spike trigger=alarm delayMs=5 durMs=3611 idle=false loc=OK fixAgeS=0 events=
+10-29 22:55:30.124 I/BgJobs  ( 3204): done id=spike result=ok durMs=3965
+10-29 22:56:26.159 I/BgJobs  ( 3204): fire id=spike trigger=alarm delayMs=4
+10-29 22:56:30.044 I/flutter ( 3204): BGJOBS_ROW job=spike trigger=alarm delayMs=4 durMs=3857 idle=false loc=OK fixAgeS=0 events=
+10-29 22:56:30.051 I/BgJobs  ( 3204): done id=spike result=ok durMs=3888
+10-29 22:57:26.167 I/BgJobs  ( 3204): fire id=spike trigger=alarm delayMs=6
+10-29 22:57:26.196 I/flutter ( 3204): BGJOBS_ROW job=spike trigger=alarm delayMs=6 durMs=10 idle=false loc=OK fixAgeS=56 events=
+10-29 22:57:26.199 I/BgJobs  ( 3204): done id=spike result=ok durMs=32
+10-29 22:57:34.723 I/BgJobs  ( 3204): watchdog armed
+10-29 22:57:34.732 I/BgJobs  ( 3204): reconcile armed id=spike at=1793289506165
+10-29 22:57:34.748 I/BgJobs  ( 3204): reconcile armed id=slow at=1793289566447
+10-29 22:58:26.374 I/BgJobs  ( 3803): fire id=spike trigger=alarm delayMs=187
+10-29 22:58:26.396 I/BgJobs  ( 3803): event #1 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=[REMOVE TASK] remove task}
+10-29 22:58:26.510 I/flutter ( 3803): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:58:26.635 I/flutter ( 3803): The Dart VM service is listening on http://127.0.0.1:34529/awG8pkqhigE=/
+10-29 22:58:26.832 I/BgJobs  ( 3803): engine ready in 419ms
+10-29 22:58:26.964 I/flutter ( 3803): BGJOBS_ROW job=spike trigger=alarm delayMs=187 durMs=56 idle=false loc=OK fixAgeS=116 events=processExit
+10-29 22:58:26.971 I/BgJobs  ( 3803): done id=spike result=ok durMs=613
+10-29 22:59:26.363 I/BgJobs  ( 3803): fire id=spike trigger=alarm delayMs=11
+10-29 22:59:26.415 I/flutter ( 3803): BGJOBS_ROW job=spike trigger=alarm delayMs=11 durMs=20 idle=false loc=OK fixAgeS=176 events=
+10-29 22:59:26.419 I/BgJobs  ( 3803): done id=spike result=ok durMs=52
+10-29 22:59:26.449 I/BgJobs  ( 3803): fire id=slow trigger=alarm delayMs=2
+10-29 23:00:26.561 I/BgJobs  ( 3977): fire id=spike trigger=alarm delayMs=177
+10-29 23:00:26.582 I/BgJobs  ( 3977): event #2 processExit {reason=SIGNALED, reasonCode=2, importance=300, description=}
+10-29 23:00:26.683 I/flutter ( 3977): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 23:00:26.792 I/flutter ( 3977): The Dart VM service is listening on http://127.0.0.1:42037/MA5hQKMZt6M=/
+10-29 23:00:26.982 I/BgJobs  ( 3977): engine ready in 385ms
+10-29 23:00:27.107 I/flutter ( 3977): BGJOBS_ROW job=spike trigger=alarm delayMs=177 durMs=55 idle=false loc=OK fixAgeS=237 events=processExit
+10-29 23:00:27.115 I/BgJobs  ( 3977): done id=spike result=ok durMs=569
+10-29 23:01:26.551 I/BgJobs  ( 3977): fire id=spike trigger=alarm delayMs=10
+10-29 23:01:26.608 I/flutter ( 3977): BGJOBS_ROW job=spike trigger=alarm delayMs=10 durMs=25 idle=false loc=OK fixAgeS=296 events=
+10-29 23:01:26.615 I/BgJobs  ( 3977): done id=spike result=ok durMs=62
+10-29 23:02:26.573 I/BgJobs  ( 3977): fire id=spike trigger=alarm delayMs=22
+10-29 23:02:26.611 I/flutter ( 3977): BGJOBS_ROW job=spike trigger=alarm delayMs=22 durMs=13 idle=false loc=OK fixAgeS=356 events=
+10-29 23:02:26.614 I/BgJobs  ( 3977): done id=spike result=ok durMs=40
+10-29 23:03:26.605 I/BgJobs  ( 3977): fire id=spike trigger=alarm delayMs=33
+10-29 23:03:26.724 I/flutter ( 3977): BGJOBS_ROW job=spike trigger=alarm delayMs=33 durMs=31 idle=true loc=OK fixAgeS=416 events=
+10-29 23:03:26.727 I/BgJobs  ( 3977): done id=spike result=ok durMs=119
+10-29 23:04:26.469 I/BgJobs  ( 3977): fire id=slow trigger=alarm delayMs=20
+10-29 23:04:46.515 I/flutter ( 3977): BGJOBS_ROW job=slow trigger=alarm delayMs=20 durMs=20004 idle=true loc=SLOW fixAgeS=- events=processExit,processExit
+10-29 23:04:46.520 I/BgJobs  ( 3977): done id=slow result=ok durMs=20047
+10-29 23:04:46.523 I/BgJobs  ( 3977): fire id=spike trigger=alarm delayMs=19917
+10-29 23:04:46.543 I/flutter ( 3977): BGJOBS_ROW job=spike trigger=alarm delayMs=19917 durMs=10 idle=true loc=OK fixAgeS=496 events=
+10-29 23:04:46.546 I/BgJobs  ( 3977): done id=spike result=ok durMs=21
+--------- beginning of main
+10-29 23:05:43.215 I/BgJobs  ( 2719): watchdog armed
+10-29 23:05:43.304 I/BgJobs  ( 2719): event #3 boot {bootCount=5, bootTime=1793289892000, shutdownAt=1793289886543, shutdownSource=lastJob, viaBroadcast=true}
+10-29 23:05:43.304 I/BgJobs  ( 2719): boot bootCount=5 viaBroadcast=true shutdown=lastJob
+10-29 23:05:43.324 I/BgJobs  ( 2719): fire id=spike trigger=boot delayMs=18
+10-29 23:05:44.091 I/flutter ( 2719): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 23:05:44.847 I/flutter ( 2719): The Dart VM service is listening on http://127.0.0.1:36715/ZT5elDJKNRM=/
+10-29 23:05:46.508 I/BgJobs  ( 2719): engine ready in 2734ms
+10-29 23:05:56.876 I/flutter ( 2719): BGJOBS_ROW job=spike trigger=boot delayMs=18 durMs=10086 idle=false loc=FAILED fixAgeS=- events=boot
+10-29 23:05:56.896 I/BgJobs  ( 2719): done id=spike result=ok durMs=13555
+10-29 23:05:56.905 I/BgJobs  ( 2719): fire id=slow trigger=boot delayMs=13594
+10-29 23:06:16.950 I/flutter ( 2719): BGJOBS_ROW job=slow trigger=boot delayMs=13594 durMs=20001 idle=false loc=SLOW fixAgeS=- events=boot
+10-29 23:06:16.955 I/BgJobs  ( 2719): done id=slow result=ok durMs=20045
+10-29 23:06:43.331 I/BgJobs  ( 2719): fire id=spike trigger=alarm delayMs=7
+10-29 23:06:53.362 I/flutter ( 2719): BGJOBS_ROW job=spike trigger=alarm delayMs=7 durMs=10011 idle=false loc=FAILED fixAgeS=- events=
+10-29 23:06:53.365 I/BgJobs  ( 2719): done id=spike result=ok durMs=10032
+10-29 23:09:10.000 I/flutter ( 3421): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 23:09:10.050 I/flutter ( 3421): The Dart VM service is listening on http://127.0.0.1:46475/EnhgrSU8ERs=/
+10-29 23:09:10.605 I/BgJobs  ( 3421): event #4 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=[FORCE STOP] stop com.example.bg_jobs_example due to from pid 3296}
+10-29 23:09:10.608 I/BgJobs  ( 3421): watchdog armed
+10-29 23:09:10.630 I/BgJobs  ( 3421): reconcile armed id=spike at=1793290151612
+10-29 23:09:10.632 I/BgJobs  ( 3421): reconcile armed id=slow at=1793290256905
+10-29 23:09:15.628 I/BgJobs  ( 3421): fire id=spike trigger=alarm delayMs=4015
+10-29 23:09:15.701 I/flutter ( 3421): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 23:09:15.892 I/BgJobs  ( 3421): engine ready in 246ms
+10-29 23:09:20.445 I/flutter ( 3421): BGJOBS_ROW job=spike trigger=alarm delayMs=4015 durMs=4455 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 23:09:20.449 I/BgJobs  ( 3421): done id=spike result=ok durMs=4820

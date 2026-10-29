@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ringkasan dozeless</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #f4f6f5; --surface: #ffffff; --ink: #16201d; --muted: #56645f; --line: #d9e0dd;
+  --accent: #0d6b5e; --accent-soft: #e2f0ec; --warn: #9a5a00; --warn-soft: #fbf0dd;
+  --bad: #a2302a; --bad-soft: #f8e3e1; --code-bg: #eaefed;
+  --f-display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101614; --surface: #17201d; --ink: #e4ece9; --muted: #98a8a2; --line: #2a3632;
+    --accent: #4fc3a9; --accent-soft: #173a32; --warn: #e3a64a; --warn-soft: #3a2c14;
+    --bad: #f08a80; --bad-soft: #3d1f1c; --code-bg: #1e2a26; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101614; --surface: #17201d; --ink: #e4ece9; --muted: #98a8a2; --line: #2a3632;
+  --accent: #4fc3a9; --accent-soft: #173a32; --warn: #e3a64a; --warn-soft: #3a2c14;
+  --bad: #f08a80; --bad-soft: #3d1f1c; --code-bg: #1e2a26; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 40px 16px 72px; display: flex; flex-direction: column; gap: 48px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 22px; font-weight: 800; }
+h3 { font-size: 16px; font-weight: 600; }
+p { margin: 0; max-width: 72ch; }
+code { font-family: var(--f-mono); font-size: 0.88em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.sec-head { display: flex; flex-direction: column; gap: 6px; }
+header { display: flex; flex-direction: column; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 28px; }
+header .lede { font-size: 17px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); align-items: center; }
+.pill { font-family: var(--f-mono); font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; }
+.pill.ok { color: var(--accent); } .pill.w { color: var(--warn); }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px; }
+nav.toc a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-color: var(--accent); }
+.tbl { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--f-mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.grp { font-family: var(--f-display); font-weight: 600; color: var(--accent); white-space: nowrap; }
+.tag { display: inline-block; font-family: var(--f-mono); font-size: 11.5px; padding: 1px 8px; border-radius: 4px; white-space: nowrap; }
+.tag.ok { background: var(--accent-soft); color: var(--accent); }
+.tag.w { background: var(--warn-soft); color: var(--warn); }
+.tag.bad { background: var(--bad-soft); color: var(--bad); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; }
+.stat b { font-family: var(--f-display); font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1.1; }
+.stat span { font-size: 13px; color: var(--muted); }
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+.box { background: var(--surface); border: 1px solid var(--line); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.box ul, .box ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.note { border-left: 4px solid var(--warn); background: var(--warn-soft); padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
+.note .t { font-weight: 600; color: var(--warn); }
+.answer { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.answer .t { font-family: var(--f-display); font-weight: 800; font-size: 18px; color: var(--accent); }
+.small { font-size: 13px; color: var(--muted); }
+pre.code { margin: 0; background: var(--code-bg); padding: 14px 16px; overflow-x: auto; font-family: var(--f-mono); font-size: 13px; line-height: 1.55; }
+footer { border-top: 1px solid var(--line); padding-top: 18px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Ringkasan · 29 Okt 2026</div>
+  <h1>dozeless: apa yang sudah dibuat</h1>
+  <p class="lede">Fitur background tracking ala Sa.To dijadikan plugin Flutter umum bernama <b>dozeless</b>. Plugin ini hanya memakai AlarmManager, dan logika job ditulis di Dart. Repo ini berisi plugin, example app, plan implementasi, dan bukti uji di Android 11–16.</p>
+  <div class="meta">
+    <span class="pill ok">Plugin + example selesai</span>
+    <span class="pill ok">Lolos di emulator Android 11–16</span>
+    <span class="pill w">Belum dites di HP HyperOS</span>
+    <span class="pill w">Lisensi belum dipilih</span>
+  </div>
+  <nav class="toc" aria-label="Isi">
+    <a href="#semua-versi">Jalan di semua versi?</a><a href="#dibuat">Isi repo</a><a href="#bisa">Plugin bisa apa</a><a href="#uji">Hasil uji</a><a href="#perbaikan">Bug &amp; perbaikan</a><a href="#keputusan">Keputusan</a><a href="#belum">Belum / perlu diputuskan</a><a href="#lanjut">Langkah berikutnya</a>
+  </nav>
+</header>
+
+<section id="semua-versi">
+  <div class="sec-head"><div class="eyebrow">Pertanyaan</div><h2>Job jalan di semua versi Android?</h2></div>
+  <div class="answer">
+    <span class="t">Ya. Di Android 11, 12, 13, 14, 15, dan 16, ke-8 kondisi lolos di emulator.</span>
+    <p>Syaratnya baterai "Tidak dibatasi" dan tidak "Dibatasi", yang <b>wajib di semua versi</b>. Izin "Alarm &amp; pengingat" (<code>SCHEDULE_EXACT_ALARM</code>) tidak pernah diminta, sama seperti Sa.To: di Android 14+, baterai "Tidak dibatasi" sudah membuat exact alarm jalan.</p>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Android</th><th>Exact alarm</th><th>Peran baterai "Tidak dibatasi"</th><th>Status uji</th></tr></thead>
+      <tbody>
+        <tr><td class="grp">7–10 (API 24–29)</td><td>Selalu boleh</td><td>Mengurangi penahanan oleh Doze / App Standby</td><td><span class="tag w">tidak dites</span> (keputusan: uji cukup sampai Android 11)</td></tr>
+        <tr><td class="grp">11 (API 30)</td><td>Selalu boleh</td><td>Sama seperti di atas</td><td><span class="tag ok">8/8 lolos</span></td></tr>
+        <tr><td class="grp">12–13 (API 31–33)</td><td>Izin diberikan otomatis saat install</td><td>Cadangan kalau user mencabut izin alarm</td><td><span class="tag ok">8/8 lolos</span></td></tr>
+        <tr><td class="grp">14–16 (API 34–36)</td><td>Izin <b>ditolak secara default</b></td><td><b>Inilah yang membuat exact alarm jalan</b></td><td><span class="tag ok">8/8 lolos</span> (16: dites manual)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="t">Yang tetap bisa menghentikan job, di versi mana pun</span>
+    <p>• <b>Force stop</b> (Pengaturan → Paksa berhenti): Android memblokir semua alarm sampai user membuka app lagi. Ini berlaku untuk semua app, termasuk Sa.To. dozeless memulihkan job saat app dibuka dan mencatat event <code>processExit USER_REQUESTED</code>.<br>
+    • <b>Pembersih atau swipe ala HyperOS/MIUI</b>: di sebagian HP Xiaomi, efeknya bisa sama dengan force stop, dan <b>Autostart mati</b> membuat event boot tidak sampai ke app. Di emulator (Android stock), swipe tidak menghentikan job. Di HyperOS hal ini harus dites langsung.<br>
+    • Kalau exact alarm tetap ditolak, plugin turun ke mode <code>inexact</code>: job tetap jalan, tapi jadwalnya bisa meleset. Watchdog per jam menjadi cadangan.</p>
+  </div>
+</section>
+
+<section id="dibuat">
+  <div class="sec-head"><div class="eyebrow">Hasil kerja</div><h2>Isi repo <code>dozeless</code></h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Path</th><th>Isi</th></tr></thead>
+      <tbody>
+        <tr><td><code>lib/</code>, <code>android/</code></td><td>Plugin: API Dart (6 file) dan native Kotlin (25 file). Package <code>dozeless</code>, Kotlin <code>io.github.xdaijobu.dozeless</code>.</td></tr>
+        <tr><td><code>test/</code>, <code>android/src/test/</code></td><td>25 test Dart dan 59 unit test Kotlin.</td></tr>
+        <tr><td><code>example/</code></td><td>App uji kelayakan: job lokasi setiap 1 menit, job 20 detik, statistik, dan 5 integration test.</td></tr>
+        <tr><td><code>README.md</code>, <code>CHANGELOG.md</code></td><td>Dokumentasi pemakaian (bahasa Inggris, gaya plugin pub.dev).</td></tr>
+        <tr><td><code>.github/workflows/ci.yaml</code></td><td>CI: analyze + test Dart + unit test Kotlin di setiap push.</td></tr>
+        <tr><td><code>doc/</code></td><td>Spec, plan per task, bukti uji per versi Android, halaman ini. <code>doc/internal/</code> berisi catatan Sa.To dan tidak ikut dipublikasikan.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="bisa">
+  <div class="sec-head"><div class="eyebrow">Kemampuan</div><h2>Plugin bisa apa</h2></div>
+<pre class="code">await Dozeless.initialize(stopNotification: StopNotification(title: '…', body: '…'));
+await Dozeless.schedule(id: 'get', callback: getJob, every: Duration(minutes: 5),
+                      requires: {Prereq.location, Prereq.backgroundLocation});
+
+@pragma('vm:entry-point')
+Future&lt;void&gt; getJob(JobContext ctx) async { /* logika Get ditulis di Dart */ }</pre>
+  <div class="split">
+    <div class="box"><h3>Menjalankan job</h3><ul>
+      <li>Rantai exact alarm per job (minimal 1 menit). Alarm berikutnya dipasang <b>sebelum</b> job jalan, jadi rantainya tidak putus walaupun job error.</li>
+      <li>Callback Dart jalan di FlutterEngine headless dan <b>ditunggu sampai selesai</b> (timeout ≤ 50 s), dengan wake lock sendiri.</li>
+      <li>Satu run per job dalam satu waktu. Callback yang menggantung dilepas setelah 3× timeout.</li>
+      <li><code>schedule()</code> aman dipanggil setiap app start, tanpa menggeser jadwal.</li>
+    </ul></div>
+    <div class="box"><h3>Pulih sendiri</h3><ul>
+      <li>Setelah HP reboot, job jalan dengan <code>trigger=boot</code> tanpa app dibuka.</li>
+      <li>Setelah app di-update, job jalan dengan <code>trigger=packageReplaced</code>.</li>
+      <li>Setelah force stop, alarm dipasang ulang saat app dibuka.</li>
+      <li>Watchdog per jam memperbaiki alarm yang hilang atau telat lebih dari 2× interval.</li>
+      <li>Kalau jam HP dimundurkan atau dimajukan ≥ 60 s, semua alarm dipasang ulang.</li>
+    </ul></div>
+    <div class="box"><h3>Izin &amp; baterai</h3><ul>
+      <li><code>checkPrerequisites()</code>: lokasi, lokasi background, baterai, "Dibatasi", exact alarm, notifikasi, dan apakah ada halaman Autostart.</li>
+      <li><code>openSettings()</code>: daftar optimasi baterai, App info, exact alarm, dan Autostart (Xiaomi, Oppo, Realme, Vivo).</li>
+      <li>Kalau prasyarat hilang, job berhenti, user mendapat notifikasi, dan job dijalankan sekali dengan <code>prerequisiteLost</code>. Setelah diperbaiki, job lanjut dengan <code>resumed</code>.</li>
+    </ul></div>
+    <div class="box"><h3>Data untuk audit (<code>JobContext</code>)</h3><ul>
+      <li>Trigger, jadwal, waktu berbunyi, telat (ms), mode exact/inexact, error run sebelumnya.</li>
+      <li>Boot: <code>bootCount</code>, waktu boot, perkiraan waktu HP mati (penanda shutdown / job terakhir).</li>
+      <li>Event: <code>boot</code>, <code>timeChanged</code>, <code>timezoneChanged</code>, <code>processExit</code> (force stop, low memory, crash…).</li>
+      <li>Perangkat: ANDROID_ID, Doze, layar, standby bucket, hemat daya, jam otomatis, zona waktu, sinyal sel/wifi.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="uji">
+  <div class="sec-head"><div class="eyebrow">Bukti</div><h2>Hasil uji</h2></div>
+  <div class="stats">
+    <div class="stat"><b>59</b><span>unit test Kotlin lolos</span></div>
+    <div class="stat"><b>25</b><span>test Dart plugin lolos</span></div>
+    <div class="stat"><b>7</b><span>test example lolos</span></div>
+    <div class="stat"><b>5/5</b><span>integration test di emulator</span></div>
+    <div class="stat"><b>6</b><span>versi Android lolos 8/8 kondisi</span></div>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Kondisi (emulator, baterai "Tidak dibatasi")</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr></thead>
+      <tbody>
+        <tr><td>1. App terbuka</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>2. App di background (Home)</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>3. App ditutup (swipe dari Recents)</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>–</td></tr>
+        <tr><td>4. Proses dibunuh</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>5. Layar mati</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>6. Doze (deep idle)</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>7. HP reboot, app tidak dibuka</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>8. Force stop, lalu app dibuka</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">✅ berarti job tetap menulis baris ke database example app dalam kondisi itu. Untuk kondisi 8, job memang berhenti selama force stop (aturan Android), lalu pulih saat app dibuka. Kolom 16 berasal dari uji manual sebelumnya; swipe dari Recents tidak dites di sana. Android 9 sempat dites sebagian: job jalan setiap menit, tapi pengujian dihentikan karena uji dibatasi sampai Android 11. Bukti lengkap ada di <code>doc/test-results/</code>: database yang ditulis job (<code>*.db</code>), logcat, dan log tiap kondisi.</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Uji khusus di Android 16</th><th>Hasil</th><th>Bukti</th></tr></thead>
+      <tbody>
+        <tr><td>Update app tanpa dibuka</td><td><span class="tag ok">lolos</span></td><td><code>trigger=packageReplaced</code></td></tr>
+        <tr><td>Baterai dibatasi → dipulihkan</td><td><span class="tag ok">lolos</span></td><td>berhenti + notifikasi → <code>resumed</code>, notifikasi hilang</td></tr>
+        <tr><td>Job 20 detik saat Doze</td><td><span class="tag ok">lolos</span></td><td><code>durMs=20014</code>, tidak terpotong</td></tr>
+        <tr><td>Uji 1: layar mati 90 menit</td><td><span class="tag w">belum</span></td><td>harus di HP HyperOS asli</td></tr>
+        <tr><td>Mode "Dibatasi"</td><td><span class="tag w">belum</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="perbaikan">
+  <div class="sec-head"><div class="eyebrow">Temuan</div><h2>Bug &amp; perbaikan dari uji</h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Temuan</th><th>Dampak</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>Force stop di Android 14</b>: alarm terhapus, tapi PendingIntent tidak, sehingga pengecekan "alarm masih terpasang" keliru</td><td>Job mati sampai HP reboot walaupun app sudah dibuka</td><td><span class="tag ok">diperbaiki: app dibuka → alarm &amp; watchdog selalu dipasang ulang; dicek di 11–15</span></td></tr>
+        <tr><td>Race saat app di-resume (dua event resume beruntun)</td><td>Job yang baru dilanjutkan bisa jalan dobel</td><td><span class="tag ok">diperbaiki + dicek ulang</span></td></tr>
+        <tr><td>Integration test tidak stabil (job sisa, <code>flutter test</code> meng-uninstall app)</td><td>Test gagal padahal plugin benar</td><td><span class="tag ok">diperbaiki (<code>--no-uninstall</code>, test membersihkan job sisa)</span></td></tr>
+        <tr><td>Job dalam satu proses berjalan bergiliran</td><td>Send bisa menunggu Get selesai</td><td><span class="tag ok">dicatat; aman untuk Get/Send</span></td></tr>
+        <tr><td><b>Lokasi di background basi</b>: <code>getCurrentPosition</code> mengembalikan posisi cache dengan status OK</td><td>Data terlihat valid padahal posisinya lama</td><td><span class="tag bad">perlu keputusan</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="keputusan">
+  <div class="sec-head"><div class="eyebrow">Sudah disepakati</div><h2>Keputusan</h2></div>
+  <div class="tbl">
+    <table>
+      <tbody>
+        <tr><td class="grp">Nama</td><td><code>dozeless</code> (belum dipakai di pub.dev maupun GitHub Flutter/Dart), Kotlin <code>io.github.xdaijobu.dozeless</code></td></tr>
+        <tr><td class="grp">Platform</td><td>Android saja, Flutter</td></tr>
+        <tr><td class="grp">Penjadwal</td><td>AlarmManager saja: tanpa WorkManager, tanpa foreground service, tanpa notifikasi permanen</td></tr>
+        <tr><td class="grp">Logika job</td><td>Ditulis di Dart, jalan di engine headless</td></tr>
+        <tr><td class="grp">Baterai</td><td>"Tidak dibatasi" dan tidak "Dibatasi" <b>wajib di semua versi Android</b></td></tr>
+        <tr><td class="grp">Exact alarm</td><td>Izin tidak diminta; cukup lewat baterai "Tidak dibatasi" (sama dengan Sa.To)</td></tr>
+        <tr><td class="grp">Uji versi</td><td>Cukup sampai Android 11</td></tr>
+        <tr><td class="grp">Repo</td><td>Private di GitHub (akun xDaijobu), terdaftar di Orca</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="belum">
+  <div class="sec-head"><div class="eyebrow">Sisa pekerjaan</div><h2>Belum dikerjakan / perlu diputuskan</h2></div>
+  <div class="split">
+    <div class="box"><h3>Perlu keputusanmu</h3><ol>
+      <li><b>Lokasi basi di background.</b> A: terima, tapi baris ditandai <code>STALE</code> berdasarkan umur fix. B: foreground service sebentar setiap Get. Atau tunggu angka "segar" dari HyperOS.</li>
+      <li><b>Lisensi</b> (mis. MIT / BSD-3), wajib sebelum publish ke pub.dev.</li>
+      <li>Rilis lewat Google Play atau internal.</li>
+      <li>Interval default Get/Send dan jumlah baris per batch.</li>
+      <li>Teks notifikasi "tracking berhenti" dan apakah notifikasinya diulang.</li>
+    </ol></div>
+    <div class="box"><h3>Belum dites / dibuat</h3><ul>
+      <li>HP HyperOS asli: Uji 1 (layar mati 90 menit), menu baterai/Autostart, perilaku swipe/pembersih.</li>
+      <li>Mode "Dibatasi".</li>
+      <li>Package <code>tracking_jobs</code> (Get/Send, tabel record, katalog event, upload). Plan-nya dibuat setelah uji HyperOS.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="lanjut">
+  <div class="sec-head"><div class="eyebrow">Langkah berikutnya</div><h2>Cara lanjut</h2></div>
+  <div class="box"><ol>
+    <li>Buka project <b>dozeless</b> di Orca.</li>
+    <li>Set <code>JAVA_HOME</code> ke JDK 17+ (di mesin ini: <code>C:\Users\UseR\.jdks\openjdk-23.0.1</code>), lalu jalankan perintah di bagian "Tests" README.</li>
+    <li>Siapkan HP HyperOS: USB debugging, baterai example "Tidak dibatasi", Autostart aktif, app dikunci di Recents. Jalankan Task 8 di <code>doc/plan/</code>.</li>
+    <li>Jawab keputusan di atas, lalu buat plan <code>tracking_jobs</code> yang memakai dozeless.</li>
+  </ol></div>
+</section>
+
+<footer>Disusun dari sesi Claude Code 29 Okt 2026. Rincian ada di <code>doc/plan/2026-10-29-dozeless-plugin.md</code> (bagian "Hasil uji di emulator") dan <code>doc/test-results/</code>.</footer>
+
+</div>
+</body>
+</html>

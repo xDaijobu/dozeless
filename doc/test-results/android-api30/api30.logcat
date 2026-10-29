@@ -1,0 +1,2485 @@
+--------- beginning of kernel
+--------- beginning of main
+--------- beginning of system
+10-29 22:09:12.808 E/flutter ( 4035): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:09:12.808 E/flutter ( 4035): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:09:12.850 I/flutter ( 4035): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:09:13.017 I/flutter ( 4035): The Dart VM service is listening on http://127.0.0.1:38231/HZPswS5t0XU=/
+10-29 22:09:13.347 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): Vertex Shader:
+10-29 22:09:13.347 E/flutter ( 4035): #version 100
+10-29 22:09:13.347 E/flutter ( 4035): uniform float _impeller_y_flip;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): struct FrameInfo
+10-29 22:09:13.347 E/flutter ( 4035): {
+10-29 22:09:13.347 E/flutter ( 4035):     mat4 mvp;
+10-29 22:09:13.347 E/flutter ( 4035):     mat4 matrix;
+10-29 22:09:13.347 E/flutter ( 4035): };
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): uniform FrameInfo frame_info;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): attribute vec2 position;
+10-29 22:09:13.347 E/flutter ( 4035): varying vec2 v_position;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): void _impeller_user_main()
+10-29 22:09:13.347 E/flutter ( 4035): {
+10-29 22:09:13.347 E/flutter ( 4035):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:09:13.347 E/flutter ( 4035):     gl_Position = frame_info.mvp * _59;
+10-29 22:09:13.347 E/flutter ( 4035):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:09:13.347 E/flutter ( 4035):     v_position = _80.xy / vec2(_80.w);
+10-29 22:09:13.347 E/flutter ( 4035):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:09:13.347 E/flutter ( 4035): }
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): void main() {
+10-29 22:09:13.347 E/flutter ( 4035):   _impeller_user_main();
+10-29 22:09:13.347 E/flutter ( 4035):   gl_Position.y *= _impeller_y_flip;
+10-29 22:09:13.347 E/flutter ( 4035): }
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): Fragment Shader:
+10-29 22:09:13.347 E/flutter ( 4035): #version 100
+10-29 22:09:13.347 E/flutter ( 4035): precision mediump float;
+10-29 22:09:13.347 E/flutter ( 4035): precision highp int;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): struct FragInfo
+10-29 22:09:13.347 E/flutter ( 4035): {
+10-29 22:09:13.347 E/flutter ( 4035):     highp vec2 start_point;
+10-29 22:09:13.347 E/flutter ( 4035):     highp vec2 start_to_end;
+10-29 22:09:13.347 E/flutter ( 4035):     float alpha;
+10-29 22:09:13.347 E/flutter ( 4035):     float tile_mode;
+10-29 22:09:13.347 E/flutter ( 4035):     float colors_length;
+10-29 22:09:13.347 E/flutter ( 4035):     float inverse_dot_start_to_end;
+10-29 22:09:13.347 E/flutter ( 4035):     vec4 decal_border_color;
+10-29 22:09:13.347 E/flutter ( 4035): };
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): uniform FragInfo frag_info;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): struct StopPairsInfo
+10-29 22:09:13.347 E/flutter ( 4035): {
+10-29 22:09:13.347 E/flutter ( 4035):     vec4 stop_pairs[128];
+10-29 22:09:13.347 E/flutter ( 4035): };
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): uniform StopPairsInfo stop_pairs_info;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): struct ColorsInfo
+10-29 22:09:13.347 E/flutter ( 4035): {
+10-29 22:09:13.347 E/flutter ( 4035):     vec4 colors[256];
+10-29 22:09:13.347 E/flutter ( 4035): };
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): uniform ColorsInfo colors_info;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): varying highp vec2 v_position;
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): void main()
+10-29 22:09:13.347 E/flutter ( 4035): {
+10-29 22:09:13.347 E/flutter ( 4035):     highp float _109 = dot(v_position - frag_info.start_point, frag_info.start_to_end) * frag_info.inverse_dot_start_to_end;
+10-29 22:09:13.347 E/flutter ( 4035):     bool _114 = (_109 < 0.0) || (_109 > 1.0);
+10-29 22:09:13.347 E/flutter ( 4035):     bool _122 = false;
+10-29 22:09:13.347 E/flutter ( 4035):     if (_114)
+10-29 22:09:13.347 E/flutter ( 4035):     {
+10-29 22:09:13.347 E/flutter ( 4035):         _122 = frag_info.tile_mode == 3.0;
+10-29 22:09:13.347 E/flutter ( 4035):     }
+10-29 22:09:13.347 E/flutter ( 4035):     else
+10-29 22:09:13.347 E/flutter ( 4035):     {
+10-29 22:09:13.347 E/flutter ( 4035):         _122 = _114;
+10-29 22:09:13.347 E/flutter ( 4035):     }
+10-29 22:09:13.347 E/flutter ( 4035):     if (_122)
+10-29 22:09:13.347 E/flutter ( 4035):     {
+10-29 22:09:13.347 E/flutter ( 4035):         gl_FragData[0] = frag_info.decal_border_color;
+10-29 22:09:13.347 E/flutter ( 4035):     }
+10-29 22:09:13.347 E/flutter ( 4035):     else
+10-29 22:09:13.347 E/flutter ( 4035):     {
+10-29 22:09:13.347 E/flutter ( 4035):         highp float _304 = 0.0;
+10-29 22:09:13.347 E/flutter ( 4035):         if (frag_info.tile_mode == 0.0)
+10-29 22:09:13.347 E/flutter ( 4035):         {
+10-29 22:09:13.347 E/flutter ( 4035):             _304 = clamp(_109, 0.0, 1.0);
+10-29 22:09:13.347 E/flutter ( 4035):         }
+10-29 22:09:13.347 E/flutter ( 4035):         else
+10-29 22:09:13.347 E/flutter ( 4035):         {
+10-29 22:09:13.347 E/flutter ( 4035):             highp float _305 = 0.0;
+10-29 22:09:13.347 E/flutter ( 4035):             if (frag_info.tile_mode == 1.0)
+10-29 22:09:13.347 E/flutter ( 4035):             {
+10-29 22:09:13.347 E/flutter ( 4035):                 _305 = fract(_109);
+10-29 22:09:13.347 E/flutter ( 4035):             }
+10-29 22:09:13.347 E/flutter ( 4035):             else
+10-29 22:09:13.347 E/flutter ( 4035):             {
+10-29 22:09:13.347 E/flutter ( 4035):                 highp float _306 = 0.0;
+10-29 22:09:13.347 E/flutter ( 4035):                 if (frag_info.tile_mode == 2.0)
+10-29 22:09:13.347 E/flutter ( 4035):                 {
+10-29 22:09:13.347 E/flutter ( 4035):                     highp float _269 = _109 - 1.0;
+10-29 22:09:13.347 E/flutter ( 4035):                     _306 = abs((_269 - (2.0 * floor(_269 * 0.5))) - 1.0);
+10-29 22:09:13.347 E/flutter ( 4035):                 }
+10-29 22:09:13.347 E/flutter ( 4035):                 else
+10-29 22:09:13.347 E/flutter ( 4035):                 {
+10-29 22:09:13.347 E/flutter ( 4035):                     _306 = _109;
+10-29 22:09:13.347 E/flutter ( 4035):                 }
+10-29 22:09:13.347 E/flutter ( 4035):                 _305 = _306;
+10-29 22:09:13.347 E/flutter ( 4035):             }
+10-29 22:09:13.347 E/flutter ( 4035):             _304 = _305;
+10-29 22:09:13.347 E/flutter ( 4035):         }
+10-29 22:09:13.347 E/flutter ( 4035):         vec2 _314 = vec2(0.0);
+10-29 22:09:13.347 E/flutter ( 4035):         _314 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:09:13.347 E/flutter ( 4035):         bool _182 = false;
+10-29 22:09:13.347 E/flutter ( 4035):         vec2 _309 = vec2(0.0);
+10-29 22:09:13.347 E/flutter ( 4035):         int _307 = 1;
+10-29 22:09:13.347 E/flutter ( 4035):         bool _308 = false;
+10-29 22:09:13.347 E/flutter ( 4035):         for (; float(_307) < frag_info.colors_length; _314 = _309, _308 = _182, _307++)
+10-29 22:09:13.347 E/flutter ( 4035):         {
+10-29 22:09:13.347 E/flutter ( 4035):             if (_308)
+10-29 22:09:13.347 E/flutter ( 4035):             {
+10-29 22:09:13.347 E/flutter ( 4035):                 _309 = stop_pairs_info.stop_pairs[_307 / 2].xy;
+10-29 22:09:13.347 E/flutter ( 4035):             }
+10-29 22:09:13.347 E/flutter ( 4035):             else
+10-29 22:09:13.347 E/flutter ( 4035):             {
+10-29 22:09:13.347 E/flutter ( 4035):                 _309 = stop_pairs_info.stop_pairs[_307 / 2].zw;
+10-29 22:09:13.347 E/flutter ( 4035):             }
+10-29 22:09:13.347 E/flutter ( 4035):             _182 = !_308;
+10-29 22:09:13.347 E/flutter ( 4035):             bool _187 = _304 >= _314.x;
+10-29 22:09:13.347 E/flutter ( 4035):             bool _194 = false;
+10-29 22:09:13.347 E/flutter ( 4035):             if (_187)
+10-29 22:09:13.347 E/flutter ( 4035):             {
+10-29 22:09:13.347 E/flutter ( 4035):                 _194 = _304 <= _309.x;
+10-29 22:09:13.347 E/flutter ( 4035):             }
+10-29 22:09:13.347 E/flutter ( 4035):             else
+10-29 22:09:13.347 E/flutter ( 4035):             {
+10-29 22:09:13.347 E/flutter ( 4035):                 _194 = _187;
+10-29 22:09:13.347 E/flutter ( 4035):             }
+10-29 22:09:13.347 E/flutter ( 4035):             if (_194)
+10-29 22:09:13.347 E/flutter ( 4035):             {
+10-29 22:09:13.347 E/flutter ( 4035):                 if (_309.y > 1000.0)
+10-29 22:09:13.347 E/flutter ( 4035):                 {
+10-29 22:09:13.347 E/flutter ( 4035):                     gl_FragData[0] = colors_info.colors[_307];
+10-29 22:09:13.347 E/flutter ( 4035):                 }
+10-29 22:09:13.347 E/flutter ( 4035):                 else
+10-29 22:09:13.347 E/flutter ( 4035):                 {
+10-29 22:09:13.347 E/flutter ( 4035):                     gl_FragData[0] = mix(colors_info.colors[_307 - 1], colors_info.colors[_307], vec4((_304 - _314.x) * _309.y));
+10-29 22:09:13.347 E/flutter ( 4035):                 }
+10-29 22:09:13.347 E/flutter ( 4035):                 break;
+10-29 22:09:13.347 E/flutter ( 4035):             }
+10-29 22:09:13.347 E/flutter ( 4035):         }
+10-29 22:09:13.347 E/flutter ( 4035):     }
+10-29 22:09:13.347 E/flutter ( 4035):     gl_FragData[0] = vec4(gl_FragData[0].xyz * gl_FragData[0].w, gl_FragData[0].w) * frag_info.alpha;
+10-29 22:09:13.347 E/flutter ( 4035): }
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.347 E/flutter ( 4035): 
+10-29 22:09:13.348 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:09:13.351 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): Vertex Shader:
+10-29 22:09:13.351 E/flutter ( 4035): #version 100
+10-29 22:09:13.351 E/flutter ( 4035): uniform float _impeller_y_flip;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): struct FrameInfo
+10-29 22:09:13.351 E/flutter ( 4035): {
+10-29 22:09:13.351 E/flutter ( 4035):     mat4 mvp;
+10-29 22:09:13.351 E/flutter ( 4035):     mat4 matrix;
+10-29 22:09:13.351 E/flutter ( 4035): };
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): uniform FrameInfo frame_info;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): attribute vec2 position;
+10-29 22:09:13.351 E/flutter ( 4035): varying vec2 v_position;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): void _impeller_user_main()
+10-29 22:09:13.351 E/flutter ( 4035): {
+10-29 22:09:13.351 E/flutter ( 4035):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:09:13.351 E/flutter ( 4035):     gl_Position = frame_info.mvp * _59;
+10-29 22:09:13.351 E/flutter ( 4035):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:09:13.351 E/flutter ( 4035):     v_position = _80.xy / vec2(_80.w);
+10-29 22:09:13.351 E/flutter ( 4035):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:09:13.351 E/flutter ( 4035): }
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): void main() {
+10-29 22:09:13.351 E/flutter ( 4035):   _impeller_user_main();
+10-29 22:09:13.351 E/flutter ( 4035):   gl_Position.y *= _impeller_y_flip;
+10-29 22:09:13.351 E/flutter ( 4035): }
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): Fragment Shader:
+10-29 22:09:13.351 E/flutter ( 4035): #version 100
+10-29 22:09:13.351 E/flutter ( 4035): precision mediump float;
+10-29 22:09:13.351 E/flutter ( 4035): precision highp int;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): struct FragInfo
+10-29 22:09:13.351 E/flutter ( 4035): {
+10-29 22:09:13.351 E/flutter ( 4035):     highp vec2 center;
+10-29 22:09:13.351 E/flutter ( 4035):     float radius;
+10-29 22:09:13.351 E/flutter ( 4035):     float tile_mode;
+10-29 22:09:13.351 E/flutter ( 4035):     float alpha;
+10-29 22:09:13.351 E/flutter ( 4035):     float colors_length;
+10-29 22:09:13.351 E/flutter ( 4035):     vec4 decal_border_color;
+10-29 22:09:13.351 E/flutter ( 4035): };
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): uniform FragInfo frag_info;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): struct StopPairsInfo
+10-29 22:09:13.351 E/flutter ( 4035): {
+10-29 22:09:13.351 E/flutter ( 4035):     vec4 stop_pairs[128];
+10-29 22:09:13.351 E/flutter ( 4035): };
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): uniform StopPairsInfo stop_pairs_info;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): struct ColorsInfo
+10-29 22:09:13.351 E/flutter ( 4035): {
+10-29 22:09:13.351 E/flutter ( 4035):     vec4 colors[256];
+10-29 22:09:13.351 E/flutter ( 4035): };
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): uniform ColorsInfo colors_info;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): varying highp vec2 v_position;
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): void main()
+10-29 22:09:13.351 E/flutter ( 4035): {
+10-29 22:09:13.351 E/flutter ( 4035):     highp float _98 = length(v_position - frag_info.center);
+10-29 22:09:13.351 E/flutter ( 4035):     float mp_copy_98 = _98;
+10-29 22:09:13.351 E/flutter ( 4035):     float _105 = mp_copy_98 / frag_info.radius;
+10-29 22:09:13.351 E/flutter ( 4035):     highp float hp_copy_105 = _105;
+10-29 22:09:13.351 E/flutter ( 4035):     bool _112 = (_105 < 0.0) || (_105 > 1.0);
+10-29 22:09:13.351 E/flutter ( 4035):     bool _120 = false;
+10-29 22:09:13.351 E/flutter ( 4035):     if (_112)
+10-29 22:09:13.351 E/flutter ( 4035):     {
+10-29 22:09:13.351 E/flutter ( 4035):         _120 = frag_info.tile_mode == 3.0;
+10-29 22:09:13.351 E/flutter ( 4035):     }
+10-29 22:09:13.351 E/flutter ( 4035):     else
+10-29 22:09:13.351 E/flutter ( 4035):     {
+10-29 22:09:13.351 E/flutter ( 4035):         _120 = _112;
+10-29 22:09:13.351 E/flutter ( 4035):     }
+10-29 22:09:13.351 E/flutter ( 4035):     vec4 _318 = vec4(0.0);
+10-29 22:09:13.351 E/flutter ( 4035):     if (_120)
+10-29 22:09:13.351 E/flutter ( 4035):     {
+10-29 22:09:13.351 E/flutter ( 4035):         _318 = frag_info.decal_border_color;
+10-29 22:09:13.351 E/flutter ( 4035):     }
+10-29 22:09:13.351 E/flutter ( 4035):     else
+10-29 22:09:13.351 E/flutter ( 4035):     {
+10-29 22:09:13.351 E/flutter ( 4035):         float mp_copy_303 = 0.0;
+10-29 22:09:13.351 E/flutter ( 4035):         highp float _303 = 0.0;
+10-29 22:09:13.351 E/flutter ( 4035):         if (frag_info.tile_mode == 0.0)
+10-29 22:09:13.351 E/flutter ( 4035):         {
+10-29 22:09:13.351 E/flutter ( 4035):             _303 = clamp(hp_copy_105, 0.0, 1.0);
+10-29 22:09:13.351 E/flutter ( 4035):         }
+10-29 22:09:13.351 E/flutter ( 4035):         else
+10-29 22:09:13.351 E/flutter ( 4035):         {
+10-29 22:09:13.351 E/flutter ( 4035):             highp float _304 = 0.0;
+10-29 22:09:13.351 E/flutter ( 4035):             if (frag_info.tile_mode == 1.0)
+10-29 22:09:13.351 E/flutter ( 4035):             {
+10-29 22:09:13.351 E/flutter ( 4035):                 _304 = fract(hp_copy_105);
+10-29 22:09:13.351 E/flutter ( 4035):             }
+10-29 22:09:13.351 E/flutter ( 4035):             else
+10-29 22:09:13.351 E/flutter ( 4035):             {
+10-29 22:09:13.351 E/flutter ( 4035):                 highp float _305 = 0.0;
+10-29 22:09:13.351 E/flutter ( 4035):                 if (frag_info.tile_mode == 2.0)
+10-29 22:09:13.351 E/flutter ( 4035):                 {
+10-29 22:09:13.351 E/flutter ( 4035):                     highp float _268 = hp_copy_105 - 1.0;
+10-29 22:09:13.351 E/flutter ( 4035):                     _305 = abs((_268 - (2.0 * floor(_268 * 0.5))) - 1.0);
+10-29 22:09:13.351 E/flutter ( 4035):                 }
+10-29 22:09:13.351 E/flutter ( 4035):                 else
+10-29 22:09:13.351 E/flutter ( 4035):                 {
+10-29 22:09:13.351 E/flutter ( 4035):                     _305 = _105;
+10-29 22:09:13.351 E/flutter ( 4035):                 }
+10-29 22:09:13.351 E/flutter ( 4035):                 _304 = _305;
+10-29 22:09:13.351 E/flutter ( 4035):             }
+10-29 22:09:13.351 E/flutter ( 4035):             _303 = _304;
+10-29 22:09:13.351 E/flutter ( 4035):         }
+10-29 22:09:13.351 E/flutter ( 4035):         mp_copy_303 = _303;
+10-29 22:09:13.351 E/flutter ( 4035):         vec2 _313 = vec2(0.0);
+10-29 22:09:13.351 E/flutter ( 4035):         _313 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:09:13.351 E/flutter ( 4035):         bool _178 = false;
+10-29 22:09:13.351 E/flutter ( 4035):         vec2 _308 = vec2(0.0);
+10-29 22:09:13.351 E/flutter ( 4035):         vec4 _319 = vec4(0.0);
+10-29 22:09:13.351 E/flutter ( 4035):         int _306 = 1;
+10-29 22:09:13.351 E/flutter ( 4035):         bool _307 = false;
+10-29 22:09:13.351 E/flutter ( 4035):         for (;;)
+10-29 22:09:13.351 E/flutter ( 4035):         {
+10-29 22:09:13.351 E/flutter ( 4035):             if (float(_306) < frag_info.colors_length)
+10-29 22:09:13.351 E/flutter ( 4035):             {
+10-29 22:09:13.351 E/flutter ( 4035):                 if (_307)
+10-29 22:09:13.351 E/flutter ( 4035):                 {
+10-29 22:09:13.351 E/flutter ( 4035):                     _308 = stop_pairs_info.stop_pairs[_306 / 2].xy;
+10-29 22:09:13.351 E/flutter ( 4035):                 }
+10-29 22:09:13.351 E/flutter ( 4035):                 else
+10-29 22:09:13.351 E/flutter ( 4035):                 {
+10-29 22:09:13.351 E/flutter ( 4035):                     _308 = stop_pairs_info.stop_pairs[_306 / 2].zw;
+10-29 22:09:13.351 E/flutter ( 4035):                 }
+10-29 22:09:13.351 E/flutter ( 4035):                 _178 = !_307;
+10-29 22:09:13.351 E/flutter ( 4035):                 bool _183 = _303 >= _313.x;
+10-29 22:09:13.351 E/flutter ( 4035):                 bool _190 = false;
+10-29 22:09:13.351 E/flutter ( 4035):                 if (_183)
+10-29 22:09:13.351 E/flutter ( 4035):                 {
+10-29 22:09:13.351 E/flutter ( 4035):                     _190 = _303 <= _308.x;
+10-29 22:09:13.351 E/flutter ( 4035):                 }
+10-29 22:09:13.351 E/flutter ( 4035):                 else
+10-29 22:09:13.351 E/flutter ( 4035):                 {
+10-29 22:09:13.351 E/flutter ( 4035):                     _190 = _183;
+10-29 22:09:13.351 E/flutter ( 4035):                 }
+10-29 22:09:13.351 E/flutter ( 4035):                 if (_190)
+10-29 22:09:13.351 E/flutter ( 4035):                 {
+10-29 22:09:13.351 E/flutter ( 4035):                     vec4 _327 = vec4(0.0);
+10-29 22:09:13.351 E/flutter ( 4035):                     if (_308.y > 1000.0)
+10-29 22:09:13.351 E/flutter ( 4035):                     {
+10-29 22:09:13.351 E/flutter ( 4035):                         _327 = colors_info.colors[_306];
+10-29 22:09:13.351 E/flutter ( 4035):                     }
+10-29 22:09:13.351 E/flutter ( 4035):                     else
+10-29 22:09:13.351 E/flutter ( 4035):                     {
+10-29 22:09:13.351 E/flutter ( 4035):                         _327 = mix(colors_info.colors[_306 - 1], colors_info.colors[_306], vec4((mp_copy_303 - _313.x) * _308.y));
+10-29 22:09:13.351 E/flutter ( 4035):                     }
+10-29 22:09:13.351 E/flutter ( 4035):                     _319 = _327;
+10-29 22:09:13.351 E/flutter ( 4035):                     break;
+10-29 22:09:13.351 E/flutter ( 4035):                 }
+10-29 22:09:13.351 E/flutter ( 4035):                 _313 = _308;
+10-29 22:09:13.351 E/flutter ( 4035):                 _307 = _178;
+10-29 22:09:13.351 E/flutter ( 4035):                 _306++;
+10-29 22:09:13.351 E/flutter ( 4035):                 continue;
+10-29 22:09:13.351 E/flutter ( 4035):             }
+10-29 22:09:13.351 E/flutter ( 4035):             else
+10-29 22:09:13.351 E/flutter ( 4035):             {
+10-29 22:09:13.351 E/flutter ( 4035):                 _319 = vec4(0.0);
+10-29 22:09:13.351 E/flutter ( 4035):                 break;
+10-29 22:09:13.351 E/flutter ( 4035):             }
+10-29 22:09:13.351 E/flutter ( 4035):         }
+10-29 22:09:13.351 E/flutter ( 4035):         _318 = _319;
+10-29 22:09:13.351 E/flutter ( 4035):     }
+10-29 22:09:13.351 E/flutter ( 4035):     gl_FragData[0] = vec4(_318.xyz * _318.w, _318.w) * frag_info.alpha;
+10-29 22:09:13.351 E/flutter ( 4035): }
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): 
+10-29 22:09:13.351 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:09:13.354 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): Vertex Shader:
+10-29 22:09:13.354 E/flutter ( 4035): #version 100
+10-29 22:09:13.354 E/flutter ( 4035): uniform float _impeller_y_flip;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): struct FrameInfo
+10-29 22:09:13.354 E/flutter ( 4035): {
+10-29 22:09:13.354 E/flutter ( 4035):     mat4 mvp;
+10-29 22:09:13.354 E/flutter ( 4035):     mat4 matrix;
+10-29 22:09:13.354 E/flutter ( 4035): };
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): uniform FrameInfo frame_info;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): attribute vec2 position;
+10-29 22:09:13.354 E/flutter ( 4035): varying vec2 v_position;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): void _impeller_user_main()
+10-29 22:09:13.354 E/flutter ( 4035): {
+10-29 22:09:13.354 E/flutter ( 4035):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:09:13.354 E/flutter ( 4035):     gl_Position = frame_info.mvp * _59;
+10-29 22:09:13.354 E/flutter ( 4035):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:09:13.354 E/flutter ( 4035):     v_position = _80.xy / vec2(_80.w);
+10-29 22:09:13.354 E/flutter ( 4035):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:09:13.354 E/flutter ( 4035): }
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): void main() {
+10-29 22:09:13.354 E/flutter ( 4035):   _impeller_user_main();
+10-29 22:09:13.354 E/flutter ( 4035):   gl_Position.y *= _impeller_y_flip;
+10-29 22:09:13.354 E/flutter ( 4035): }
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): Fragment Shader:
+10-29 22:09:13.354 E/flutter ( 4035): #version 100
+10-29 22:09:13.354 E/flutter ( 4035): precision mediump float;
+10-29 22:09:13.354 E/flutter ( 4035): precision highp int;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): struct FragInfo
+10-29 22:09:13.354 E/flutter ( 4035): {
+10-29 22:09:13.354 E/flutter ( 4035):     highp vec2 center;
+10-29 22:09:13.354 E/flutter ( 4035):     highp vec2 focus;
+10-29 22:09:13.354 E/flutter ( 4035):     highp float focus_radius;
+10-29 22:09:13.354 E/flutter ( 4035):     highp float radius;
+10-29 22:09:13.354 E/flutter ( 4035):     highp float tile_mode;
+10-29 22:09:13.354 E/flutter ( 4035):     highp float alpha;
+10-29 22:09:13.354 E/flutter ( 4035):     highp float colors_length;
+10-29 22:09:13.354 E/flutter ( 4035):     highp vec4 decal_border_color;
+10-29 22:09:13.354 E/flutter ( 4035): };
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): uniform FragInfo frag_info;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): struct StopPairsInfo
+10-29 22:09:13.354 E/flutter ( 4035): {
+10-29 22:09:13.354 E/flutter ( 4035):     highp vec4 stop_pairs[128];
+10-29 22:09:13.354 E/flutter ( 4035): };
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): uniform StopPairsInfo stop_pairs_info;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): struct ColorsInfo
+10-29 22:09:13.354 E/flutter ( 4035): {
+10-29 22:09:13.354 E/flutter ( 4035):     highp vec4 colors[256];
+10-29 22:09:13.354 E/flutter ( 4035): };
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): uniform ColorsInfo colors_info;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): varying highp vec2 v_position;
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): void main()
+10-29 22:09:13.354 E/flutter ( 4035): {
+10-29 22:09:13.354 E/flutter ( 4035):     highp vec2 _1222 = vec2(0.0);
+10-29 22:09:13.354 E/flutter ( 4035):     for (int spvDummy103 = 0; spvDummy103 < 1; spvDummy103++)
+10-29 22:09:13.354 E/flutter ( 4035):     {
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _685 = frag_info.focus_radius / (frag_info.focus_radius - frag_info.radius);
+10-29 22:09:13.354 E/flutter ( 4035):         bool _689 = abs(_685 - 1.0) < 0.000244140625;
+10-29 22:09:13.354 E/flutter ( 4035):         bvec2 _1255 = bvec2(_689);
+10-29 22:09:13.354 E/flutter ( 4035):         highp vec2 _1256 = vec2(_1255.x ? frag_info.focus.x : frag_info.center.x, _1255.y ? frag_info.focus.y : frag_info.center.y);
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _1257 = _689 ? 0.0 : _685;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _698 = 1.0 - _1257;
+10-29 22:09:13.354 E/flutter ( 4035):         highp vec2 _703 = (vec2(_1255.x ? frag_info.center.x : frag_info.focus.x, _1255.y ? frag_info.center.y : frag_info.focus.y) * _698) + (_1256 * _1257);
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _855 = _703.y;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _856 = _1256.y - _855;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _858 = _703.x;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _860 = _1256.x;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _861 = _858 - _860;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _866 = _860 - _858;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _925 = (-1.0) * _866;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _939 = _856 * _856;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _709 = abs(_698);
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _716 = abs(frag_info.radius - frag_info.focus_radius) / distance(frag_info.focus, frag_info.center);
+10-29 22:09:13.354 E/flutter ( 4035):         bool _720 = abs(_716 - 1.0) < 0.000244140625;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _1209 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _1210 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):         if (_720)
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             highp float _724 = _709 * 0.5;
+10-29 22:09:13.354 E/flutter ( 4035):             _1210 = _724;
+10-29 22:09:13.354 E/flutter ( 4035):             _1209 = _724;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         else
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             highp float _732 = (_716 * _716) - 1.0;
+10-29 22:09:13.354 E/flutter ( 4035):             _1210 = _709 / sqrt(abs(_732));
+10-29 22:09:13.354 E/flutter ( 4035):             _1209 = _709 * (_716 / _732);
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         highp vec3 _758 = (mat3(vec3(_1209, 0.0, 0.0), vec3(0.0, _1210, 0.0), vec3(0.0, 0.0, 1.0)) * (mat3(vec3(0.0, -1.0, 0.0), vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0)) * (mat3(vec3(_856, (-1.0) * _861, 0.0), vec3(_925, _856, 0.0), vec3((_855 * _866) - (_856 * _858), ((-_855) * _856) + (_861 * _858), _939 - (_861 * _866))) * (1.0 / (_939 + (_861 * _925)))))) * vec3(v_position, 1.0);
+10-29 22:09:13.354 E/flutter ( 4035):         highp vec2 _759 = _758.xy;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _761 = 1.0 / _716;
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _764 = sign(_698);
+10-29 22:09:13.354 E/flutter ( 4035):         bool _769 = (!_720) && (_716 > 1.0);
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _1213 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):         if (_720)
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             _1213 = dot(_759, _759) / _758.x;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         else
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             highp float _1214 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):             if (_769)
+10-29 22:09:13.354 E/flutter ( 4035):             {
+10-29 22:09:13.354 E/flutter ( 4035):                 _1214 = length(_759) - (_758.x * _761);
+10-29 22:09:13.354 E/flutter ( 4035):             }
+10-29 22:09:13.354 E/flutter ( 4035):             else
+10-29 22:09:13.354 E/flutter ( 4035):             {
+10-29 22:09:13.354 E/flutter ( 4035):                 highp float _790 = _758.x;
+10-29 22:09:13.354 E/flutter ( 4035):                 highp float _795 = _758.y;
+10-29 22:09:13.354 E/flutter ( 4035):                 highp float _799 = (_790 * _790) - (_795 * _795);
+10-29 22:09:13.354 E/flutter ( 4035):                 highp float _1215 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):                 if (_799 >= 0.0)
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     highp float _1216 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):                     if (_689 || (_764 < 0.0))
+10-29 22:09:13.354 E/flutter ( 4035):                     {
+10-29 22:09:13.354 E/flutter ( 4035):                         _1216 = (-sqrt(_799)) - (_790 * _761);
+10-29 22:09:13.354 E/flutter ( 4035):                     }
+10-29 22:09:13.354 E/flutter ( 4035):                     else
+10-29 22:09:13.354 E/flutter ( 4035):                     {
+10-29 22:09:13.354 E/flutter ( 4035):                         _1216 = sqrt(_799) - (_790 * _761);
+10-29 22:09:13.354 E/flutter ( 4035):                     }
+10-29 22:09:13.354 E/flutter ( 4035):                     _1215 = _1216;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 else
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     _1215 = -1.0;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 _1214 = _1215;
+10-29 22:09:13.354 E/flutter ( 4035):             }
+10-29 22:09:13.354 E/flutter ( 4035):             _1213 = _1214;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         if ((!_769) && (_1213 < 0.0))
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             _1222 = vec2(0.0, -1.0);
+10-29 22:09:13.354 E/flutter ( 4035):             break;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _839 = _1257 + (_764 * _1213);
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _1221 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):         if (_689)
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             _1221 = 1.0 - _839;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         else
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             _1221 = _839;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         _1222 = vec2(_1221, 1.0);
+10-29 22:09:13.354 E/flutter ( 4035):         break;
+10-29 22:09:13.354 E/flutter ( 4035):     }
+10-29 22:09:13.354 E/flutter ( 4035):     bool _1020 = _1222.y < 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):     bool _1035 = false;
+10-29 22:09:13.354 E/flutter ( 4035):     if (!_1020)
+10-29 22:09:13.354 E/flutter ( 4035):     {
+10-29 22:09:13.354 E/flutter ( 4035):         bool _1027 = (_1222.x < 0.0) || (_1222.x > 1.0);
+10-29 22:09:13.354 E/flutter ( 4035):         bool _1033 = false;
+10-29 22:09:13.354 E/flutter ( 4035):         if (_1027)
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             _1033 = frag_info.tile_mode == 3.0;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         else
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             _1033 = _1027;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         _1035 = _1033;
+10-29 22:09:13.354 E/flutter ( 4035):     }
+10-29 22:09:13.354 E/flutter ( 4035):     else
+10-29 22:09:13.354 E/flutter ( 4035):     {
+10-29 22:09:13.354 E/flutter ( 4035):         _1035 = _1020;
+10-29 22:09:13.354 E/flutter ( 4035):     }
+10-29 22:09:13.354 E/flutter ( 4035):     highp vec4 _1240 = vec4(0.0);
+10-29 22:09:13.354 E/flutter ( 4035):     if (_1035)
+10-29 22:09:13.354 E/flutter ( 4035):     {
+10-29 22:09:13.354 E/flutter ( 4035):         _1240 = frag_info.decal_border_color;
+10-29 22:09:13.354 E/flutter ( 4035):     }
+10-29 22:09:13.354 E/flutter ( 4035):     else
+10-29 22:09:13.354 E/flutter ( 4035):     {
+10-29 22:09:13.354 E/flutter ( 4035):         highp float _1225 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):         if (frag_info.tile_mode == 0.0)
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             _1225 = clamp(_1222.x, 0.0, 1.0);
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         else
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             highp float _1226 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):             if (frag_info.tile_mode == 1.0)
+10-29 22:09:13.354 E/flutter ( 4035):             {
+10-29 22:09:13.354 E/flutter ( 4035):                 _1226 = fract(_1222.x);
+10-29 22:09:13.354 E/flutter ( 4035):             }
+10-29 22:09:13.354 E/flutter ( 4035):             else
+10-29 22:09:13.354 E/flutter ( 4035):             {
+10-29 22:09:13.354 E/flutter ( 4035):                 highp float _1227 = 0.0;
+10-29 22:09:13.354 E/flutter ( 4035):                 if (frag_info.tile_mode == 2.0)
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     highp float _1143 = _1222.x - 1.0;
+10-29 22:09:13.354 E/flutter ( 4035):                     _1227 = abs((_1143 - (2.0 * floor(_1143 * 0.5))) - 1.0);
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 else
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     _1227 = _1222.x;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 _1226 = _1227;
+10-29 22:09:13.354 E/flutter ( 4035):             }
+10-29 22:09:13.354 E/flutter ( 4035):             _1225 = _1226;
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         highp vec2 _1235 = vec2(0.0);
+10-29 22:09:13.354 E/flutter ( 4035):         _1235 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:09:13.354 E/flutter ( 4035):         bool _1071 = false;
+10-29 22:09:13.354 E/flutter ( 4035):         highp vec2 _1230 = vec2(0.0);
+10-29 22:09:13.354 E/flutter ( 4035):         highp vec4 _1241 = vec4(0.0);
+10-29 22:09:13.354 E/flutter ( 4035):         int _1228 = 1;
+10-29 22:09:13.354 E/flutter ( 4035):         bool _1229 = false;
+10-29 22:09:13.354 E/flutter ( 4035):         for (;;)
+10-29 22:09:13.354 E/flutter ( 4035):         {
+10-29 22:09:13.354 E/flutter ( 4035):             if (float(_1228) < frag_info.colors_length)
+10-29 22:09:13.354 E/flutter ( 4035):             {
+10-29 22:09:13.354 E/flutter ( 4035):                 if (_1229)
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     _1230 = stop_pairs_info.stop_pairs[_1228 / 2].xy;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 else
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     _1230 = stop_pairs_info.stop_pairs[_1228 / 2].zw;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 _1071 = !_1229;
+10-29 22:09:13.354 E/flutter ( 4035):                 bool _1075 = _1225 >= _1235.x;
+10-29 22:09:13.354 E/flutter ( 4035):                 bool _1082 = false;
+10-29 22:09:13.354 E/flutter ( 4035):                 if (_1075)
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     _1082 = _1225 <= _1230.x;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 else
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     _1082 = _1075;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 if (_1082)
+10-29 22:09:13.354 E/flutter ( 4035):                 {
+10-29 22:09:13.354 E/flutter ( 4035):                     highp vec4 _1250 = vec4(0.0);
+10-29 22:09:13.354 E/flutter ( 4035):                     if (_1230.y > 1000.0)
+10-29 22:09:13.354 E/flutter ( 4035):                     {
+10-29 22:09:13.354 E/flutter ( 4035):                         _1250 = colors_info.colors[_1228];
+10-29 22:09:13.354 E/flutter ( 4035):                     }
+10-29 22:09:13.354 E/flutter ( 4035):                     else
+10-29 22:09:13.354 E/flutter ( 4035):                     {
+10-29 22:09:13.354 E/flutter ( 4035):                         _1250 = mix(colors_info.colors[_1228 - 1], colors_info.colors[_1228], vec4((_1225 - _1235.x) * _1230.y));
+10-29 22:09:13.354 E/flutter ( 4035):                     }
+10-29 22:09:13.354 E/flutter ( 4035):                     _1241 = _1250;
+10-29 22:09:13.354 E/flutter ( 4035):                     break;
+10-29 22:09:13.354 E/flutter ( 4035):                 }
+10-29 22:09:13.354 E/flutter ( 4035):                 _1235 = _1230;
+10-29 22:09:13.354 E/flutter ( 4035):                 _1229 = _1071;
+10-29 22:09:13.354 E/flutter ( 4035):                 _1228++;
+10-29 22:09:13.354 E/flutter ( 4035):                 continue;
+10-29 22:09:13.354 E/flutter ( 4035):             }
+10-29 22:09:13.354 E/flutter ( 4035):             else
+10-29 22:09:13.354 E/flutter ( 4035):             {
+10-29 22:09:13.354 E/flutter ( 4035):                 _1241 = vec4(0.0);
+10-29 22:09:13.354 E/flutter ( 4035):                 break;
+10-29 22:09:13.354 E/flutter ( 4035):             }
+10-29 22:09:13.354 E/flutter ( 4035):         }
+10-29 22:09:13.354 E/flutter ( 4035):         _1240 = _1241;
+10-29 22:09:13.354 E/flutter ( 4035):     }
+10-29 22:09:13.354 E/flutter ( 4035):     gl_FragData[0] = vec4(_1240.xyz * _1240.w, _1240.w) * frag_info.alpha;
+10-29 22:09:13.354 E/flutter ( 4035): }
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): 
+10-29 22:09:13.354 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:09:13.362 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): Vertex Shader:
+10-29 22:09:13.362 E/flutter ( 4035): #version 100
+10-29 22:09:13.362 E/flutter ( 4035): uniform float _impeller_y_flip;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): struct FrameInfo
+10-29 22:09:13.362 E/flutter ( 4035): {
+10-29 22:09:13.362 E/flutter ( 4035):     mat4 mvp;
+10-29 22:09:13.362 E/flutter ( 4035):     mat4 matrix;
+10-29 22:09:13.362 E/flutter ( 4035): };
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): uniform FrameInfo frame_info;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): attribute vec2 position;
+10-29 22:09:13.362 E/flutter ( 4035): varying vec2 v_position;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): void _impeller_user_main()
+10-29 22:09:13.362 E/flutter ( 4035): {
+10-29 22:09:13.362 E/flutter ( 4035):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:09:13.362 E/flutter ( 4035):     gl_Position = frame_info.mvp * _59;
+10-29 22:09:13.362 E/flutter ( 4035):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:09:13.362 E/flutter ( 4035):     v_position = _80.xy / vec2(_80.w);
+10-29 22:09:13.362 E/flutter ( 4035):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:09:13.362 E/flutter ( 4035): }
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): void main() {
+10-29 22:09:13.362 E/flutter ( 4035):   _impeller_user_main();
+10-29 22:09:13.362 E/flutter ( 4035):   gl_Position.y *= _impeller_y_flip;
+10-29 22:09:13.362 E/flutter ( 4035): }
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): Fragment Shader:
+10-29 22:09:13.362 E/flutter ( 4035): #version 100
+10-29 22:09:13.362 E/flutter ( 4035): precision mediump float;
+10-29 22:09:13.362 E/flutter ( 4035): precision highp int;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): struct FragInfo
+10-29 22:09:13.362 E/flutter ( 4035): {
+10-29 22:09:13.362 E/flutter ( 4035):     highp vec2 center;
+10-29 22:09:13.362 E/flutter ( 4035):     highp vec2 focus;
+10-29 22:09:13.362 E/flutter ( 4035):     highp float focus_radius;
+10-29 22:09:13.362 E/flutter ( 4035):     highp float radius;
+10-29 22:09:13.362 E/flutter ( 4035):     highp float tile_mode;
+10-29 22:09:13.362 E/flutter ( 4035):     highp float alpha;
+10-29 22:09:13.362 E/flutter ( 4035):     highp float colors_length;
+10-29 22:09:13.362 E/flutter ( 4035):     highp vec4 decal_border_color;
+10-29 22:09:13.362 E/flutter ( 4035): };
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): uniform FragInfo frag_info;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): struct StopPairsInfo
+10-29 22:09:13.362 E/flutter ( 4035): {
+10-29 22:09:13.362 E/flutter ( 4035):     highp vec4 stop_pairs[128];
+10-29 22:09:13.362 E/flutter ( 4035): };
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): uniform StopPairsInfo stop_pairs_info;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): struct ColorsInfo
+10-29 22:09:13.362 E/flutter ( 4035): {
+10-29 22:09:13.362 E/flutter ( 4035):     highp vec4 colors[256];
+10-29 22:09:13.362 E/flutter ( 4035): };
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): uniform ColorsInfo colors_info;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): varying highp vec2 v_position;
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): void main()
+10-29 22:09:13.362 E/flutter ( 4035): {
+10-29 22:09:13.362 E/flutter ( 4035):     highp float _325 = frag_info.radius - frag_info.focus_radius;
+10-29 22:09:13.362 E/flutter ( 4035):     highp float _343 = (length((v_position - frag_info.focus) * (1.0 / _325)) * sign(_325)) - (frag_info.focus_radius / _325);
+10-29 22:09:13.362 E/flutter ( 4035):     bool _370 = (_343 < 0.0) || (_343 > 1.0);
+10-29 22:09:13.362 E/flutter ( 4035):     bool _376 = false;
+10-29 22:09:13.362 E/flutter ( 4035):     if (_370)
+10-29 22:09:13.362 E/flutter ( 4035):     {
+10-29 22:09:13.362 E/flutter ( 4035):         _376 = frag_info.tile_mode == 3.0;
+10-29 22:09:13.362 E/flutter ( 4035):     }
+10-29 22:09:13.362 E/flutter ( 4035):     else
+10-29 22:09:13.362 E/flutter ( 4035):     {
+10-29 22:09:13.362 E/flutter ( 4035):         _376 = _370;
+10-29 22:09:13.362 E/flutter ( 4035):     }
+10-29 22:09:13.362 E/flutter ( 4035):     highp vec4 _539 = vec4(0.0);
+10-29 22:09:13.362 E/flutter ( 4035):     if (_376)
+10-29 22:09:13.362 E/flutter ( 4035):     {
+10-29 22:09:13.362 E/flutter ( 4035):         _539 = frag_info.decal_border_color;
+10-29 22:09:13.362 E/flutter ( 4035):     }
+10-29 22:09:13.362 E/flutter ( 4035):     else
+10-29 22:09:13.362 E/flutter ( 4035):     {
+10-29 22:09:13.362 E/flutter ( 4035):         highp float _524 = 0.0;
+10-29 22:09:13.362 E/flutter ( 4035):         if (frag_info.tile_mode == 0.0)
+10-29 22:09:13.362 E/flutter ( 4035):         {
+10-29 22:09:13.362 E/flutter ( 4035):             _524 = clamp(_343, 0.0, 1.0);
+10-29 22:09:13.362 E/flutter ( 4035):         }
+10-29 22:09:13.362 E/flutter ( 4035):         else
+10-29 22:09:13.362 E/flutter ( 4035):         {
+10-29 22:09:13.362 E/flutter ( 4035):             highp float _525 = 0.0;
+10-29 22:09:13.362 E/flutter ( 4035):             if (frag_info.tile_mode == 1.0)
+10-29 22:09:13.362 E/flutter ( 4035):             {
+10-29 22:09:13.362 E/flutter ( 4035):                 _525 = fract(_343);
+10-29 22:09:13.362 E/flutter ( 4035):             }
+10-29 22:09:13.362 E/flutter ( 4035):             else
+10-29 22:09:13.362 E/flutter ( 4035):             {
+10-29 22:09:13.362 E/flutter ( 4035):                 highp float _526 = 0.0;
+10-29 22:09:13.362 E/flutter ( 4035):                 if (frag_info.tile_mode == 2.0)
+10-29 22:09:13.362 E/flutter ( 4035):                 {
+10-29 22:09:13.362 E/flutter ( 4035):                     highp float _486 = _343 - 1.0;
+10-29 22:09:13.362 E/flutter ( 4035):                     _526 = abs((_486 - (2.0 * floor(_486 * 0.5))) - 1.0);
+10-29 22:09:13.362 E/flutter ( 4035):                 }
+10-29 22:09:13.362 E/flutter ( 4035):                 else
+10-29 22:09:13.362 E/flutter ( 4035):                 {
+10-29 22:09:13.362 E/flutter ( 4035):                     _526 = _343;
+10-29 22:09:13.362 E/flutter ( 4035):                 }
+10-29 22:09:13.362 E/flutter ( 4035):                 _525 = _526;
+10-29 22:09:13.362 E/flutter ( 4035):             }
+10-29 22:09:13.362 E/flutter ( 4035):             _524 = _525;
+10-29 22:09:13.362 E/flutter ( 4035):         }
+10-29 22:09:13.362 E/flutter ( 4035):         highp vec2 _534 = vec2(0.0);
+10-29 22:09:13.362 E/flutter ( 4035):         _534 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:09:13.362 E/flutter ( 4035):         bool _414 = false;
+10-29 22:09:13.362 E/flutter ( 4035):         highp vec2 _529 = vec2(0.0);
+10-29 22:09:13.362 E/flutter ( 4035):         highp vec4 _540 = vec4(0.0);
+10-29 22:09:13.362 E/flutter ( 4035):         int _527 = 1;
+10-29 22:09:13.362 E/flutter ( 4035):         bool _528 = false;
+10-29 22:09:13.362 E/flutter ( 4035):         for (;;)
+10-29 22:09:13.362 E/flutter ( 4035):         {
+10-29 22:09:13.362 E/flutter ( 4035):             if (float(_527) < frag_info.colors_length)
+10-29 22:09:13.362 E/flutter ( 4035):             {
+10-29 22:09:13.362 E/flutter ( 4035):                 if (_528)
+10-29 22:09:13.362 E/flutter ( 4035):                 {
+10-29 22:09:13.362 E/flutter ( 4035):                     _529 = stop_pairs_info.stop_pairs[_527 / 2].xy;
+10-29 22:09:13.362 E/flutter ( 4035):                 }
+10-29 22:09:13.362 E/flutter ( 4035):                 else
+10-29 22:09:13.362 E/flutter ( 4035):                 {
+10-29 22:09:13.362 E/flutter ( 4035):                     _529 = stop_pairs_info.stop_pairs[_527 / 2].zw;
+10-29 22:09:13.362 E/flutter ( 4035):                 }
+10-29 22:09:13.362 E/flutter ( 4035):                 _414 = !_528;
+10-29 22:09:13.362 E/flutter ( 4035):                 bool _418 = _524 >= _534.x;
+10-29 22:09:13.362 E/flutter ( 4035):                 bool _425 = false;
+10-29 22:09:13.362 E/flutter ( 4035):                 if (_418)
+10-29 22:09:13.362 E/flutter ( 4035):                 {
+10-29 22:09:13.362 E/flutter ( 4035):                     _425 = _524 <= _529.x;
+10-29 22:09:13.362 E/flutter ( 4035):                 }
+10-29 22:09:13.362 E/flutter ( 4035):                 else
+10-29 22:09:13.362 E/flutter ( 4035):                 {
+10-29 22:09:13.362 E/flutter ( 4035):                     _425 = _418;
+10-29 22:09:13.362 E/flutter ( 4035):                 }
+10-29 22:09:13.362 E/flutter ( 4035):                 if (_425)
+10-29 22:09:13.362 E/flutter ( 4035):                 {
+10-29 22:09:13.362 E/flutter ( 4035):                     highp vec4 _549 = vec4(0.0);
+10-29 22:09:13.362 E/flutter ( 4035):                     if (_529.y > 1000.0)
+10-29 22:09:13.362 E/flutter ( 4035):                     {
+10-29 22:09:13.362 E/flutter ( 4035):                         _549 = colors_info.colors[_527];
+10-29 22:09:13.362 E/flutter ( 4035):                     }
+10-29 22:09:13.362 E/flutter ( 4035):                     else
+10-29 22:09:13.362 E/flutter ( 4035):                     {
+10-29 22:09:13.362 E/flutter ( 4035):                         _549 = mix(colors_info.colors[_527 - 1], colors_info.colors[_527], vec4((_524 - _534.x) * _529.y));
+10-29 22:09:13.362 E/flutter ( 4035):                     }
+10-29 22:09:13.362 E/flutter ( 4035):                     _540 = _549;
+10-29 22:09:13.362 E/flutter ( 4035):                     break;
+10-29 22:09:13.362 E/flutter ( 4035):                 }
+10-29 22:09:13.362 E/flutter ( 4035):                 _534 = _529;
+10-29 22:09:13.362 E/flutter ( 4035):                 _528 = _414;
+10-29 22:09:13.362 E/flutter ( 4035):                 _527++;
+10-29 22:09:13.362 E/flutter ( 4035):                 continue;
+10-29 22:09:13.362 E/flutter ( 4035):             }
+10-29 22:09:13.362 E/flutter ( 4035):             else
+10-29 22:09:13.362 E/flutter ( 4035):             {
+10-29 22:09:13.362 E/flutter ( 4035):                 _540 = vec4(0.0);
+10-29 22:09:13.362 E/flutter ( 4035):                 break;
+10-29 22:09:13.362 E/flutter ( 4035):             }
+10-29 22:09:13.362 E/flutter ( 4035):         }
+10-29 22:09:13.362 E/flutter ( 4035):         _539 = _540;
+10-29 22:09:13.362 E/flutter ( 4035):     }
+10-29 22:09:13.362 E/flutter ( 4035):     gl_FragData[0] = vec4(_539.xyz * _539.w, _539.w) * frag_info.alpha;
+10-29 22:09:13.362 E/flutter ( 4035): }
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): 
+10-29 22:09:13.362 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:09:13.374 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): Vertex Shader:
+10-29 22:09:13.374 E/flutter ( 4035): #version 100
+10-29 22:09:13.374 E/flutter ( 4035): uniform float _impeller_y_flip;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): struct FrameInfo
+10-29 22:09:13.374 E/flutter ( 4035): {
+10-29 22:09:13.374 E/flutter ( 4035):     mat4 mvp;
+10-29 22:09:13.374 E/flutter ( 4035):     mat4 matrix;
+10-29 22:09:13.374 E/flutter ( 4035): };
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): uniform FrameInfo frame_info;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): attribute vec2 position;
+10-29 22:09:13.374 E/flutter ( 4035): varying vec2 v_position;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): void _impeller_user_main()
+10-29 22:09:13.374 E/flutter ( 4035): {
+10-29 22:09:13.374 E/flutter ( 4035):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:09:13.374 E/flutter ( 4035):     gl_Position = frame_info.mvp * _59;
+10-29 22:09:13.374 E/flutter ( 4035):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:09:13.374 E/flutter ( 4035):     v_position = _80.xy / vec2(_80.w);
+10-29 22:09:13.374 E/flutter ( 4035):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:09:13.374 E/flutter ( 4035): }
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): void main() {
+10-29 22:09:13.374 E/flutter ( 4035):   _impeller_user_main();
+10-29 22:09:13.374 E/flutter ( 4035):   gl_Position.y *= _impeller_y_flip;
+10-29 22:09:13.374 E/flutter ( 4035): }
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): Fragment Shader:
+10-29 22:09:13.374 E/flutter ( 4035): #version 100
+10-29 22:09:13.374 E/flutter ( 4035): precision mediump float;
+10-29 22:09:13.374 E/flutter ( 4035): precision highp int;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): struct FragInfo
+10-29 22:09:13.374 E/flutter ( 4035): {
+10-29 22:09:13.374 E/flutter ( 4035):     highp vec2 center;
+10-29 22:09:13.374 E/flutter ( 4035):     highp vec2 focus;
+10-29 22:09:13.374 E/flutter ( 4035):     highp float focus_radius;
+10-29 22:09:13.374 E/flutter ( 4035):     highp float radius;
+10-29 22:09:13.374 E/flutter ( 4035):     highp float tile_mode;
+10-29 22:09:13.374 E/flutter ( 4035):     highp float alpha;
+10-29 22:09:13.374 E/flutter ( 4035):     highp float colors_length;
+10-29 22:09:13.374 E/flutter ( 4035):     highp vec4 decal_border_color;
+10-29 22:09:13.374 E/flutter ( 4035): };
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): uniform FragInfo frag_info;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): struct StopPairsInfo
+10-29 22:09:13.374 E/flutter ( 4035): {
+10-29 22:09:13.374 E/flutter ( 4035):     highp vec4 stop_pairs[128];
+10-29 22:09:13.374 E/flutter ( 4035): };
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): uniform StopPairsInfo stop_pairs_info;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): struct ColorsInfo
+10-29 22:09:13.374 E/flutter ( 4035): {
+10-29 22:09:13.374 E/flutter ( 4035):     highp vec4 colors[256];
+10-29 22:09:13.374 E/flutter ( 4035): };
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): uniform ColorsInfo colors_info;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): varying highp vec2 v_position;
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): void main()
+10-29 22:09:13.374 E/flutter ( 4035): {
+10-29 22:09:13.374 E/flutter ( 4035):     highp vec2 _914 = vec2(0.0);
+10-29 22:09:13.374 E/flutter ( 4035):     for (int spvDummy103 = 0; spvDummy103 < 1; spvDummy103++)
+10-29 22:09:13.374 E/flutter ( 4035):     {
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _569 = frag_info.center.y - frag_info.focus.y;
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _574 = frag_info.focus.x - frag_info.center.x;
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _579 = frag_info.center.x - frag_info.focus.x;
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _638 = (-1.0) * _579;
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _652 = _569 * _569;
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _531 = frag_info.focus_radius / distance(frag_info.focus, frag_info.center);
+10-29 22:09:13.374 E/flutter ( 4035):         highp vec3 _540 = (mat3(vec3(0.0, -1.0, 0.0), vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0)) * (mat3(vec3(_569, (-1.0) * _574, 0.0), vec3(_638, _569, 0.0), vec3((frag_info.focus.y * _579) - (_569 * frag_info.focus.x), ((-frag_info.focus.y) * _569) + (_574 * frag_info.focus.x), _652 - (_574 * _579))) * (1.0 / (_652 + (_574 * _638))))) * vec3(v_position, 1.0);
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _544 = _540.y;
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _548 = (_531 * _531) - (_544 * _544);
+10-29 22:09:13.374 E/flutter ( 4035):         if (_548 < 0.0)
+10-29 22:09:13.374 E/flutter ( 4035):         {
+10-29 22:09:13.374 E/flutter ( 4035):             _914 = vec2(0.0, -1.0);
+10-29 22:09:13.374 E/flutter ( 4035):             break;
+10-29 22:09:13.374 E/flutter ( 4035):         }
+10-29 22:09:13.374 E/flutter ( 4035):         _914 = vec2(_540.x + sqrt(_548), 1.0);
+10-29 22:09:13.374 E/flutter ( 4035):         break;
+10-29 22:09:13.374 E/flutter ( 4035):     }
+10-29 22:09:13.374 E/flutter ( 4035):     bool _733 = _914.y < 0.0;
+10-29 22:09:13.374 E/flutter ( 4035):     bool _748 = false;
+10-29 22:09:13.374 E/flutter ( 4035):     if (!_733)
+10-29 22:09:13.374 E/flutter ( 4035):     {
+10-29 22:09:13.374 E/flutter ( 4035):         bool _740 = (_914.x < 0.0) || (_914.x > 1.0);
+10-29 22:09:13.374 E/flutter ( 4035):         bool _746 = false;
+10-29 22:09:13.374 E/flutter ( 4035):         if (_740)
+10-29 22:09:13.374 E/flutter ( 4035):         {
+10-29 22:09:13.374 E/flutter ( 4035):             _746 = frag_info.tile_mode == 3.0;
+10-29 22:09:13.374 E/flutter ( 4035):         }
+10-29 22:09:13.374 E/flutter ( 4035):         else
+10-29 22:09:13.374 E/flutter ( 4035):         {
+10-29 22:09:13.374 E/flutter ( 4035):             _746 = _740;
+10-29 22:09:13.374 E/flutter ( 4035):         }
+10-29 22:09:13.374 E/flutter ( 4035):         _748 = _746;
+10-29 22:09:13.374 E/flutter ( 4035):     }
+10-29 22:09:13.374 E/flutter ( 4035):     else
+10-29 22:09:13.374 E/flutter ( 4035):     {
+10-29 22:09:13.374 E/flutter ( 4035):         _748 = _733;
+10-29 22:09:13.374 E/flutter ( 4035):     }
+10-29 22:09:13.374 E/flutter ( 4035):     highp vec4 _932 = vec4(0.0);
+10-29 22:09:13.374 E/flutter ( 4035):     if (_748)
+10-29 22:09:13.374 E/flutter ( 4035):     {
+10-29 22:09:13.374 E/flutter ( 4035):         _932 = frag_info.decal_border_color;
+10-29 22:09:13.374 E/flutter ( 4035):     }
+10-29 22:09:13.374 E/flutter ( 4035):     else
+10-29 22:09:13.374 E/flutter ( 4035):     {
+10-29 22:09:13.374 E/flutter ( 4035):         highp float _917 = 0.0;
+10-29 22:09:13.374 E/flutter ( 4035):         if (frag_info.tile_mode == 0.0)
+10-29 22:09:13.374 E/flutter ( 4035):         {
+10-29 22:09:13.374 E/flutter ( 4035):             _917 = clamp(_914.x, 0.0, 1.0);
+10-29 22:09:13.374 E/flutter ( 4035):         }
+10-29 22:09:13.374 E/flutter ( 4035):         else
+10-29 22:09:13.374 E/flutter ( 4035):         {
+10-29 22:09:13.374 E/flutter ( 4035):             highp float _918 = 0.0;
+10-29 22:09:13.374 E/flutter ( 4035):             if (frag_info.tile_mode == 1.0)
+10-29 22:09:13.374 E/flutter ( 4035):             {
+10-29 22:09:13.374 E/flutter ( 4035):                 _918 = fract(_914.x);
+10-29 22:09:13.374 E/flutter ( 4035):             }
+10-29 22:09:13.374 E/flutter ( 4035):             else
+10-29 22:09:13.374 E/flutter ( 4035):             {
+10-29 22:09:13.374 E/flutter ( 4035):                 highp float _919 = 0.0;
+10-29 22:09:13.374 E/flutter ( 4035):                 if (frag_info.tile_mode == 2.0)
+10-29 22:09:13.374 E/flutter ( 4035):                 {
+10-29 22:09:13.374 E/flutter ( 4035):                     highp float _856 = _914.x - 1.0;
+10-29 22:09:13.374 E/flutter ( 4035):                     _919 = abs((_856 - (2.0 * floor(_856 * 0.5))) - 1.0);
+10-29 22:09:13.374 E/flutter ( 4035):                 }
+10-29 22:09:13.374 E/flutter ( 4035):                 else
+10-29 22:09:13.374 E/flutter ( 4035):                 {
+10-29 22:09:13.374 E/flutter ( 4035):                     _919 = _914.x;
+10-29 22:09:13.374 E/flutter ( 4035):                 }
+10-29 22:09:13.374 E/flutter ( 4035):                 _918 = _919;
+10-29 22:09:13.374 E/flutter ( 4035):             }
+10-29 22:09:13.374 E/flutter ( 4035):             _917 = _918;
+10-29 22:09:13.374 E/flutter ( 4035):         }
+10-29 22:09:13.374 E/flutter ( 4035):         highp vec2 _927 = vec2(0.0);
+10-29 22:09:13.374 E/flutter ( 4035):         _927 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:09:13.374 E/flutter ( 4035):         bool _784 = false;
+10-29 22:09:13.374 E/flutter ( 4035):         highp vec2 _922 = vec2(0.0);
+10-29 22:09:13.374 E/flutter ( 4035):         highp vec4 _933 = vec4(0.0);
+10-29 22:09:13.374 E/flutter ( 4035):         int _920 = 1;
+10-29 22:09:13.374 E/flutter ( 4035):         bool _921 = false;
+10-29 22:09:13.374 E/flutter ( 4035):         for (;;)
+10-29 22:09:13.374 E/flutter ( 4035):         {
+10-29 22:09:13.374 E/flutter ( 4035):             if (float(_920) < frag_info.colors_length)
+10-29 22:09:13.374 E/flutter ( 4035):             {
+10-29 22:09:13.374 E/flutter ( 4035):                 if (_921)
+10-29 22:09:13.374 E/flutter ( 4035):                 {
+10-29 22:09:13.374 E/flutter ( 4035):                     _922 = stop_pairs_info.stop_pairs[_920 / 2].xy;
+10-29 22:09:13.374 E/flutter ( 4035):                 }
+10-29 22:09:13.374 E/flutter ( 4035):                 else
+10-29 22:09:13.374 E/flutter ( 4035):                 {
+10-29 22:09:13.374 E/flutter ( 4035):                     _922 = stop_pairs_info.stop_pairs[_920 / 2].zw;
+10-29 22:09:13.374 E/flutter ( 4035):                 }
+10-29 22:09:13.374 E/flutter ( 4035):                 _784 = !_921;
+10-29 22:09:13.374 E/flutter ( 4035):                 bool _788 = _917 >= _927.x;
+10-29 22:09:13.374 E/flutter ( 4035):                 bool _795 = false;
+10-29 22:09:13.374 E/flutter ( 4035):                 if (_788)
+10-29 22:09:13.374 E/flutter ( 4035):                 {
+10-29 22:09:13.374 E/flutter ( 4035):                     _795 = _917 <= _922.x;
+10-29 22:09:13.374 E/flutter ( 4035):                 }
+10-29 22:09:13.374 E/flutter ( 4035):                 else
+10-29 22:09:13.374 E/flutter ( 4035):                 {
+10-29 22:09:13.374 E/flutter ( 4035):                     _795 = _788;
+10-29 22:09:13.374 E/flutter ( 4035):                 }
+10-29 22:09:13.374 E/flutter ( 4035):                 if (_795)
+10-29 22:09:13.374 E/flutter ( 4035):                 {
+10-29 22:09:13.374 E/flutter ( 4035):                     highp vec4 _942 = vec4(0.0);
+10-29 22:09:13.374 E/flutter ( 4035):                     if (_922.y > 1000.0)
+10-29 22:09:13.374 E/flutter ( 4035):                     {
+10-29 22:09:13.374 E/flutter ( 4035):                         _942 = colors_info.colors[_920];
+10-29 22:09:13.374 E/flutter ( 4035):                     }
+10-29 22:09:13.374 E/flutter ( 4035):                     else
+10-29 22:09:13.374 E/flutter ( 4035):                     {
+10-29 22:09:13.374 E/flutter ( 4035):                         _942 = mix(colors_info.colors[_920 - 1], colors_info.colors[_920], vec4((_917 - _927.x) * _922.y));
+10-29 22:09:13.374 E/flutter ( 4035):                     }
+10-29 22:09:13.374 E/flutter ( 4035):                     _933 = _942;
+10-29 22:09:13.374 E/flutter ( 4035):                     break;
+10-29 22:09:13.374 E/flutter ( 4035):                 }
+10-29 22:09:13.374 E/flutter ( 4035):                 _927 = _922;
+10-29 22:09:13.374 E/flutter ( 4035):                 _921 = _784;
+10-29 22:09:13.374 E/flutter ( 4035):                 _920++;
+10-29 22:09:13.374 E/flutter ( 4035):                 continue;
+10-29 22:09:13.374 E/flutter ( 4035):             }
+10-29 22:09:13.374 E/flutter ( 4035):             else
+10-29 22:09:13.374 E/flutter ( 4035):             {
+10-29 22:09:13.374 E/flutter ( 4035):                 _933 = vec4(0.0);
+10-29 22:09:13.374 E/flutter ( 4035):                 break;
+10-29 22:09:13.374 E/flutter ( 4035):             }
+10-29 22:09:13.374 E/flutter ( 4035):         }
+10-29 22:09:13.374 E/flutter ( 4035):         _932 = _933;
+10-29 22:09:13.374 E/flutter ( 4035):     }
+10-29 22:09:13.374 E/flutter ( 4035):     gl_FragData[0] = vec4(_932.xyz * _932.w, _932.w) * frag_info.alpha;
+10-29 22:09:13.374 E/flutter ( 4035): }
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): 
+10-29 22:09:13.374 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:09:13.382 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): Vertex Shader:
+10-29 22:09:13.382 E/flutter ( 4035): #version 100
+10-29 22:09:13.382 E/flutter ( 4035): uniform float _impeller_y_flip;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): struct FrameInfo
+10-29 22:09:13.382 E/flutter ( 4035): {
+10-29 22:09:13.382 E/flutter ( 4035):     mat4 mvp;
+10-29 22:09:13.382 E/flutter ( 4035):     mat4 matrix;
+10-29 22:09:13.382 E/flutter ( 4035): };
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): uniform FrameInfo frame_info;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): attribute vec2 position;
+10-29 22:09:13.382 E/flutter ( 4035): varying vec2 v_position;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): void _impeller_user_main()
+10-29 22:09:13.382 E/flutter ( 4035): {
+10-29 22:09:13.382 E/flutter ( 4035):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:09:13.382 E/flutter ( 4035):     gl_Position = frame_info.mvp * _59;
+10-29 22:09:13.382 E/flutter ( 4035):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:09:13.382 E/flutter ( 4035):     v_position = _80.xy / vec2(_80.w);
+10-29 22:09:13.382 E/flutter ( 4035):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:09:13.382 E/flutter ( 4035): }
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): void main() {
+10-29 22:09:13.382 E/flutter ( 4035):   _impeller_user_main();
+10-29 22:09:13.382 E/flutter ( 4035):   gl_Position.y *= _impeller_y_flip;
+10-29 22:09:13.382 E/flutter ( 4035): }
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): Fragment Shader:
+10-29 22:09:13.382 E/flutter ( 4035): #version 100
+10-29 22:09:13.382 E/flutter ( 4035): precision mediump float;
+10-29 22:09:13.382 E/flutter ( 4035): precision highp int;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): struct FragInfo
+10-29 22:09:13.382 E/flutter ( 4035): {
+10-29 22:09:13.382 E/flutter ( 4035):     highp vec2 center;
+10-29 22:09:13.382 E/flutter ( 4035):     highp float bias;
+10-29 22:09:13.382 E/flutter ( 4035):     highp float scale;
+10-29 22:09:13.382 E/flutter ( 4035):     highp float tile_mode;
+10-29 22:09:13.382 E/flutter ( 4035):     highp float alpha;
+10-29 22:09:13.382 E/flutter ( 4035):     highp float colors_length;
+10-29 22:09:13.382 E/flutter ( 4035):     highp vec4 decal_border_color;
+10-29 22:09:13.382 E/flutter ( 4035): };
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): uniform FragInfo frag_info;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): struct StopPairsInfo
+10-29 22:09:13.382 E/flutter ( 4035): {
+10-29 22:09:13.382 E/flutter ( 4035):     highp vec4 stop_pairs[128];
+10-29 22:09:13.382 E/flutter ( 4035): };
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): uniform StopPairsInfo stop_pairs_info;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): struct ColorsInfo
+10-29 22:09:13.382 E/flutter ( 4035): {
+10-29 22:09:13.382 E/flutter ( 4035):     highp vec4 colors[256];
+10-29 22:09:13.382 E/flutter ( 4035): };
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): uniform ColorsInfo colors_info;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): varying highp vec2 v_position;
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): void main()
+10-29 22:09:13.382 E/flutter ( 4035): {
+10-29 22:09:13.382 E/flutter ( 4035):     highp vec2 _98 = v_position - frag_info.center;
+10-29 22:09:13.382 E/flutter ( 4035):     highp float _122 = (((atan(-_98.y, -_98.x) * 0.15915493667125701904296875) + 0.5) + frag_info.bias) * frag_info.scale;
+10-29 22:09:13.382 E/flutter ( 4035):     bool _129 = (_122 < 0.0) || (_122 > 1.0);
+10-29 22:09:13.382 E/flutter ( 4035):     bool _137 = false;
+10-29 22:09:13.382 E/flutter ( 4035):     if (_129)
+10-29 22:09:13.382 E/flutter ( 4035):     {
+10-29 22:09:13.382 E/flutter ( 4035):         _137 = frag_info.tile_mode == 3.0;
+10-29 22:09:13.382 E/flutter ( 4035):     }
+10-29 22:09:13.382 E/flutter ( 4035):     else
+10-29 22:09:13.382 E/flutter ( 4035):     {
+10-29 22:09:13.382 E/flutter ( 4035):         _137 = _129;
+10-29 22:09:13.382 E/flutter ( 4035):     }
+10-29 22:09:13.382 E/flutter ( 4035):     highp vec4 _333 = vec4(0.0);
+10-29 22:09:13.382 E/flutter ( 4035):     if (_137)
+10-29 22:09:13.382 E/flutter ( 4035):     {
+10-29 22:09:13.382 E/flutter ( 4035):         _333 = frag_info.decal_border_color;
+10-29 22:09:13.382 E/flutter ( 4035):     }
+10-29 22:09:13.382 E/flutter ( 4035):     else
+10-29 22:09:13.382 E/flutter ( 4035):     {
+10-29 22:09:13.382 E/flutter ( 4035):         highp float _318 = 0.0;
+10-29 22:09:13.382 E/flutter ( 4035):         if (frag_info.tile_mode == 0.0)
+10-29 22:09:13.382 E/flutter ( 4035):         {
+10-29 22:09:13.382 E/flutter ( 4035):             _318 = clamp(_122, 0.0, 1.0);
+10-29 22:09:13.382 E/flutter ( 4035):         }
+10-29 22:09:13.382 E/flutter ( 4035):         else
+10-29 22:09:13.382 E/flutter ( 4035):         {
+10-29 22:09:13.382 E/flutter ( 4035):             highp float _319 = 0.0;
+10-29 22:09:13.382 E/flutter ( 4035):             if (frag_info.tile_mode == 1.0)
+10-29 22:09:13.382 E/flutter ( 4035):             {
+10-29 22:09:13.382 E/flutter ( 4035):                 _319 = fract(_122);
+10-29 22:09:13.382 E/flutter ( 4035):             }
+10-29 22:09:13.382 E/flutter ( 4035):             else
+10-29 22:09:13.382 E/flutter ( 4035):             {
+10-29 22:09:13.382 E/flutter ( 4035):                 highp float _320 = 0.0;
+10-29 22:09:13.382 E/flutter ( 4035):                 if (frag_info.tile_mode == 2.0)
+10-29 22:09:13.382 E/flutter ( 4035):                 {
+10-29 22:09:13.382 E/flutter ( 4035):                     highp float _281 = _122 - 1.0;
+10-29 22:09:13.382 E/flutter ( 4035):                     _320 = abs((_281 - (2.0 * floor(_281 * 0.5))) - 1.0);
+10-29 22:09:13.382 E/flutter ( 4035):                 }
+10-29 22:09:13.382 E/flutter ( 4035):                 else
+10-29 22:09:13.382 E/flutter ( 4035):                 {
+10-29 22:09:13.382 E/flutter ( 4035):                     _320 = _122;
+10-29 22:09:13.382 E/flutter ( 4035):                 }
+10-29 22:09:13.382 E/flutter ( 4035):                 _319 = _320;
+10-29 22:09:13.382 E/flutter ( 4035):             }
+10-29 22:09:13.382 E/flutter ( 4035):             _318 = _319;
+10-29 22:09:13.382 E/flutter ( 4035):         }
+10-29 22:09:13.382 E/flutter ( 4035):         highp vec2 _328 = vec2(0.0);
+10-29 22:09:13.382 E/flutter ( 4035):         _328 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:09:13.382 E/flutter ( 4035):         bool _194 = false;
+10-29 22:09:13.382 E/flutter ( 4035):         highp vec2 _323 = vec2(0.0);
+10-29 22:09:13.382 E/flutter ( 4035):         highp vec4 _334 = vec4(0.0);
+10-29 22:09:13.382 E/flutter ( 4035):         int _321 = 1;
+10-29 22:09:13.382 E/flutter ( 4035):         bool _322 = false;
+10-29 22:09:13.382 E/flutter ( 4035):         for (;;)
+10-29 22:09:13.382 E/flutter ( 4035):         {
+10-29 22:09:13.382 E/flutter ( 4035):             if (float(_321) < frag_info.colors_length)
+10-29 22:09:13.382 E/flutter ( 4035):             {
+10-29 22:09:13.382 E/flutter ( 4035):                 if (_322)
+10-29 22:09:13.382 E/flutter ( 4035):                 {
+10-29 22:09:13.382 E/flutter ( 4035):                     _323 = stop_pairs_info.stop_pairs[_321 / 2].xy;
+10-29 22:09:13.382 E/flutter ( 4035):                 }
+10-29 22:09:13.382 E/flutter ( 4035):                 else
+10-29 22:09:13.382 E/flutter ( 4035):                 {
+10-29 22:09:13.382 E/flutter ( 4035):                     _323 = stop_pairs_info.stop_pairs[_321 / 2].zw;
+10-29 22:09:13.382 E/flutter ( 4035):                 }
+10-29 22:09:13.382 E/flutter ( 4035):                 _194 = !_322;
+10-29 22:09:13.382 E/flutter ( 4035):                 bool _198 = _318 >= _328.x;
+10-29 22:09:13.382 E/flutter ( 4035):                 bool _205 = false;
+10-29 22:09:13.382 E/flutter ( 4035):                 if (_198)
+10-29 22:09:13.382 E/flutter ( 4035):                 {
+10-29 22:09:13.382 E/flutter ( 4035):                     _205 = _318 <= _323.x;
+10-29 22:09:13.382 E/flutter ( 4035):                 }
+10-29 22:09:13.382 E/flutter ( 4035):                 else
+10-29 22:09:13.382 E/flutter ( 4035):                 {
+10-29 22:09:13.382 E/flutter ( 4035):                     _205 = _198;
+10-29 22:09:13.382 E/flutter ( 4035):                 }
+10-29 22:09:13.382 E/flutter ( 4035):                 if (_205)
+10-29 22:09:13.382 E/flutter ( 4035):                 {
+10-29 22:09:13.382 E/flutter ( 4035):                     highp vec4 _342 = vec4(0.0);
+10-29 22:09:13.382 E/flutter ( 4035):                     if (_323.y > 1000.0)
+10-29 22:09:13.382 E/flutter ( 4035):                     {
+10-29 22:09:13.382 E/flutter ( 4035):                         _342 = colors_info.colors[_321];
+10-29 22:09:13.382 E/flutter ( 4035):                     }
+10-29 22:09:13.382 E/flutter ( 4035):                     else
+10-29 22:09:13.382 E/flutter ( 4035):                     {
+10-29 22:09:13.382 E/flutter ( 4035):                         _342 = mix(colors_info.colors[_321 - 1], colors_info.colors[_321], vec4((_318 - _328.x) * _323.y));
+10-29 22:09:13.382 E/flutter ( 4035):                     }
+10-29 22:09:13.382 E/flutter ( 4035):                     _334 = _342;
+10-29 22:09:13.382 E/flutter ( 4035):                     break;
+10-29 22:09:13.382 E/flutter ( 4035):                 }
+10-29 22:09:13.382 E/flutter ( 4035):                 _328 = _323;
+10-29 22:09:13.382 E/flutter ( 4035):                 _322 = _194;
+10-29 22:09:13.382 E/flutter ( 4035):                 _321++;
+10-29 22:09:13.382 E/flutter ( 4035):                 continue;
+10-29 22:09:13.382 E/flutter ( 4035):             }
+10-29 22:09:13.382 E/flutter ( 4035):             else
+10-29 22:09:13.382 E/flutter ( 4035):             {
+10-29 22:09:13.382 E/flutter ( 4035):                 _334 = vec4(0.0);
+10-29 22:09:13.382 E/flutter ( 4035):                 break;
+10-29 22:09:13.382 E/flutter ( 4035):             }
+10-29 22:09:13.382 E/flutter ( 4035):         }
+10-29 22:09:13.382 E/flutter ( 4035):         _333 = _334;
+10-29 22:09:13.382 E/flutter ( 4035):     }
+10-29 22:09:13.382 E/flutter ( 4035):     gl_FragData[0] = vec4(_333.xyz * _333.w, _333.w) * frag_info.alpha;
+10-29 22:09:13.382 E/flutter ( 4035): }
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): 
+10-29 22:09:13.382 E/flutter ( 4035): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:09:14.035 I/BgJobs  ( 4035): watchdog armed
+10-29 22:09:30.073 I/BgJobs  ( 4035): schedule id=spike everyMs=60000 next=1793286629896 mode=exact
+10-29 22:09:30.081 I/BgJobs  ( 4035): schedule id=slow everyMs=300000 next=1793286870077 mode=exact
+10-29 22:10:29.902 I/BgJobs  ( 4035): fire id=spike trigger=alarm delayMs=5
+10-29 22:10:29.939 E/flutter ( 4035): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:10:29.939 E/flutter ( 4035): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:10:29.964 I/flutter ( 4035): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:10:30.488 I/BgJobs  ( 4035): engine ready in 571ms
+10-29 22:10:34.710 I/flutter ( 4035): BGJOBS_ROW job=spike trigger=alarm delayMs=5 durMs=4163 idle=false loc=OK fixAgeS=0 events=
+10-29 22:10:34.715 I/BgJobs  ( 4035): done id=spike result=ok durMs=4810
+10-29 22:11:29.905 I/BgJobs  ( 4035): fire id=spike trigger=alarm delayMs=3
+10-29 22:11:33.694 I/flutter ( 4035): BGJOBS_ROW job=spike trigger=alarm delayMs=3 durMs=3776 idle=false loc=OK fixAgeS=0 events=
+10-29 22:11:33.698 I/BgJobs  ( 4035): done id=spike result=ok durMs=3791
+10-29 22:12:29.906 I/BgJobs  ( 4035): fire id=spike trigger=alarm delayMs=2
+10-29 22:12:33.732 I/flutter ( 4035): BGJOBS_ROW job=spike trigger=alarm delayMs=2 durMs=3815 idle=false loc=OK fixAgeS=0 events=
+10-29 22:12:33.734 I/BgJobs  ( 4035): done id=spike result=ok durMs=3827
+10-29 22:12:40.365 I/BgJobs  ( 4035): watchdog armed
+10-29 22:12:40.385 I/BgJobs  ( 4035): reconcile armed id=slow at=1793286870077
+10-29 22:12:40.401 I/BgJobs  ( 4035): reconcile armed id=spike at=1793286809906
+10-29 22:13:30.115 I/BgJobs  ( 5932): fire id=spike trigger=alarm delayMs=204
+10-29 22:13:30.126 I/BgJobs  ( 5932): event #1 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=remove task}
+10-29 22:13:30.231 E/flutter ( 5932): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:13:30.231 E/flutter ( 5932): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:13:30.240 I/flutter ( 5932): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:13:30.447 I/flutter ( 5932): The Dart VM service is listening on http://127.0.0.1:44243/TLODKR1HhQo=/
+10-29 22:13:30.591 I/BgJobs  ( 5932): engine ready in 456ms
+10-29 22:13:34.847 I/flutter ( 5932): BGJOBS_ROW job=spike trigger=alarm delayMs=204 durMs=4166 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 22:13:34.852 I/BgJobs  ( 5932): done id=spike result=ok durMs=4738
+10-29 22:14:30.141 I/BgJobs  ( 6455): fire id=slow trigger=alarm delayMs=62
+10-29 22:14:30.156 I/BgJobs  ( 6455): event #2 processExit {reason=OTHER, reasonCode=13, importance=400, description=empty #17}
+10-29 22:14:30.240 E/flutter ( 6455): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:14:30.240 E/flutter ( 6455): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:14:30.249 I/flutter ( 6455): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:14:30.385 I/flutter ( 6455): The Dart VM service is listening on http://127.0.0.1:45147/beHeWGMhxQM=/
+10-29 22:14:30.537 I/BgJobs  ( 6455): engine ready in 371ms
+10-29 22:14:50.610 I/flutter ( 6455): BGJOBS_ROW job=slow trigger=alarm delayMs=62 durMs=20009 idle=false loc=SLOW fixAgeS=- events=processExit,processExit
+10-29 22:14:50.617 I/BgJobs  ( 6455): done id=slow result=ok durMs=20473
+10-29 22:14:50.620 I/BgJobs  ( 6455): fire id=spike trigger=alarm delayMs=20510
+10-29 22:14:54.826 I/flutter ( 6455): BGJOBS_ROW job=spike trigger=alarm delayMs=20510 durMs=4182 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 22:14:54.846 I/BgJobs  ( 6455): done id=spike result=ok durMs=4210
+10-29 22:15:50.672 I/BgJobs  ( 6563): fire id=spike trigger=alarm delayMs=49
+10-29 22:15:50.681 I/BgJobs  ( 6563): event #3 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=kill background}
+10-29 22:15:50.758 E/flutter ( 6563): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:15:50.758 E/flutter ( 6563): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:15:50.768 I/flutter ( 6563): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:15:50.894 I/flutter ( 6563): The Dart VM service is listening on http://127.0.0.1:41541/SgCgldmg3Rk=/
+10-29 22:15:51.026 I/BgJobs  ( 6563): engine ready in 338ms
+10-29 22:15:54.929 I/flutter ( 6563): BGJOBS_ROW job=spike trigger=alarm delayMs=49 durMs=3820 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 22:15:54.935 I/BgJobs  ( 6563): done id=spike result=ok durMs=4262
+10-29 22:16:50.671 I/BgJobs  ( 6563): fire id=spike trigger=alarm delayMs=2
+10-29 22:16:54.892 I/flutter ( 6563): BGJOBS_ROW job=spike trigger=alarm delayMs=2 durMs=4205 idle=false loc=OK fixAgeS=0 events=
+10-29 22:16:54.897 I/BgJobs  ( 6563): done id=spike result=ok durMs=4222
+10-29 22:17:50.674 I/BgJobs  ( 6563): fire id=spike trigger=alarm delayMs=2
+10-29 22:17:54.944 I/flutter ( 6563): BGJOBS_ROW job=spike trigger=alarm delayMs=2 durMs=4245 idle=false loc=OK fixAgeS=0 events=
+10-29 22:17:54.952 I/BgJobs  ( 6563): done id=spike result=ok durMs=4272
+10-29 22:18:50.678 I/BgJobs  ( 6563): fire id=spike trigger=alarm delayMs=5
+10-29 22:18:54.974 I/flutter ( 6563): BGJOBS_ROW job=spike trigger=alarm delayMs=5 durMs=4279 idle=true loc=OK fixAgeS=0 events=
+10-29 22:18:54.977 I/BgJobs  ( 6563): done id=spike result=ok durMs=4296
+10-29 22:19:30.149 I/BgJobs  ( 6563): fire id=slow trigger=alarm delayMs=10
+10-29 22:19:50.176 I/flutter ( 6563): BGJOBS_ROW job=slow trigger=alarm delayMs=10 durMs=20004 idle=true loc=SLOW fixAgeS=- events=processExit
+10-29 22:19:50.183 I/BgJobs  ( 6563): done id=slow result=ok durMs=20028
+10-29 22:19:50.680 I/BgJobs  ( 6563): fire id=spike trigger=alarm delayMs=2
+10-29 22:19:55.012 I/flutter ( 6563): BGJOBS_ROW job=spike trigger=alarm delayMs=2 durMs=4320 idle=true loc=OK fixAgeS=0 events=
+10-29 22:19:55.016 I/BgJobs  ( 6563): done id=spike result=ok durMs=4332
+--------- beginning of crash
+--------- beginning of kernel
+--------- beginning of main
+--------- beginning of system
+10-29 22:20:53.190 I/BgJobs  ( 3492): watchdog armed
+10-29 22:20:53.204 I/BgJobs  ( 3492): event #4 boot {bootCount=2, bootTime=1793287206925, shutdownAt=1793287195012, shutdownSource=lastJob, viaBroadcast=true}
+10-29 22:20:53.204 I/BgJobs  ( 3492): boot bootCount=2 viaBroadcast=true shutdown=lastJob
+10-29 22:20:57.066 I/BgJobs  ( 3492): fire id=slow trigger=boot delayMs=3861
+10-29 22:20:57.305 E/flutter ( 3492): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:20:57.305 E/flutter ( 3492): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:20:57.332 I/flutter ( 3492): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:20:57.798 I/flutter ( 3492): The Dart VM service is listening on http://127.0.0.1:35521/jv1yTmq4Wr0=/
+10-29 22:20:58.817 I/BgJobs  ( 3492): engine ready in 1726ms
+10-29 22:21:18.886 I/flutter ( 3492): BGJOBS_ROW job=slow trigger=boot delayMs=3861 durMs=20003 idle=false loc=SLOW fixAgeS=- events=boot
+10-29 22:21:18.890 I/BgJobs  ( 3492): done id=slow result=ok durMs=21821
+10-29 22:21:18.991 I/BgJobs  ( 3492): fire id=spike trigger=boot delayMs=25783
+10-29 22:21:22.896 I/flutter ( 3492): BGJOBS_ROW job=spike trigger=boot delayMs=25783 durMs=3892 idle=false loc=OK fixAgeS=0 events=boot
+10-29 22:21:22.912 I/BgJobs  ( 3492): done id=spike result=ok durMs=3905
+10-29 22:22:18.995 I/BgJobs  ( 3492): fire id=spike trigger=alarm delayMs=3
+10-29 22:22:22.929 I/flutter ( 3492): BGJOBS_ROW job=spike trigger=alarm delayMs=3 durMs=3918 idle=false loc=OK fixAgeS=0 events=
+10-29 22:22:22.933 I/BgJobs  ( 3492): done id=spike result=ok durMs=3936
+10-29 22:24:41.646 E/flutter ( 4363): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:24:41.646 E/flutter ( 4363): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:24:41.696 I/flutter ( 4363): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:24:41.884 I/flutter ( 4363): The Dart VM service is listening on http://127.0.0.1:38427/zwyIn6sTpRs=/
+10-29 22:24:42.113 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): Vertex Shader:
+10-29 22:24:42.113 E/flutter ( 4363): #version 100
+10-29 22:24:42.113 E/flutter ( 4363): uniform float _impeller_y_flip;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): struct FrameInfo
+10-29 22:24:42.113 E/flutter ( 4363): {
+10-29 22:24:42.113 E/flutter ( 4363):     mat4 mvp;
+10-29 22:24:42.113 E/flutter ( 4363):     mat4 matrix;
+10-29 22:24:42.113 E/flutter ( 4363): };
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): uniform FrameInfo frame_info;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): attribute vec2 position;
+10-29 22:24:42.113 E/flutter ( 4363): varying vec2 v_position;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): void _impeller_user_main()
+10-29 22:24:42.113 E/flutter ( 4363): {
+10-29 22:24:42.113 E/flutter ( 4363):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:24:42.113 E/flutter ( 4363):     gl_Position = frame_info.mvp * _59;
+10-29 22:24:42.113 E/flutter ( 4363):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:24:42.113 E/flutter ( 4363):     v_position = _80.xy / vec2(_80.w);
+10-29 22:24:42.113 E/flutter ( 4363):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:24:42.113 E/flutter ( 4363): }
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): void main() {
+10-29 22:24:42.113 E/flutter ( 4363):   _impeller_user_main();
+10-29 22:24:42.113 E/flutter ( 4363):   gl_Position.y *= _impeller_y_flip;
+10-29 22:24:42.113 E/flutter ( 4363): }
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): Fragment Shader:
+10-29 22:24:42.113 E/flutter ( 4363): #version 100
+10-29 22:24:42.113 E/flutter ( 4363): precision mediump float;
+10-29 22:24:42.113 E/flutter ( 4363): precision highp int;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): struct FragInfo
+10-29 22:24:42.113 E/flutter ( 4363): {
+10-29 22:24:42.113 E/flutter ( 4363):     highp vec2 start_point;
+10-29 22:24:42.113 E/flutter ( 4363):     highp vec2 start_to_end;
+10-29 22:24:42.113 E/flutter ( 4363):     float alpha;
+10-29 22:24:42.113 E/flutter ( 4363):     float tile_mode;
+10-29 22:24:42.113 E/flutter ( 4363):     float colors_length;
+10-29 22:24:42.113 E/flutter ( 4363):     float inverse_dot_start_to_end;
+10-29 22:24:42.113 E/flutter ( 4363):     vec4 decal_border_color;
+10-29 22:24:42.113 E/flutter ( 4363): };
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): uniform FragInfo frag_info;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): struct StopPairsInfo
+10-29 22:24:42.113 E/flutter ( 4363): {
+10-29 22:24:42.113 E/flutter ( 4363):     vec4 stop_pairs[128];
+10-29 22:24:42.113 E/flutter ( 4363): };
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): uniform StopPairsInfo stop_pairs_info;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): struct ColorsInfo
+10-29 22:24:42.113 E/flutter ( 4363): {
+10-29 22:24:42.113 E/flutter ( 4363):     vec4 colors[256];
+10-29 22:24:42.113 E/flutter ( 4363): };
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): uniform ColorsInfo colors_info;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): varying highp vec2 v_position;
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): void main()
+10-29 22:24:42.113 E/flutter ( 4363): {
+10-29 22:24:42.113 E/flutter ( 4363):     highp float _109 = dot(v_position - frag_info.start_point, frag_info.start_to_end) * frag_info.inverse_dot_start_to_end;
+10-29 22:24:42.113 E/flutter ( 4363):     bool _114 = (_109 < 0.0) || (_109 > 1.0);
+10-29 22:24:42.113 E/flutter ( 4363):     bool _122 = false;
+10-29 22:24:42.113 E/flutter ( 4363):     if (_114)
+10-29 22:24:42.113 E/flutter ( 4363):     {
+10-29 22:24:42.113 E/flutter ( 4363):         _122 = frag_info.tile_mode == 3.0;
+10-29 22:24:42.113 E/flutter ( 4363):     }
+10-29 22:24:42.113 E/flutter ( 4363):     else
+10-29 22:24:42.113 E/flutter ( 4363):     {
+10-29 22:24:42.113 E/flutter ( 4363):         _122 = _114;
+10-29 22:24:42.113 E/flutter ( 4363):     }
+10-29 22:24:42.113 E/flutter ( 4363):     if (_122)
+10-29 22:24:42.113 E/flutter ( 4363):     {
+10-29 22:24:42.113 E/flutter ( 4363):         gl_FragData[0] = frag_info.decal_border_color;
+10-29 22:24:42.113 E/flutter ( 4363):     }
+10-29 22:24:42.113 E/flutter ( 4363):     else
+10-29 22:24:42.113 E/flutter ( 4363):     {
+10-29 22:24:42.113 E/flutter ( 4363):         highp float _304 = 0.0;
+10-29 22:24:42.113 E/flutter ( 4363):         if (frag_info.tile_mode == 0.0)
+10-29 22:24:42.113 E/flutter ( 4363):         {
+10-29 22:24:42.113 E/flutter ( 4363):             _304 = clamp(_109, 0.0, 1.0);
+10-29 22:24:42.113 E/flutter ( 4363):         }
+10-29 22:24:42.113 E/flutter ( 4363):         else
+10-29 22:24:42.113 E/flutter ( 4363):         {
+10-29 22:24:42.113 E/flutter ( 4363):             highp float _305 = 0.0;
+10-29 22:24:42.113 E/flutter ( 4363):             if (frag_info.tile_mode == 1.0)
+10-29 22:24:42.113 E/flutter ( 4363):             {
+10-29 22:24:42.113 E/flutter ( 4363):                 _305 = fract(_109);
+10-29 22:24:42.113 E/flutter ( 4363):             }
+10-29 22:24:42.113 E/flutter ( 4363):             else
+10-29 22:24:42.113 E/flutter ( 4363):             {
+10-29 22:24:42.113 E/flutter ( 4363):                 highp float _306 = 0.0;
+10-29 22:24:42.113 E/flutter ( 4363):                 if (frag_info.tile_mode == 2.0)
+10-29 22:24:42.113 E/flutter ( 4363):                 {
+10-29 22:24:42.113 E/flutter ( 4363):                     highp float _269 = _109 - 1.0;
+10-29 22:24:42.113 E/flutter ( 4363):                     _306 = abs((_269 - (2.0 * floor(_269 * 0.5))) - 1.0);
+10-29 22:24:42.113 E/flutter ( 4363):                 }
+10-29 22:24:42.113 E/flutter ( 4363):                 else
+10-29 22:24:42.113 E/flutter ( 4363):                 {
+10-29 22:24:42.113 E/flutter ( 4363):                     _306 = _109;
+10-29 22:24:42.113 E/flutter ( 4363):                 }
+10-29 22:24:42.113 E/flutter ( 4363):                 _305 = _306;
+10-29 22:24:42.113 E/flutter ( 4363):             }
+10-29 22:24:42.113 E/flutter ( 4363):             _304 = _305;
+10-29 22:24:42.113 E/flutter ( 4363):         }
+10-29 22:24:42.113 E/flutter ( 4363):         vec2 _314 = vec2(0.0);
+10-29 22:24:42.113 E/flutter ( 4363):         _314 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:24:42.113 E/flutter ( 4363):         bool _182 = false;
+10-29 22:24:42.113 E/flutter ( 4363):         vec2 _309 = vec2(0.0);
+10-29 22:24:42.113 E/flutter ( 4363):         int _307 = 1;
+10-29 22:24:42.113 E/flutter ( 4363):         bool _308 = false;
+10-29 22:24:42.113 E/flutter ( 4363):         for (; float(_307) < frag_info.colors_length; _314 = _309, _308 = _182, _307++)
+10-29 22:24:42.113 E/flutter ( 4363):         {
+10-29 22:24:42.113 E/flutter ( 4363):             if (_308)
+10-29 22:24:42.113 E/flutter ( 4363):             {
+10-29 22:24:42.113 E/flutter ( 4363):                 _309 = stop_pairs_info.stop_pairs[_307 / 2].xy;
+10-29 22:24:42.113 E/flutter ( 4363):             }
+10-29 22:24:42.113 E/flutter ( 4363):             else
+10-29 22:24:42.113 E/flutter ( 4363):             {
+10-29 22:24:42.113 E/flutter ( 4363):                 _309 = stop_pairs_info.stop_pairs[_307 / 2].zw;
+10-29 22:24:42.113 E/flutter ( 4363):             }
+10-29 22:24:42.113 E/flutter ( 4363):             _182 = !_308;
+10-29 22:24:42.113 E/flutter ( 4363):             bool _187 = _304 >= _314.x;
+10-29 22:24:42.113 E/flutter ( 4363):             bool _194 = false;
+10-29 22:24:42.113 E/flutter ( 4363):             if (_187)
+10-29 22:24:42.113 E/flutter ( 4363):             {
+10-29 22:24:42.113 E/flutter ( 4363):                 _194 = _304 <= _309.x;
+10-29 22:24:42.113 E/flutter ( 4363):             }
+10-29 22:24:42.113 E/flutter ( 4363):             else
+10-29 22:24:42.113 E/flutter ( 4363):             {
+10-29 22:24:42.113 E/flutter ( 4363):                 _194 = _187;
+10-29 22:24:42.113 E/flutter ( 4363):             }
+10-29 22:24:42.113 E/flutter ( 4363):             if (_194)
+10-29 22:24:42.113 E/flutter ( 4363):             {
+10-29 22:24:42.113 E/flutter ( 4363):                 if (_309.y > 1000.0)
+10-29 22:24:42.113 E/flutter ( 4363):                 {
+10-29 22:24:42.113 E/flutter ( 4363):                     gl_FragData[0] = colors_info.colors[_307];
+10-29 22:24:42.113 E/flutter ( 4363):                 }
+10-29 22:24:42.113 E/flutter ( 4363):                 else
+10-29 22:24:42.113 E/flutter ( 4363):                 {
+10-29 22:24:42.113 E/flutter ( 4363):                     gl_FragData[0] = mix(colors_info.colors[_307 - 1], colors_info.colors[_307], vec4((_304 - _314.x) * _309.y));
+10-29 22:24:42.113 E/flutter ( 4363):                 }
+10-29 22:24:42.113 E/flutter ( 4363):                 break;
+10-29 22:24:42.113 E/flutter ( 4363):             }
+10-29 22:24:42.113 E/flutter ( 4363):         }
+10-29 22:24:42.113 E/flutter ( 4363):     }
+10-29 22:24:42.113 E/flutter ( 4363):     gl_FragData[0] = vec4(gl_FragData[0].xyz * gl_FragData[0].w, gl_FragData[0].w) * frag_info.alpha;
+10-29 22:24:42.113 E/flutter ( 4363): }
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): 
+10-29 22:24:42.113 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:24:42.116 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): Vertex Shader:
+10-29 22:24:42.116 E/flutter ( 4363): #version 100
+10-29 22:24:42.116 E/flutter ( 4363): uniform float _impeller_y_flip;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): struct FrameInfo
+10-29 22:24:42.116 E/flutter ( 4363): {
+10-29 22:24:42.116 E/flutter ( 4363):     mat4 mvp;
+10-29 22:24:42.116 E/flutter ( 4363):     mat4 matrix;
+10-29 22:24:42.116 E/flutter ( 4363): };
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): uniform FrameInfo frame_info;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): attribute vec2 position;
+10-29 22:24:42.116 E/flutter ( 4363): varying vec2 v_position;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): void _impeller_user_main()
+10-29 22:24:42.116 E/flutter ( 4363): {
+10-29 22:24:42.116 E/flutter ( 4363):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:24:42.116 E/flutter ( 4363):     gl_Position = frame_info.mvp * _59;
+10-29 22:24:42.116 E/flutter ( 4363):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:24:42.116 E/flutter ( 4363):     v_position = _80.xy / vec2(_80.w);
+10-29 22:24:42.116 E/flutter ( 4363):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:24:42.116 E/flutter ( 4363): }
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): void main() {
+10-29 22:24:42.116 E/flutter ( 4363):   _impeller_user_main();
+10-29 22:24:42.116 E/flutter ( 4363):   gl_Position.y *= _impeller_y_flip;
+10-29 22:24:42.116 E/flutter ( 4363): }
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): Fragment Shader:
+10-29 22:24:42.116 E/flutter ( 4363): #version 100
+10-29 22:24:42.116 E/flutter ( 4363): precision mediump float;
+10-29 22:24:42.116 E/flutter ( 4363): precision highp int;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): struct FragInfo
+10-29 22:24:42.116 E/flutter ( 4363): {
+10-29 22:24:42.116 E/flutter ( 4363):     highp vec2 center;
+10-29 22:24:42.116 E/flutter ( 4363):     float radius;
+10-29 22:24:42.116 E/flutter ( 4363):     float tile_mode;
+10-29 22:24:42.116 E/flutter ( 4363):     float alpha;
+10-29 22:24:42.116 E/flutter ( 4363):     float colors_length;
+10-29 22:24:42.116 E/flutter ( 4363):     vec4 decal_border_color;
+10-29 22:24:42.116 E/flutter ( 4363): };
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): uniform FragInfo frag_info;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): struct StopPairsInfo
+10-29 22:24:42.116 E/flutter ( 4363): {
+10-29 22:24:42.116 E/flutter ( 4363):     vec4 stop_pairs[128];
+10-29 22:24:42.116 E/flutter ( 4363): };
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): uniform StopPairsInfo stop_pairs_info;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): struct ColorsInfo
+10-29 22:24:42.116 E/flutter ( 4363): {
+10-29 22:24:42.116 E/flutter ( 4363):     vec4 colors[256];
+10-29 22:24:42.116 E/flutter ( 4363): };
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): uniform ColorsInfo colors_info;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): varying highp vec2 v_position;
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): void main()
+10-29 22:24:42.116 E/flutter ( 4363): {
+10-29 22:24:42.116 E/flutter ( 4363):     highp float _98 = length(v_position - frag_info.center);
+10-29 22:24:42.116 E/flutter ( 4363):     float mp_copy_98 = _98;
+10-29 22:24:42.116 E/flutter ( 4363):     float _105 = mp_copy_98 / frag_info.radius;
+10-29 22:24:42.116 E/flutter ( 4363):     highp float hp_copy_105 = _105;
+10-29 22:24:42.116 E/flutter ( 4363):     bool _112 = (_105 < 0.0) || (_105 > 1.0);
+10-29 22:24:42.116 E/flutter ( 4363):     bool _120 = false;
+10-29 22:24:42.116 E/flutter ( 4363):     if (_112)
+10-29 22:24:42.116 E/flutter ( 4363):     {
+10-29 22:24:42.116 E/flutter ( 4363):         _120 = frag_info.tile_mode == 3.0;
+10-29 22:24:42.116 E/flutter ( 4363):     }
+10-29 22:24:42.116 E/flutter ( 4363):     else
+10-29 22:24:42.116 E/flutter ( 4363):     {
+10-29 22:24:42.116 E/flutter ( 4363):         _120 = _112;
+10-29 22:24:42.116 E/flutter ( 4363):     }
+10-29 22:24:42.116 E/flutter ( 4363):     vec4 _318 = vec4(0.0);
+10-29 22:24:42.116 E/flutter ( 4363):     if (_120)
+10-29 22:24:42.116 E/flutter ( 4363):     {
+10-29 22:24:42.116 E/flutter ( 4363):         _318 = frag_info.decal_border_color;
+10-29 22:24:42.116 E/flutter ( 4363):     }
+10-29 22:24:42.116 E/flutter ( 4363):     else
+10-29 22:24:42.116 E/flutter ( 4363):     {
+10-29 22:24:42.116 E/flutter ( 4363):         float mp_copy_303 = 0.0;
+10-29 22:24:42.116 E/flutter ( 4363):         highp float _303 = 0.0;
+10-29 22:24:42.116 E/flutter ( 4363):         if (frag_info.tile_mode == 0.0)
+10-29 22:24:42.116 E/flutter ( 4363):         {
+10-29 22:24:42.116 E/flutter ( 4363):             _303 = clamp(hp_copy_105, 0.0, 1.0);
+10-29 22:24:42.116 E/flutter ( 4363):         }
+10-29 22:24:42.116 E/flutter ( 4363):         else
+10-29 22:24:42.116 E/flutter ( 4363):         {
+10-29 22:24:42.116 E/flutter ( 4363):             highp float _304 = 0.0;
+10-29 22:24:42.116 E/flutter ( 4363):             if (frag_info.tile_mode == 1.0)
+10-29 22:24:42.116 E/flutter ( 4363):             {
+10-29 22:24:42.116 E/flutter ( 4363):                 _304 = fract(hp_copy_105);
+10-29 22:24:42.116 E/flutter ( 4363):             }
+10-29 22:24:42.116 E/flutter ( 4363):             else
+10-29 22:24:42.116 E/flutter ( 4363):             {
+10-29 22:24:42.116 E/flutter ( 4363):                 highp float _305 = 0.0;
+10-29 22:24:42.116 E/flutter ( 4363):                 if (frag_info.tile_mode == 2.0)
+10-29 22:24:42.116 E/flutter ( 4363):                 {
+10-29 22:24:42.116 E/flutter ( 4363):                     highp float _268 = hp_copy_105 - 1.0;
+10-29 22:24:42.116 E/flutter ( 4363):                     _305 = abs((_268 - (2.0 * floor(_268 * 0.5))) - 1.0);
+10-29 22:24:42.116 E/flutter ( 4363):                 }
+10-29 22:24:42.116 E/flutter ( 4363):                 else
+10-29 22:24:42.116 E/flutter ( 4363):                 {
+10-29 22:24:42.116 E/flutter ( 4363):                     _305 = _105;
+10-29 22:24:42.116 E/flutter ( 4363):                 }
+10-29 22:24:42.116 E/flutter ( 4363):                 _304 = _305;
+10-29 22:24:42.116 E/flutter ( 4363):             }
+10-29 22:24:42.116 E/flutter ( 4363):             _303 = _304;
+10-29 22:24:42.116 E/flutter ( 4363):         }
+10-29 22:24:42.116 E/flutter ( 4363):         mp_copy_303 = _303;
+10-29 22:24:42.116 E/flutter ( 4363):         vec2 _313 = vec2(0.0);
+10-29 22:24:42.116 E/flutter ( 4363):         _313 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:24:42.116 E/flutter ( 4363):         bool _178 = false;
+10-29 22:24:42.116 E/flutter ( 4363):         vec2 _308 = vec2(0.0);
+10-29 22:24:42.116 E/flutter ( 4363):         vec4 _319 = vec4(0.0);
+10-29 22:24:42.116 E/flutter ( 4363):         int _306 = 1;
+10-29 22:24:42.116 E/flutter ( 4363):         bool _307 = false;
+10-29 22:24:42.116 E/flutter ( 4363):         for (;;)
+10-29 22:24:42.116 E/flutter ( 4363):         {
+10-29 22:24:42.116 E/flutter ( 4363):             if (float(_306) < frag_info.colors_length)
+10-29 22:24:42.116 E/flutter ( 4363):             {
+10-29 22:24:42.116 E/flutter ( 4363):                 if (_307)
+10-29 22:24:42.116 E/flutter ( 4363):                 {
+10-29 22:24:42.116 E/flutter ( 4363):                     _308 = stop_pairs_info.stop_pairs[_306 / 2].xy;
+10-29 22:24:42.116 E/flutter ( 4363):                 }
+10-29 22:24:42.116 E/flutter ( 4363):                 else
+10-29 22:24:42.116 E/flutter ( 4363):                 {
+10-29 22:24:42.116 E/flutter ( 4363):                     _308 = stop_pairs_info.stop_pairs[_306 / 2].zw;
+10-29 22:24:42.116 E/flutter ( 4363):                 }
+10-29 22:24:42.116 E/flutter ( 4363):                 _178 = !_307;
+10-29 22:24:42.116 E/flutter ( 4363):                 bool _183 = _303 >= _313.x;
+10-29 22:24:42.116 E/flutter ( 4363):                 bool _190 = false;
+10-29 22:24:42.116 E/flutter ( 4363):                 if (_183)
+10-29 22:24:42.116 E/flutter ( 4363):                 {
+10-29 22:24:42.116 E/flutter ( 4363):                     _190 = _303 <= _308.x;
+10-29 22:24:42.116 E/flutter ( 4363):                 }
+10-29 22:24:42.116 E/flutter ( 4363):                 else
+10-29 22:24:42.116 E/flutter ( 4363):                 {
+10-29 22:24:42.116 E/flutter ( 4363):                     _190 = _183;
+10-29 22:24:42.116 E/flutter ( 4363):                 }
+10-29 22:24:42.116 E/flutter ( 4363):                 if (_190)
+10-29 22:24:42.116 E/flutter ( 4363):                 {
+10-29 22:24:42.116 E/flutter ( 4363):                     vec4 _327 = vec4(0.0);
+10-29 22:24:42.116 E/flutter ( 4363):                     if (_308.y > 1000.0)
+10-29 22:24:42.116 E/flutter ( 4363):                     {
+10-29 22:24:42.116 E/flutter ( 4363):                         _327 = colors_info.colors[_306];
+10-29 22:24:42.116 E/flutter ( 4363):                     }
+10-29 22:24:42.116 E/flutter ( 4363):                     else
+10-29 22:24:42.116 E/flutter ( 4363):                     {
+10-29 22:24:42.116 E/flutter ( 4363):                         _327 = mix(colors_info.colors[_306 - 1], colors_info.colors[_306], vec4((mp_copy_303 - _313.x) * _308.y));
+10-29 22:24:42.116 E/flutter ( 4363):                     }
+10-29 22:24:42.116 E/flutter ( 4363):                     _319 = _327;
+10-29 22:24:42.116 E/flutter ( 4363):                     break;
+10-29 22:24:42.116 E/flutter ( 4363):                 }
+10-29 22:24:42.116 E/flutter ( 4363):                 _313 = _308;
+10-29 22:24:42.116 E/flutter ( 4363):                 _307 = _178;
+10-29 22:24:42.116 E/flutter ( 4363):                 _306++;
+10-29 22:24:42.116 E/flutter ( 4363):                 continue;
+10-29 22:24:42.116 E/flutter ( 4363):             }
+10-29 22:24:42.116 E/flutter ( 4363):             else
+10-29 22:24:42.116 E/flutter ( 4363):             {
+10-29 22:24:42.116 E/flutter ( 4363):                 _319 = vec4(0.0);
+10-29 22:24:42.116 E/flutter ( 4363):                 break;
+10-29 22:24:42.116 E/flutter ( 4363):             }
+10-29 22:24:42.116 E/flutter ( 4363):         }
+10-29 22:24:42.116 E/flutter ( 4363):         _318 = _319;
+10-29 22:24:42.116 E/flutter ( 4363):     }
+10-29 22:24:42.116 E/flutter ( 4363):     gl_FragData[0] = vec4(_318.xyz * _318.w, _318.w) * frag_info.alpha;
+10-29 22:24:42.116 E/flutter ( 4363): }
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): 
+10-29 22:24:42.116 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:24:42.119 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): Vertex Shader:
+10-29 22:24:42.119 E/flutter ( 4363): #version 100
+10-29 22:24:42.119 E/flutter ( 4363): uniform float _impeller_y_flip;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): struct FrameInfo
+10-29 22:24:42.119 E/flutter ( 4363): {
+10-29 22:24:42.119 E/flutter ( 4363):     mat4 mvp;
+10-29 22:24:42.119 E/flutter ( 4363):     mat4 matrix;
+10-29 22:24:42.119 E/flutter ( 4363): };
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): uniform FrameInfo frame_info;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): attribute vec2 position;
+10-29 22:24:42.119 E/flutter ( 4363): varying vec2 v_position;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): void _impeller_user_main()
+10-29 22:24:42.119 E/flutter ( 4363): {
+10-29 22:24:42.119 E/flutter ( 4363):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:24:42.119 E/flutter ( 4363):     gl_Position = frame_info.mvp * _59;
+10-29 22:24:42.119 E/flutter ( 4363):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:24:42.119 E/flutter ( 4363):     v_position = _80.xy / vec2(_80.w);
+10-29 22:24:42.119 E/flutter ( 4363):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:24:42.119 E/flutter ( 4363): }
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): void main() {
+10-29 22:24:42.119 E/flutter ( 4363):   _impeller_user_main();
+10-29 22:24:42.119 E/flutter ( 4363):   gl_Position.y *= _impeller_y_flip;
+10-29 22:24:42.119 E/flutter ( 4363): }
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): Fragment Shader:
+10-29 22:24:42.119 E/flutter ( 4363): #version 100
+10-29 22:24:42.119 E/flutter ( 4363): precision mediump float;
+10-29 22:24:42.119 E/flutter ( 4363): precision highp int;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): struct FragInfo
+10-29 22:24:42.119 E/flutter ( 4363): {
+10-29 22:24:42.119 E/flutter ( 4363):     highp vec2 center;
+10-29 22:24:42.119 E/flutter ( 4363):     highp vec2 focus;
+10-29 22:24:42.119 E/flutter ( 4363):     highp float focus_radius;
+10-29 22:24:42.119 E/flutter ( 4363):     highp float radius;
+10-29 22:24:42.119 E/flutter ( 4363):     highp float tile_mode;
+10-29 22:24:42.119 E/flutter ( 4363):     highp float alpha;
+10-29 22:24:42.119 E/flutter ( 4363):     highp float colors_length;
+10-29 22:24:42.119 E/flutter ( 4363):     highp vec4 decal_border_color;
+10-29 22:24:42.119 E/flutter ( 4363): };
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): uniform FragInfo frag_info;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): struct StopPairsInfo
+10-29 22:24:42.119 E/flutter ( 4363): {
+10-29 22:24:42.119 E/flutter ( 4363):     highp vec4 stop_pairs[128];
+10-29 22:24:42.119 E/flutter ( 4363): };
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): uniform StopPairsInfo stop_pairs_info;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): struct ColorsInfo
+10-29 22:24:42.119 E/flutter ( 4363): {
+10-29 22:24:42.119 E/flutter ( 4363):     highp vec4 colors[256];
+10-29 22:24:42.119 E/flutter ( 4363): };
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): uniform ColorsInfo colors_info;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): varying highp vec2 v_position;
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): void main()
+10-29 22:24:42.119 E/flutter ( 4363): {
+10-29 22:24:42.119 E/flutter ( 4363):     highp vec2 _1222 = vec2(0.0);
+10-29 22:24:42.119 E/flutter ( 4363):     for (int spvDummy103 = 0; spvDummy103 < 1; spvDummy103++)
+10-29 22:24:42.119 E/flutter ( 4363):     {
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _685 = frag_info.focus_radius / (frag_info.focus_radius - frag_info.radius);
+10-29 22:24:42.119 E/flutter ( 4363):         bool _689 = abs(_685 - 1.0) < 0.000244140625;
+10-29 22:24:42.119 E/flutter ( 4363):         bvec2 _1255 = bvec2(_689);
+10-29 22:24:42.119 E/flutter ( 4363):         highp vec2 _1256 = vec2(_1255.x ? frag_info.focus.x : frag_info.center.x, _1255.y ? frag_info.focus.y : frag_info.center.y);
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _1257 = _689 ? 0.0 : _685;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _698 = 1.0 - _1257;
+10-29 22:24:42.119 E/flutter ( 4363):         highp vec2 _703 = (vec2(_1255.x ? frag_info.center.x : frag_info.focus.x, _1255.y ? frag_info.center.y : frag_info.focus.y) * _698) + (_1256 * _1257);
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _855 = _703.y;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _856 = _1256.y - _855;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _858 = _703.x;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _860 = _1256.x;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _861 = _858 - _860;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _866 = _860 - _858;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _925 = (-1.0) * _866;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _939 = _856 * _856;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _709 = abs(_698);
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _716 = abs(frag_info.radius - frag_info.focus_radius) / distance(frag_info.focus, frag_info.center);
+10-29 22:24:42.119 E/flutter ( 4363):         bool _720 = abs(_716 - 1.0) < 0.000244140625;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _1209 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _1210 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):         if (_720)
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             highp float _724 = _709 * 0.5;
+10-29 22:24:42.119 E/flutter ( 4363):             _1210 = _724;
+10-29 22:24:42.119 E/flutter ( 4363):             _1209 = _724;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         else
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             highp float _732 = (_716 * _716) - 1.0;
+10-29 22:24:42.119 E/flutter ( 4363):             _1210 = _709 / sqrt(abs(_732));
+10-29 22:24:42.119 E/flutter ( 4363):             _1209 = _709 * (_716 / _732);
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         highp vec3 _758 = (mat3(vec3(_1209, 0.0, 0.0), vec3(0.0, _1210, 0.0), vec3(0.0, 0.0, 1.0)) * (mat3(vec3(0.0, -1.0, 0.0), vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0)) * (mat3(vec3(_856, (-1.0) * _861, 0.0), vec3(_925, _856, 0.0), vec3((_855 * _866) - (_856 * _858), ((-_855) * _856) + (_861 * _858), _939 - (_861 * _866))) * (1.0 / (_939 + (_861 * _925)))))) * vec3(v_position, 1.0);
+10-29 22:24:42.119 E/flutter ( 4363):         highp vec2 _759 = _758.xy;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _761 = 1.0 / _716;
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _764 = sign(_698);
+10-29 22:24:42.119 E/flutter ( 4363):         bool _769 = (!_720) && (_716 > 1.0);
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _1213 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):         if (_720)
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             _1213 = dot(_759, _759) / _758.x;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         else
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             highp float _1214 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):             if (_769)
+10-29 22:24:42.119 E/flutter ( 4363):             {
+10-29 22:24:42.119 E/flutter ( 4363):                 _1214 = length(_759) - (_758.x * _761);
+10-29 22:24:42.119 E/flutter ( 4363):             }
+10-29 22:24:42.119 E/flutter ( 4363):             else
+10-29 22:24:42.119 E/flutter ( 4363):             {
+10-29 22:24:42.119 E/flutter ( 4363):                 highp float _790 = _758.x;
+10-29 22:24:42.119 E/flutter ( 4363):                 highp float _795 = _758.y;
+10-29 22:24:42.119 E/flutter ( 4363):                 highp float _799 = (_790 * _790) - (_795 * _795);
+10-29 22:24:42.119 E/flutter ( 4363):                 highp float _1215 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):                 if (_799 >= 0.0)
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     highp float _1216 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):                     if (_689 || (_764 < 0.0))
+10-29 22:24:42.119 E/flutter ( 4363):                     {
+10-29 22:24:42.119 E/flutter ( 4363):                         _1216 = (-sqrt(_799)) - (_790 * _761);
+10-29 22:24:42.119 E/flutter ( 4363):                     }
+10-29 22:24:42.119 E/flutter ( 4363):                     else
+10-29 22:24:42.119 E/flutter ( 4363):                     {
+10-29 22:24:42.119 E/flutter ( 4363):                         _1216 = sqrt(_799) - (_790 * _761);
+10-29 22:24:42.119 E/flutter ( 4363):                     }
+10-29 22:24:42.119 E/flutter ( 4363):                     _1215 = _1216;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 else
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     _1215 = -1.0;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 _1214 = _1215;
+10-29 22:24:42.119 E/flutter ( 4363):             }
+10-29 22:24:42.119 E/flutter ( 4363):             _1213 = _1214;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         if ((!_769) && (_1213 < 0.0))
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             _1222 = vec2(0.0, -1.0);
+10-29 22:24:42.119 E/flutter ( 4363):             break;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _839 = _1257 + (_764 * _1213);
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _1221 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):         if (_689)
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             _1221 = 1.0 - _839;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         else
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             _1221 = _839;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         _1222 = vec2(_1221, 1.0);
+10-29 22:24:42.119 E/flutter ( 4363):         break;
+10-29 22:24:42.119 E/flutter ( 4363):     }
+10-29 22:24:42.119 E/flutter ( 4363):     bool _1020 = _1222.y < 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):     bool _1035 = false;
+10-29 22:24:42.119 E/flutter ( 4363):     if (!_1020)
+10-29 22:24:42.119 E/flutter ( 4363):     {
+10-29 22:24:42.119 E/flutter ( 4363):         bool _1027 = (_1222.x < 0.0) || (_1222.x > 1.0);
+10-29 22:24:42.119 E/flutter ( 4363):         bool _1033 = false;
+10-29 22:24:42.119 E/flutter ( 4363):         if (_1027)
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             _1033 = frag_info.tile_mode == 3.0;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         else
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             _1033 = _1027;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         _1035 = _1033;
+10-29 22:24:42.119 E/flutter ( 4363):     }
+10-29 22:24:42.119 E/flutter ( 4363):     else
+10-29 22:24:42.119 E/flutter ( 4363):     {
+10-29 22:24:42.119 E/flutter ( 4363):         _1035 = _1020;
+10-29 22:24:42.119 E/flutter ( 4363):     }
+10-29 22:24:42.119 E/flutter ( 4363):     highp vec4 _1240 = vec4(0.0);
+10-29 22:24:42.119 E/flutter ( 4363):     if (_1035)
+10-29 22:24:42.119 E/flutter ( 4363):     {
+10-29 22:24:42.119 E/flutter ( 4363):         _1240 = frag_info.decal_border_color;
+10-29 22:24:42.119 E/flutter ( 4363):     }
+10-29 22:24:42.119 E/flutter ( 4363):     else
+10-29 22:24:42.119 E/flutter ( 4363):     {
+10-29 22:24:42.119 E/flutter ( 4363):         highp float _1225 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):         if (frag_info.tile_mode == 0.0)
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             _1225 = clamp(_1222.x, 0.0, 1.0);
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         else
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             highp float _1226 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):             if (frag_info.tile_mode == 1.0)
+10-29 22:24:42.119 E/flutter ( 4363):             {
+10-29 22:24:42.119 E/flutter ( 4363):                 _1226 = fract(_1222.x);
+10-29 22:24:42.119 E/flutter ( 4363):             }
+10-29 22:24:42.119 E/flutter ( 4363):             else
+10-29 22:24:42.119 E/flutter ( 4363):             {
+10-29 22:24:42.119 E/flutter ( 4363):                 highp float _1227 = 0.0;
+10-29 22:24:42.119 E/flutter ( 4363):                 if (frag_info.tile_mode == 2.0)
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     highp float _1143 = _1222.x - 1.0;
+10-29 22:24:42.119 E/flutter ( 4363):                     _1227 = abs((_1143 - (2.0 * floor(_1143 * 0.5))) - 1.0);
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 else
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     _1227 = _1222.x;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 _1226 = _1227;
+10-29 22:24:42.119 E/flutter ( 4363):             }
+10-29 22:24:42.119 E/flutter ( 4363):             _1225 = _1226;
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         highp vec2 _1235 = vec2(0.0);
+10-29 22:24:42.119 E/flutter ( 4363):         _1235 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:24:42.119 E/flutter ( 4363):         bool _1071 = false;
+10-29 22:24:42.119 E/flutter ( 4363):         highp vec2 _1230 = vec2(0.0);
+10-29 22:24:42.119 E/flutter ( 4363):         highp vec4 _1241 = vec4(0.0);
+10-29 22:24:42.119 E/flutter ( 4363):         int _1228 = 1;
+10-29 22:24:42.119 E/flutter ( 4363):         bool _1229 = false;
+10-29 22:24:42.119 E/flutter ( 4363):         for (;;)
+10-29 22:24:42.119 E/flutter ( 4363):         {
+10-29 22:24:42.119 E/flutter ( 4363):             if (float(_1228) < frag_info.colors_length)
+10-29 22:24:42.119 E/flutter ( 4363):             {
+10-29 22:24:42.119 E/flutter ( 4363):                 if (_1229)
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     _1230 = stop_pairs_info.stop_pairs[_1228 / 2].xy;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 else
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     _1230 = stop_pairs_info.stop_pairs[_1228 / 2].zw;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 _1071 = !_1229;
+10-29 22:24:42.119 E/flutter ( 4363):                 bool _1075 = _1225 >= _1235.x;
+10-29 22:24:42.119 E/flutter ( 4363):                 bool _1082 = false;
+10-29 22:24:42.119 E/flutter ( 4363):                 if (_1075)
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     _1082 = _1225 <= _1230.x;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 else
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     _1082 = _1075;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 if (_1082)
+10-29 22:24:42.119 E/flutter ( 4363):                 {
+10-29 22:24:42.119 E/flutter ( 4363):                     highp vec4 _1250 = vec4(0.0);
+10-29 22:24:42.119 E/flutter ( 4363):                     if (_1230.y > 1000.0)
+10-29 22:24:42.119 E/flutter ( 4363):                     {
+10-29 22:24:42.119 E/flutter ( 4363):                         _1250 = colors_info.colors[_1228];
+10-29 22:24:42.119 E/flutter ( 4363):                     }
+10-29 22:24:42.119 E/flutter ( 4363):                     else
+10-29 22:24:42.119 E/flutter ( 4363):                     {
+10-29 22:24:42.119 E/flutter ( 4363):                         _1250 = mix(colors_info.colors[_1228 - 1], colors_info.colors[_1228], vec4((_1225 - _1235.x) * _1230.y));
+10-29 22:24:42.119 E/flutter ( 4363):                     }
+10-29 22:24:42.119 E/flutter ( 4363):                     _1241 = _1250;
+10-29 22:24:42.119 E/flutter ( 4363):                     break;
+10-29 22:24:42.119 E/flutter ( 4363):                 }
+10-29 22:24:42.119 E/flutter ( 4363):                 _1235 = _1230;
+10-29 22:24:42.119 E/flutter ( 4363):                 _1229 = _1071;
+10-29 22:24:42.119 E/flutter ( 4363):                 _1228++;
+10-29 22:24:42.119 E/flutter ( 4363):                 continue;
+10-29 22:24:42.119 E/flutter ( 4363):             }
+10-29 22:24:42.119 E/flutter ( 4363):             else
+10-29 22:24:42.119 E/flutter ( 4363):             {
+10-29 22:24:42.119 E/flutter ( 4363):                 _1241 = vec4(0.0);
+10-29 22:24:42.119 E/flutter ( 4363):                 break;
+10-29 22:24:42.119 E/flutter ( 4363):             }
+10-29 22:24:42.119 E/flutter ( 4363):         }
+10-29 22:24:42.119 E/flutter ( 4363):         _1240 = _1241;
+10-29 22:24:42.119 E/flutter ( 4363):     }
+10-29 22:24:42.119 E/flutter ( 4363):     gl_FragData[0] = vec4(_1240.xyz * _1240.w, _1240.w) * frag_info.alpha;
+10-29 22:24:42.119 E/flutter ( 4363): }
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): 
+10-29 22:24:42.119 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:24:42.120 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): Vertex Shader:
+10-29 22:24:42.120 E/flutter ( 4363): #version 100
+10-29 22:24:42.120 E/flutter ( 4363): uniform float _impeller_y_flip;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): struct FrameInfo
+10-29 22:24:42.120 E/flutter ( 4363): {
+10-29 22:24:42.120 E/flutter ( 4363):     mat4 mvp;
+10-29 22:24:42.120 E/flutter ( 4363):     mat4 matrix;
+10-29 22:24:42.120 E/flutter ( 4363): };
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): uniform FrameInfo frame_info;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): attribute vec2 position;
+10-29 22:24:42.120 E/flutter ( 4363): varying vec2 v_position;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): void _impeller_user_main()
+10-29 22:24:42.120 E/flutter ( 4363): {
+10-29 22:24:42.120 E/flutter ( 4363):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:24:42.120 E/flutter ( 4363):     gl_Position = frame_info.mvp * _59;
+10-29 22:24:42.120 E/flutter ( 4363):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:24:42.120 E/flutter ( 4363):     v_position = _80.xy / vec2(_80.w);
+10-29 22:24:42.120 E/flutter ( 4363):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:24:42.120 E/flutter ( 4363): }
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): void main() {
+10-29 22:24:42.120 E/flutter ( 4363):   _impeller_user_main();
+10-29 22:24:42.120 E/flutter ( 4363):   gl_Position.y *= _impeller_y_flip;
+10-29 22:24:42.120 E/flutter ( 4363): }
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): Fragment Shader:
+10-29 22:24:42.120 E/flutter ( 4363): #version 100
+10-29 22:24:42.120 E/flutter ( 4363): precision mediump float;
+10-29 22:24:42.120 E/flutter ( 4363): precision highp int;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): struct FragInfo
+10-29 22:24:42.120 E/flutter ( 4363): {
+10-29 22:24:42.120 E/flutter ( 4363):     highp vec2 center;
+10-29 22:24:42.120 E/flutter ( 4363):     highp vec2 focus;
+10-29 22:24:42.120 E/flutter ( 4363):     highp float focus_radius;
+10-29 22:24:42.120 E/flutter ( 4363):     highp float radius;
+10-29 22:24:42.120 E/flutter ( 4363):     highp float tile_mode;
+10-29 22:24:42.120 E/flutter ( 4363):     highp float alpha;
+10-29 22:24:42.120 E/flutter ( 4363):     highp float colors_length;
+10-29 22:24:42.120 E/flutter ( 4363):     highp vec4 decal_border_color;
+10-29 22:24:42.120 E/flutter ( 4363): };
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): uniform FragInfo frag_info;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): struct StopPairsInfo
+10-29 22:24:42.120 E/flutter ( 4363): {
+10-29 22:24:42.120 E/flutter ( 4363):     highp vec4 stop_pairs[128];
+10-29 22:24:42.120 E/flutter ( 4363): };
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): uniform StopPairsInfo stop_pairs_info;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): struct ColorsInfo
+10-29 22:24:42.120 E/flutter ( 4363): {
+10-29 22:24:42.120 E/flutter ( 4363):     highp vec4 colors[256];
+10-29 22:24:42.120 E/flutter ( 4363): };
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): uniform ColorsInfo colors_info;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): varying highp vec2 v_position;
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): void main()
+10-29 22:24:42.120 E/flutter ( 4363): {
+10-29 22:24:42.120 E/flutter ( 4363):     highp float _325 = frag_info.radius - frag_info.focus_radius;
+10-29 22:24:42.120 E/flutter ( 4363):     highp float _343 = (length((v_position - frag_info.focus) * (1.0 / _325)) * sign(_325)) - (frag_info.focus_radius / _325);
+10-29 22:24:42.120 E/flutter ( 4363):     bool _370 = (_343 < 0.0) || (_343 > 1.0);
+10-29 22:24:42.120 E/flutter ( 4363):     bool _376 = false;
+10-29 22:24:42.120 E/flutter ( 4363):     if (_370)
+10-29 22:24:42.120 E/flutter ( 4363):     {
+10-29 22:24:42.120 E/flutter ( 4363):         _376 = frag_info.tile_mode == 3.0;
+10-29 22:24:42.120 E/flutter ( 4363):     }
+10-29 22:24:42.120 E/flutter ( 4363):     else
+10-29 22:24:42.120 E/flutter ( 4363):     {
+10-29 22:24:42.120 E/flutter ( 4363):         _376 = _370;
+10-29 22:24:42.120 E/flutter ( 4363):     }
+10-29 22:24:42.120 E/flutter ( 4363):     highp vec4 _539 = vec4(0.0);
+10-29 22:24:42.120 E/flutter ( 4363):     if (_376)
+10-29 22:24:42.120 E/flutter ( 4363):     {
+10-29 22:24:42.120 E/flutter ( 4363):         _539 = frag_info.decal_border_color;
+10-29 22:24:42.120 E/flutter ( 4363):     }
+10-29 22:24:42.120 E/flutter ( 4363):     else
+10-29 22:24:42.120 E/flutter ( 4363):     {
+10-29 22:24:42.120 E/flutter ( 4363):         highp float _524 = 0.0;
+10-29 22:24:42.120 E/flutter ( 4363):         if (frag_info.tile_mode == 0.0)
+10-29 22:24:42.120 E/flutter ( 4363):         {
+10-29 22:24:42.120 E/flutter ( 4363):             _524 = clamp(_343, 0.0, 1.0);
+10-29 22:24:42.120 E/flutter ( 4363):         }
+10-29 22:24:42.120 E/flutter ( 4363):         else
+10-29 22:24:42.120 E/flutter ( 4363):         {
+10-29 22:24:42.120 E/flutter ( 4363):             highp float _525 = 0.0;
+10-29 22:24:42.120 E/flutter ( 4363):             if (frag_info.tile_mode == 1.0)
+10-29 22:24:42.120 E/flutter ( 4363):             {
+10-29 22:24:42.120 E/flutter ( 4363):                 _525 = fract(_343);
+10-29 22:24:42.120 E/flutter ( 4363):             }
+10-29 22:24:42.120 E/flutter ( 4363):             else
+10-29 22:24:42.120 E/flutter ( 4363):             {
+10-29 22:24:42.120 E/flutter ( 4363):                 highp float _526 = 0.0;
+10-29 22:24:42.120 E/flutter ( 4363):                 if (frag_info.tile_mode == 2.0)
+10-29 22:24:42.120 E/flutter ( 4363):                 {
+10-29 22:24:42.120 E/flutter ( 4363):                     highp float _486 = _343 - 1.0;
+10-29 22:24:42.120 E/flutter ( 4363):                     _526 = abs((_486 - (2.0 * floor(_486 * 0.5))) - 1.0);
+10-29 22:24:42.120 E/flutter ( 4363):                 }
+10-29 22:24:42.120 E/flutter ( 4363):                 else
+10-29 22:24:42.120 E/flutter ( 4363):                 {
+10-29 22:24:42.120 E/flutter ( 4363):                     _526 = _343;
+10-29 22:24:42.120 E/flutter ( 4363):                 }
+10-29 22:24:42.120 E/flutter ( 4363):                 _525 = _526;
+10-29 22:24:42.120 E/flutter ( 4363):             }
+10-29 22:24:42.120 E/flutter ( 4363):             _524 = _525;
+10-29 22:24:42.120 E/flutter ( 4363):         }
+10-29 22:24:42.120 E/flutter ( 4363):         highp vec2 _534 = vec2(0.0);
+10-29 22:24:42.120 E/flutter ( 4363):         _534 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:24:42.120 E/flutter ( 4363):         bool _414 = false;
+10-29 22:24:42.120 E/flutter ( 4363):         highp vec2 _529 = vec2(0.0);
+10-29 22:24:42.120 E/flutter ( 4363):         highp vec4 _540 = vec4(0.0);
+10-29 22:24:42.120 E/flutter ( 4363):         int _527 = 1;
+10-29 22:24:42.120 E/flutter ( 4363):         bool _528 = false;
+10-29 22:24:42.120 E/flutter ( 4363):         for (;;)
+10-29 22:24:42.120 E/flutter ( 4363):         {
+10-29 22:24:42.120 E/flutter ( 4363):             if (float(_527) < frag_info.colors_length)
+10-29 22:24:42.120 E/flutter ( 4363):             {
+10-29 22:24:42.120 E/flutter ( 4363):                 if (_528)
+10-29 22:24:42.120 E/flutter ( 4363):                 {
+10-29 22:24:42.120 E/flutter ( 4363):                     _529 = stop_pairs_info.stop_pairs[_527 / 2].xy;
+10-29 22:24:42.120 E/flutter ( 4363):                 }
+10-29 22:24:42.120 E/flutter ( 4363):                 else
+10-29 22:24:42.120 E/flutter ( 4363):                 {
+10-29 22:24:42.120 E/flutter ( 4363):                     _529 = stop_pairs_info.stop_pairs[_527 / 2].zw;
+10-29 22:24:42.120 E/flutter ( 4363):                 }
+10-29 22:24:42.120 E/flutter ( 4363):                 _414 = !_528;
+10-29 22:24:42.120 E/flutter ( 4363):                 bool _418 = _524 >= _534.x;
+10-29 22:24:42.120 E/flutter ( 4363):                 bool _425 = false;
+10-29 22:24:42.120 E/flutter ( 4363):                 if (_418)
+10-29 22:24:42.120 E/flutter ( 4363):                 {
+10-29 22:24:42.120 E/flutter ( 4363):                     _425 = _524 <= _529.x;
+10-29 22:24:42.120 E/flutter ( 4363):                 }
+10-29 22:24:42.120 E/flutter ( 4363):                 else
+10-29 22:24:42.120 E/flutter ( 4363):                 {
+10-29 22:24:42.120 E/flutter ( 4363):                     _425 = _418;
+10-29 22:24:42.120 E/flutter ( 4363):                 }
+10-29 22:24:42.120 E/flutter ( 4363):                 if (_425)
+10-29 22:24:42.120 E/flutter ( 4363):                 {
+10-29 22:24:42.120 E/flutter ( 4363):                     highp vec4 _549 = vec4(0.0);
+10-29 22:24:42.120 E/flutter ( 4363):                     if (_529.y > 1000.0)
+10-29 22:24:42.120 E/flutter ( 4363):                     {
+10-29 22:24:42.120 E/flutter ( 4363):                         _549 = colors_info.colors[_527];
+10-29 22:24:42.120 E/flutter ( 4363):                     }
+10-29 22:24:42.120 E/flutter ( 4363):                     else
+10-29 22:24:42.120 E/flutter ( 4363):                     {
+10-29 22:24:42.120 E/flutter ( 4363):                         _549 = mix(colors_info.colors[_527 - 1], colors_info.colors[_527], vec4((_524 - _534.x) * _529.y));
+10-29 22:24:42.120 E/flutter ( 4363):                     }
+10-29 22:24:42.120 E/flutter ( 4363):                     _540 = _549;
+10-29 22:24:42.120 E/flutter ( 4363):                     break;
+10-29 22:24:42.120 E/flutter ( 4363):                 }
+10-29 22:24:42.120 E/flutter ( 4363):                 _534 = _529;
+10-29 22:24:42.120 E/flutter ( 4363):                 _528 = _414;
+10-29 22:24:42.120 E/flutter ( 4363):                 _527++;
+10-29 22:24:42.120 E/flutter ( 4363):                 continue;
+10-29 22:24:42.120 E/flutter ( 4363):             }
+10-29 22:24:42.120 E/flutter ( 4363):             else
+10-29 22:24:42.120 E/flutter ( 4363):             {
+10-29 22:24:42.120 E/flutter ( 4363):                 _540 = vec4(0.0);
+10-29 22:24:42.120 E/flutter ( 4363):                 break;
+10-29 22:24:42.120 E/flutter ( 4363):             }
+10-29 22:24:42.120 E/flutter ( 4363):         }
+10-29 22:24:42.120 E/flutter ( 4363):         _539 = _540;
+10-29 22:24:42.120 E/flutter ( 4363):     }
+10-29 22:24:42.120 E/flutter ( 4363):     gl_FragData[0] = vec4(_539.xyz * _539.w, _539.w) * frag_info.alpha;
+10-29 22:24:42.120 E/flutter ( 4363): }
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): 
+10-29 22:24:42.120 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:24:42.122 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): Vertex Shader:
+10-29 22:24:42.122 E/flutter ( 4363): #version 100
+10-29 22:24:42.122 E/flutter ( 4363): uniform float _impeller_y_flip;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): struct FrameInfo
+10-29 22:24:42.122 E/flutter ( 4363): {
+10-29 22:24:42.122 E/flutter ( 4363):     mat4 mvp;
+10-29 22:24:42.122 E/flutter ( 4363):     mat4 matrix;
+10-29 22:24:42.122 E/flutter ( 4363): };
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): uniform FrameInfo frame_info;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): attribute vec2 position;
+10-29 22:24:42.122 E/flutter ( 4363): varying vec2 v_position;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): void _impeller_user_main()
+10-29 22:24:42.122 E/flutter ( 4363): {
+10-29 22:24:42.122 E/flutter ( 4363):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:24:42.122 E/flutter ( 4363):     gl_Position = frame_info.mvp * _59;
+10-29 22:24:42.122 E/flutter ( 4363):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:24:42.122 E/flutter ( 4363):     v_position = _80.xy / vec2(_80.w);
+10-29 22:24:42.122 E/flutter ( 4363):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:24:42.122 E/flutter ( 4363): }
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): void main() {
+10-29 22:24:42.122 E/flutter ( 4363):   _impeller_user_main();
+10-29 22:24:42.122 E/flutter ( 4363):   gl_Position.y *= _impeller_y_flip;
+10-29 22:24:42.122 E/flutter ( 4363): }
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): Fragment Shader:
+10-29 22:24:42.122 E/flutter ( 4363): #version 100
+10-29 22:24:42.122 E/flutter ( 4363): precision mediump float;
+10-29 22:24:42.122 E/flutter ( 4363): precision highp int;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): struct FragInfo
+10-29 22:24:42.122 E/flutter ( 4363): {
+10-29 22:24:42.122 E/flutter ( 4363):     highp vec2 center;
+10-29 22:24:42.122 E/flutter ( 4363):     highp vec2 focus;
+10-29 22:24:42.122 E/flutter ( 4363):     highp float focus_radius;
+10-29 22:24:42.122 E/flutter ( 4363):     highp float radius;
+10-29 22:24:42.122 E/flutter ( 4363):     highp float tile_mode;
+10-29 22:24:42.122 E/flutter ( 4363):     highp float alpha;
+10-29 22:24:42.122 E/flutter ( 4363):     highp float colors_length;
+10-29 22:24:42.122 E/flutter ( 4363):     highp vec4 decal_border_color;
+10-29 22:24:42.122 E/flutter ( 4363): };
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): uniform FragInfo frag_info;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): struct StopPairsInfo
+10-29 22:24:42.122 E/flutter ( 4363): {
+10-29 22:24:42.122 E/flutter ( 4363):     highp vec4 stop_pairs[128];
+10-29 22:24:42.122 E/flutter ( 4363): };
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): uniform StopPairsInfo stop_pairs_info;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): struct ColorsInfo
+10-29 22:24:42.122 E/flutter ( 4363): {
+10-29 22:24:42.122 E/flutter ( 4363):     highp vec4 colors[256];
+10-29 22:24:42.122 E/flutter ( 4363): };
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): uniform ColorsInfo colors_info;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): varying highp vec2 v_position;
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): void main()
+10-29 22:24:42.122 E/flutter ( 4363): {
+10-29 22:24:42.122 E/flutter ( 4363):     highp vec2 _914 = vec2(0.0);
+10-29 22:24:42.122 E/flutter ( 4363):     for (int spvDummy103 = 0; spvDummy103 < 1; spvDummy103++)
+10-29 22:24:42.122 E/flutter ( 4363):     {
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _569 = frag_info.center.y - frag_info.focus.y;
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _574 = frag_info.focus.x - frag_info.center.x;
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _579 = frag_info.center.x - frag_info.focus.x;
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _638 = (-1.0) * _579;
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _652 = _569 * _569;
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _531 = frag_info.focus_radius / distance(frag_info.focus, frag_info.center);
+10-29 22:24:42.122 E/flutter ( 4363):         highp vec3 _540 = (mat3(vec3(0.0, -1.0, 0.0), vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0)) * (mat3(vec3(_569, (-1.0) * _574, 0.0), vec3(_638, _569, 0.0), vec3((frag_info.focus.y * _579) - (_569 * frag_info.focus.x), ((-frag_info.focus.y) * _569) + (_574 * frag_info.focus.x), _652 - (_574 * _579))) * (1.0 / (_652 + (_574 * _638))))) * vec3(v_position, 1.0);
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _544 = _540.y;
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _548 = (_531 * _531) - (_544 * _544);
+10-29 22:24:42.122 E/flutter ( 4363):         if (_548 < 0.0)
+10-29 22:24:42.122 E/flutter ( 4363):         {
+10-29 22:24:42.122 E/flutter ( 4363):             _914 = vec2(0.0, -1.0);
+10-29 22:24:42.122 E/flutter ( 4363):             break;
+10-29 22:24:42.122 E/flutter ( 4363):         }
+10-29 22:24:42.122 E/flutter ( 4363):         _914 = vec2(_540.x + sqrt(_548), 1.0);
+10-29 22:24:42.122 E/flutter ( 4363):         break;
+10-29 22:24:42.122 E/flutter ( 4363):     }
+10-29 22:24:42.122 E/flutter ( 4363):     bool _733 = _914.y < 0.0;
+10-29 22:24:42.122 E/flutter ( 4363):     bool _748 = false;
+10-29 22:24:42.122 E/flutter ( 4363):     if (!_733)
+10-29 22:24:42.122 E/flutter ( 4363):     {
+10-29 22:24:42.122 E/flutter ( 4363):         bool _740 = (_914.x < 0.0) || (_914.x > 1.0);
+10-29 22:24:42.122 E/flutter ( 4363):         bool _746 = false;
+10-29 22:24:42.122 E/flutter ( 4363):         if (_740)
+10-29 22:24:42.122 E/flutter ( 4363):         {
+10-29 22:24:42.122 E/flutter ( 4363):             _746 = frag_info.tile_mode == 3.0;
+10-29 22:24:42.122 E/flutter ( 4363):         }
+10-29 22:24:42.122 E/flutter ( 4363):         else
+10-29 22:24:42.122 E/flutter ( 4363):         {
+10-29 22:24:42.122 E/flutter ( 4363):             _746 = _740;
+10-29 22:24:42.122 E/flutter ( 4363):         }
+10-29 22:24:42.122 E/flutter ( 4363):         _748 = _746;
+10-29 22:24:42.122 E/flutter ( 4363):     }
+10-29 22:24:42.122 E/flutter ( 4363):     else
+10-29 22:24:42.122 E/flutter ( 4363):     {
+10-29 22:24:42.122 E/flutter ( 4363):         _748 = _733;
+10-29 22:24:42.122 E/flutter ( 4363):     }
+10-29 22:24:42.122 E/flutter ( 4363):     highp vec4 _932 = vec4(0.0);
+10-29 22:24:42.122 E/flutter ( 4363):     if (_748)
+10-29 22:24:42.122 E/flutter ( 4363):     {
+10-29 22:24:42.122 E/flutter ( 4363):         _932 = frag_info.decal_border_color;
+10-29 22:24:42.122 E/flutter ( 4363):     }
+10-29 22:24:42.122 E/flutter ( 4363):     else
+10-29 22:24:42.122 E/flutter ( 4363):     {
+10-29 22:24:42.122 E/flutter ( 4363):         highp float _917 = 0.0;
+10-29 22:24:42.122 E/flutter ( 4363):         if (frag_info.tile_mode == 0.0)
+10-29 22:24:42.122 E/flutter ( 4363):         {
+10-29 22:24:42.122 E/flutter ( 4363):             _917 = clamp(_914.x, 0.0, 1.0);
+10-29 22:24:42.122 E/flutter ( 4363):         }
+10-29 22:24:42.122 E/flutter ( 4363):         else
+10-29 22:24:42.122 E/flutter ( 4363):         {
+10-29 22:24:42.122 E/flutter ( 4363):             highp float _918 = 0.0;
+10-29 22:24:42.122 E/flutter ( 4363):             if (frag_info.tile_mode == 1.0)
+10-29 22:24:42.122 E/flutter ( 4363):             {
+10-29 22:24:42.122 E/flutter ( 4363):                 _918 = fract(_914.x);
+10-29 22:24:42.122 E/flutter ( 4363):             }
+10-29 22:24:42.122 E/flutter ( 4363):             else
+10-29 22:24:42.122 E/flutter ( 4363):             {
+10-29 22:24:42.122 E/flutter ( 4363):                 highp float _919 = 0.0;
+10-29 22:24:42.122 E/flutter ( 4363):                 if (frag_info.tile_mode == 2.0)
+10-29 22:24:42.122 E/flutter ( 4363):                 {
+10-29 22:24:42.122 E/flutter ( 4363):                     highp float _856 = _914.x - 1.0;
+10-29 22:24:42.122 E/flutter ( 4363):                     _919 = abs((_856 - (2.0 * floor(_856 * 0.5))) - 1.0);
+10-29 22:24:42.122 E/flutter ( 4363):                 }
+10-29 22:24:42.122 E/flutter ( 4363):                 else
+10-29 22:24:42.122 E/flutter ( 4363):                 {
+10-29 22:24:42.122 E/flutter ( 4363):                     _919 = _914.x;
+10-29 22:24:42.122 E/flutter ( 4363):                 }
+10-29 22:24:42.122 E/flutter ( 4363):                 _918 = _919;
+10-29 22:24:42.122 E/flutter ( 4363):             }
+10-29 22:24:42.122 E/flutter ( 4363):             _917 = _918;
+10-29 22:24:42.122 E/flutter ( 4363):         }
+10-29 22:24:42.122 E/flutter ( 4363):         highp vec2 _927 = vec2(0.0);
+10-29 22:24:42.122 E/flutter ( 4363):         _927 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:24:42.122 E/flutter ( 4363):         bool _784 = false;
+10-29 22:24:42.122 E/flutter ( 4363):         highp vec2 _922 = vec2(0.0);
+10-29 22:24:42.122 E/flutter ( 4363):         highp vec4 _933 = vec4(0.0);
+10-29 22:24:42.122 E/flutter ( 4363):         int _920 = 1;
+10-29 22:24:42.122 E/flutter ( 4363):         bool _921 = false;
+10-29 22:24:42.122 E/flutter ( 4363):         for (;;)
+10-29 22:24:42.122 E/flutter ( 4363):         {
+10-29 22:24:42.122 E/flutter ( 4363):             if (float(_920) < frag_info.colors_length)
+10-29 22:24:42.122 E/flutter ( 4363):             {
+10-29 22:24:42.122 E/flutter ( 4363):                 if (_921)
+10-29 22:24:42.122 E/flutter ( 4363):                 {
+10-29 22:24:42.122 E/flutter ( 4363):                     _922 = stop_pairs_info.stop_pairs[_920 / 2].xy;
+10-29 22:24:42.122 E/flutter ( 4363):                 }
+10-29 22:24:42.122 E/flutter ( 4363):                 else
+10-29 22:24:42.122 E/flutter ( 4363):                 {
+10-29 22:24:42.122 E/flutter ( 4363):                     _922 = stop_pairs_info.stop_pairs[_920 / 2].zw;
+10-29 22:24:42.122 E/flutter ( 4363):                 }
+10-29 22:24:42.122 E/flutter ( 4363):                 _784 = !_921;
+10-29 22:24:42.122 E/flutter ( 4363):                 bool _788 = _917 >= _927.x;
+10-29 22:24:42.122 E/flutter ( 4363):                 bool _795 = false;
+10-29 22:24:42.122 E/flutter ( 4363):                 if (_788)
+10-29 22:24:42.122 E/flutter ( 4363):                 {
+10-29 22:24:42.122 E/flutter ( 4363):                     _795 = _917 <= _922.x;
+10-29 22:24:42.122 E/flutter ( 4363):                 }
+10-29 22:24:42.122 E/flutter ( 4363):                 else
+10-29 22:24:42.122 E/flutter ( 4363):                 {
+10-29 22:24:42.122 E/flutter ( 4363):                     _795 = _788;
+10-29 22:24:42.122 E/flutter ( 4363):                 }
+10-29 22:24:42.122 E/flutter ( 4363):                 if (_795)
+10-29 22:24:42.122 E/flutter ( 4363):                 {
+10-29 22:24:42.122 E/flutter ( 4363):                     highp vec4 _942 = vec4(0.0);
+10-29 22:24:42.122 E/flutter ( 4363):                     if (_922.y > 1000.0)
+10-29 22:24:42.122 E/flutter ( 4363):                     {
+10-29 22:24:42.122 E/flutter ( 4363):                         _942 = colors_info.colors[_920];
+10-29 22:24:42.122 E/flutter ( 4363):                     }
+10-29 22:24:42.122 E/flutter ( 4363):                     else
+10-29 22:24:42.122 E/flutter ( 4363):                     {
+10-29 22:24:42.122 E/flutter ( 4363):                         _942 = mix(colors_info.colors[_920 - 1], colors_info.colors[_920], vec4((_917 - _927.x) * _922.y));
+10-29 22:24:42.122 E/flutter ( 4363):                     }
+10-29 22:24:42.122 E/flutter ( 4363):                     _933 = _942;
+10-29 22:24:42.122 E/flutter ( 4363):                     break;
+10-29 22:24:42.122 E/flutter ( 4363):                 }
+10-29 22:24:42.122 E/flutter ( 4363):                 _927 = _922;
+10-29 22:24:42.122 E/flutter ( 4363):                 _921 = _784;
+10-29 22:24:42.122 E/flutter ( 4363):                 _920++;
+10-29 22:24:42.122 E/flutter ( 4363):                 continue;
+10-29 22:24:42.122 E/flutter ( 4363):             }
+10-29 22:24:42.122 E/flutter ( 4363):             else
+10-29 22:24:42.122 E/flutter ( 4363):             {
+10-29 22:24:42.122 E/flutter ( 4363):                 _933 = vec4(0.0);
+10-29 22:24:42.122 E/flutter ( 4363):                 break;
+10-29 22:24:42.122 E/flutter ( 4363):             }
+10-29 22:24:42.122 E/flutter ( 4363):         }
+10-29 22:24:42.122 E/flutter ( 4363):         _932 = _933;
+10-29 22:24:42.122 E/flutter ( 4363):     }
+10-29 22:24:42.122 E/flutter ( 4363):     gl_FragData[0] = vec4(_932.xyz * _932.w, _932.w) * frag_info.alpha;
+10-29 22:24:42.122 E/flutter ( 4363): }
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): 
+10-29 22:24:42.122 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:24:42.127 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(169)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link shader program: Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (261)
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): Vertex Shader:
+10-29 22:24:42.127 E/flutter ( 4363): #version 100
+10-29 22:24:42.127 E/flutter ( 4363): uniform float _impeller_y_flip;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): struct FrameInfo
+10-29 22:24:42.127 E/flutter ( 4363): {
+10-29 22:24:42.127 E/flutter ( 4363):     mat4 mvp;
+10-29 22:24:42.127 E/flutter ( 4363):     mat4 matrix;
+10-29 22:24:42.127 E/flutter ( 4363): };
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): uniform FrameInfo frame_info;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): attribute vec2 position;
+10-29 22:24:42.127 E/flutter ( 4363): varying vec2 v_position;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): void _impeller_user_main()
+10-29 22:24:42.127 E/flutter ( 4363): {
+10-29 22:24:42.127 E/flutter ( 4363):     vec4 _59 = vec4(position, 0.0, 1.0);
+10-29 22:24:42.127 E/flutter ( 4363):     gl_Position = frame_info.mvp * _59;
+10-29 22:24:42.127 E/flutter ( 4363):     vec4 _80 = frame_info.matrix * _59;
+10-29 22:24:42.127 E/flutter ( 4363):     v_position = _80.xy / vec2(_80.w);
+10-29 22:24:42.127 E/flutter ( 4363):     gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;
+10-29 22:24:42.127 E/flutter ( 4363): }
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): void main() {
+10-29 22:24:42.127 E/flutter ( 4363):   _impeller_user_main();
+10-29 22:24:42.127 E/flutter ( 4363):   gl_Position.y *= _impeller_y_flip;
+10-29 22:24:42.127 E/flutter ( 4363): }
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): Fragment Shader:
+10-29 22:24:42.127 E/flutter ( 4363): #version 100
+10-29 22:24:42.127 E/flutter ( 4363): precision mediump float;
+10-29 22:24:42.127 E/flutter ( 4363): precision highp int;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): struct FragInfo
+10-29 22:24:42.127 E/flutter ( 4363): {
+10-29 22:24:42.127 E/flutter ( 4363):     highp vec2 center;
+10-29 22:24:42.127 E/flutter ( 4363):     highp float bias;
+10-29 22:24:42.127 E/flutter ( 4363):     highp float scale;
+10-29 22:24:42.127 E/flutter ( 4363):     highp float tile_mode;
+10-29 22:24:42.127 E/flutter ( 4363):     highp float alpha;
+10-29 22:24:42.127 E/flutter ( 4363):     highp float colors_length;
+10-29 22:24:42.127 E/flutter ( 4363):     highp vec4 decal_border_color;
+10-29 22:24:42.127 E/flutter ( 4363): };
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): uniform FragInfo frag_info;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): struct StopPairsInfo
+10-29 22:24:42.127 E/flutter ( 4363): {
+10-29 22:24:42.127 E/flutter ( 4363):     highp vec4 stop_pairs[128];
+10-29 22:24:42.127 E/flutter ( 4363): };
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): uniform StopPairsInfo stop_pairs_info;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): struct ColorsInfo
+10-29 22:24:42.127 E/flutter ( 4363): {
+10-29 22:24:42.127 E/flutter ( 4363):     highp vec4 colors[256];
+10-29 22:24:42.127 E/flutter ( 4363): };
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): uniform ColorsInfo colors_info;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): varying highp vec2 v_position;
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): void main()
+10-29 22:24:42.127 E/flutter ( 4363): {
+10-29 22:24:42.127 E/flutter ( 4363):     highp vec2 _98 = v_position - frag_info.center;
+10-29 22:24:42.127 E/flutter ( 4363):     highp float _122 = (((atan(-_98.y, -_98.x) * 0.15915493667125701904296875) + 0.5) + frag_info.bias) * frag_info.scale;
+10-29 22:24:42.127 E/flutter ( 4363):     bool _129 = (_122 < 0.0) || (_122 > 1.0);
+10-29 22:24:42.127 E/flutter ( 4363):     bool _137 = false;
+10-29 22:24:42.127 E/flutter ( 4363):     if (_129)
+10-29 22:24:42.127 E/flutter ( 4363):     {
+10-29 22:24:42.127 E/flutter ( 4363):         _137 = frag_info.tile_mode == 3.0;
+10-29 22:24:42.127 E/flutter ( 4363):     }
+10-29 22:24:42.127 E/flutter ( 4363):     else
+10-29 22:24:42.127 E/flutter ( 4363):     {
+10-29 22:24:42.127 E/flutter ( 4363):         _137 = _129;
+10-29 22:24:42.127 E/flutter ( 4363):     }
+10-29 22:24:42.127 E/flutter ( 4363):     highp vec4 _333 = vec4(0.0);
+10-29 22:24:42.127 E/flutter ( 4363):     if (_137)
+10-29 22:24:42.127 E/flutter ( 4363):     {
+10-29 22:24:42.127 E/flutter ( 4363):         _333 = frag_info.decal_border_color;
+10-29 22:24:42.127 E/flutter ( 4363):     }
+10-29 22:24:42.127 E/flutter ( 4363):     else
+10-29 22:24:42.127 E/flutter ( 4363):     {
+10-29 22:24:42.127 E/flutter ( 4363):         highp float _318 = 0.0;
+10-29 22:24:42.127 E/flutter ( 4363):         if (frag_info.tile_mode == 0.0)
+10-29 22:24:42.127 E/flutter ( 4363):         {
+10-29 22:24:42.127 E/flutter ( 4363):             _318 = clamp(_122, 0.0, 1.0);
+10-29 22:24:42.127 E/flutter ( 4363):         }
+10-29 22:24:42.127 E/flutter ( 4363):         else
+10-29 22:24:42.127 E/flutter ( 4363):         {
+10-29 22:24:42.127 E/flutter ( 4363):             highp float _319 = 0.0;
+10-29 22:24:42.127 E/flutter ( 4363):             if (frag_info.tile_mode == 1.0)
+10-29 22:24:42.127 E/flutter ( 4363):             {
+10-29 22:24:42.127 E/flutter ( 4363):                 _319 = fract(_122);
+10-29 22:24:42.127 E/flutter ( 4363):             }
+10-29 22:24:42.127 E/flutter ( 4363):             else
+10-29 22:24:42.127 E/flutter ( 4363):             {
+10-29 22:24:42.127 E/flutter ( 4363):                 highp float _320 = 0.0;
+10-29 22:24:42.127 E/flutter ( 4363):                 if (frag_info.tile_mode == 2.0)
+10-29 22:24:42.127 E/flutter ( 4363):                 {
+10-29 22:24:42.127 E/flutter ( 4363):                     highp float _281 = _122 - 1.0;
+10-29 22:24:42.127 E/flutter ( 4363):                     _320 = abs((_281 - (2.0 * floor(_281 * 0.5))) - 1.0);
+10-29 22:24:42.127 E/flutter ( 4363):                 }
+10-29 22:24:42.127 E/flutter ( 4363):                 else
+10-29 22:24:42.127 E/flutter ( 4363):                 {
+10-29 22:24:42.127 E/flutter ( 4363):                     _320 = _122;
+10-29 22:24:42.127 E/flutter ( 4363):                 }
+10-29 22:24:42.127 E/flutter ( 4363):                 _319 = _320;
+10-29 22:24:42.127 E/flutter ( 4363):             }
+10-29 22:24:42.127 E/flutter ( 4363):             _318 = _319;
+10-29 22:24:42.127 E/flutter ( 4363):         }
+10-29 22:24:42.127 E/flutter ( 4363):         highp vec2 _328 = vec2(0.0);
+10-29 22:24:42.127 E/flutter ( 4363):         _328 = stop_pairs_info.stop_pairs[0].xy;
+10-29 22:24:42.127 E/flutter ( 4363):         bool _194 = false;
+10-29 22:24:42.127 E/flutter ( 4363):         highp vec2 _323 = vec2(0.0);
+10-29 22:24:42.127 E/flutter ( 4363):         highp vec4 _334 = vec4(0.0);
+10-29 22:24:42.127 E/flutter ( 4363):         int _321 = 1;
+10-29 22:24:42.127 E/flutter ( 4363):         bool _322 = false;
+10-29 22:24:42.127 E/flutter ( 4363):         for (;;)
+10-29 22:24:42.127 E/flutter ( 4363):         {
+10-29 22:24:42.127 E/flutter ( 4363):             if (float(_321) < frag_info.colors_length)
+10-29 22:24:42.127 E/flutter ( 4363):             {
+10-29 22:24:42.127 E/flutter ( 4363):                 if (_322)
+10-29 22:24:42.127 E/flutter ( 4363):                 {
+10-29 22:24:42.127 E/flutter ( 4363):                     _323 = stop_pairs_info.stop_pairs[_321 / 2].xy;
+10-29 22:24:42.127 E/flutter ( 4363):                 }
+10-29 22:24:42.127 E/flutter ( 4363):                 else
+10-29 22:24:42.127 E/flutter ( 4363):                 {
+10-29 22:24:42.127 E/flutter ( 4363):                     _323 = stop_pairs_info.stop_pairs[_321 / 2].zw;
+10-29 22:24:42.127 E/flutter ( 4363):                 }
+10-29 22:24:42.127 E/flutter ( 4363):                 _194 = !_322;
+10-29 22:24:42.127 E/flutter ( 4363):                 bool _198 = _318 >= _328.x;
+10-29 22:24:42.127 E/flutter ( 4363):                 bool _205 = false;
+10-29 22:24:42.127 E/flutter ( 4363):                 if (_198)
+10-29 22:24:42.127 E/flutter ( 4363):                 {
+10-29 22:24:42.127 E/flutter ( 4363):                     _205 = _318 <= _323.x;
+10-29 22:24:42.127 E/flutter ( 4363):                 }
+10-29 22:24:42.127 E/flutter ( 4363):                 else
+10-29 22:24:42.127 E/flutter ( 4363):                 {
+10-29 22:24:42.127 E/flutter ( 4363):                     _205 = _198;
+10-29 22:24:42.127 E/flutter ( 4363):                 }
+10-29 22:24:42.127 E/flutter ( 4363):                 if (_205)
+10-29 22:24:42.127 E/flutter ( 4363):                 {
+10-29 22:24:42.127 E/flutter ( 4363):                     highp vec4 _342 = vec4(0.0);
+10-29 22:24:42.127 E/flutter ( 4363):                     if (_323.y > 1000.0)
+10-29 22:24:42.127 E/flutter ( 4363):                     {
+10-29 22:24:42.127 E/flutter ( 4363):                         _342 = colors_info.colors[_321];
+10-29 22:24:42.127 E/flutter ( 4363):                     }
+10-29 22:24:42.127 E/flutter ( 4363):                     else
+10-29 22:24:42.127 E/flutter ( 4363):                     {
+10-29 22:24:42.127 E/flutter ( 4363):                         _342 = mix(colors_info.colors[_321 - 1], colors_info.colors[_321], vec4((_318 - _328.x) * _323.y));
+10-29 22:24:42.127 E/flutter ( 4363):                     }
+10-29 22:24:42.127 E/flutter ( 4363):                     _334 = _342;
+10-29 22:24:42.127 E/flutter ( 4363):                     break;
+10-29 22:24:42.127 E/flutter ( 4363):                 }
+10-29 22:24:42.127 E/flutter ( 4363):                 _328 = _323;
+10-29 22:24:42.127 E/flutter ( 4363):                 _322 = _194;
+10-29 22:24:42.127 E/flutter ( 4363):                 _321++;
+10-29 22:24:42.127 E/flutter ( 4363):                 continue;
+10-29 22:24:42.127 E/flutter ( 4363):             }
+10-29 22:24:42.127 E/flutter ( 4363):             else
+10-29 22:24:42.127 E/flutter ( 4363):             {
+10-29 22:24:42.127 E/flutter ( 4363):                 _334 = vec4(0.0);
+10-29 22:24:42.127 E/flutter ( 4363):                 break;
+10-29 22:24:42.127 E/flutter ( 4363):             }
+10-29 22:24:42.127 E/flutter ( 4363):         }
+10-29 22:24:42.127 E/flutter ( 4363):         _333 = _334;
+10-29 22:24:42.127 E/flutter ( 4363):     }
+10-29 22:24:42.127 E/flutter ( 4363):     gl_FragData[0] = vec4(_333.xyz * _333.w, _333.w) * frag_info.alpha;
+10-29 22:24:42.127 E/flutter ( 4363): }
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): 
+10-29 22:24:42.127 E/flutter ( 4363): [ERROR:flutter/impeller/renderer/backend/gles/pipeline_library_gles.cc(245)] Break on 'ImpellerValidationBreak' to inspect point of failure: Could not link pipeline program.
+10-29 22:24:42.310 I/BgJobs  ( 4363): event #5 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=stop com.example.bg_jobs_example due to from pid 4245}
+10-29 22:24:42.313 I/BgJobs  ( 4363): watchdog armed
+10-29 22:24:42.316 I/BgJobs  ( 4363): reconcile armed id=slow at=1793287557066
+10-29 22:24:42.319 I/BgJobs  ( 4363): reconcile armed id=spike at=1793287483315
+10-29 22:24:47.321 I/BgJobs  ( 4363): fire id=spike trigger=alarm delayMs=4005
+10-29 22:24:47.339 E/flutter ( 4363): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:24:47.339 E/flutter ( 4363): [ERROR:flutter/impeller/toolkit/egl/egl.cc(56)] EGL Error: Success (12288) in ../../../flutter/impeller/toolkit/egl/display.cc:161
+10-29 22:24:47.424 I/flutter ( 4363): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:24:47.565 I/BgJobs  ( 4363): engine ready in 230ms
+10-29 22:24:52.063 I/flutter ( 4363): BGJOBS_ROW job=spike trigger=alarm delayMs=4005 durMs=4443 idle=false loc=OK fixAgeS=0 events=processExit
+10-29 22:24:52.067 I/BgJobs  ( 4363): done id=spike result=ok durMs=4745

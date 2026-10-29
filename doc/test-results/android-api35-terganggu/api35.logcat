@@ -1,0 +1,31 @@
+--------- beginning of main
+10-29 22:37:10.352 I/flutter ( 3458): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:37:10.860 I/flutter ( 3458): The Dart VM service is listening on http://127.0.0.1:37221/nvxS9_N2pqU=/
+10-29 22:37:14.090 I/BgJobs  ( 3458): watchdog armed
+10-29 22:37:23.154 I/BgJobs  ( 3458): schedule id=spike everyMs=60000 next=1793288302918 mode=exact
+10-29 22:37:23.160 I/BgJobs  ( 3458): schedule id=slow everyMs=300000 next=1793288543157 mode=exact
+10-29 22:38:22.926 I/BgJobs  ( 3458): fire id=spike trigger=alarm delayMs=7
+10-29 22:38:23.326 I/flutter ( 3458): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:38:24.734 I/BgJobs  ( 3458): engine ready in 1552ms
+10-29 22:38:35.551 I/flutter ( 3458): BGJOBS_ROW job=spike trigger=alarm delayMs=7 durMs=6216 idle=false loc=OK fixAgeS=0 events=
+10-29 22:38:35.810 I/BgJobs  ( 3458): done id=spike result=ok durMs=12712
+10-29 22:39:22.927 I/BgJobs  ( 3458): fire id=spike trigger=alarm delayMs=2
+10-29 22:39:33.744 I/flutter ( 3458): BGJOBS_ROW job=spike trigger=alarm delayMs=2 durMs=10770 idle=false loc=LAST_KNOWN fixAgeS=63 events=
+10-29 22:39:33.755 I/BgJobs  ( 3458): done id=spike result=ok durMs=10818
+10-29 22:40:22.954 I/BgJobs  ( 3458): fire id=spike trigger=alarm delayMs=22
+10-29 22:40:23.209 I/flutter ( 3458): BGJOBS_ROW job=spike trigger=alarm delayMs=22 durMs=175 idle=false loc=OK fixAgeS=113 events=
+10-29 22:40:23.213 I/BgJobs  ( 3458): done id=spike result=ok durMs=260
+10-29 22:40:34.074 I/BgJobs  ( 3458): watchdog armed
+10-29 22:40:34.080 I/BgJobs  ( 3458): reconcile armed id=spike at=1793288482949
+10-29 22:40:34.083 I/BgJobs  ( 3458): reconcile armed id=slow at=1793288543157
+10-29 22:41:23.147 I/BgJobs  ( 6277): fire id=spike trigger=alarm delayMs=181
+10-29 22:41:23.168 I/BgJobs  ( 6277): event #1 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=[REMOVE TASK] remove task}
+10-29 22:41:23.282 I/flutter ( 6277): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-29 22:41:23.408 I/flutter ( 6277): The Dart VM service is listening on http://127.0.0.1:41225/VHAzf0S2EsM=/
+10-29 22:41:23.603 I/BgJobs  ( 6277): engine ready in 418ms
+10-29 22:41:23.720 I/flutter ( 6277): BGJOBS_ROW job=spike trigger=alarm delayMs=181 durMs=54 idle=true loc=OK fixAgeS=173 events=processExit
+10-29 22:41:23.727 I/BgJobs  ( 6277): done id=spike result=ok durMs=591
+10-29 22:42:23.153 I/BgJobs  ( 6277): fire id=spike trigger=alarm delayMs=15
+10-29 22:42:23.202 I/flutter ( 6277): BGJOBS_ROW job=spike trigger=alarm delayMs=15 durMs=20 idle=true loc=OK fixAgeS=233 events=
+10-29 22:42:23.206 I/BgJobs  ( 6277): done id=spike result=ok durMs=58
+10-29 22:42:23.210 I/BgJobs  ( 6277): fire id=slow trigger=alarm delayMs=53

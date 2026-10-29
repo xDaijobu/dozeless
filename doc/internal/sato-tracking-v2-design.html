@@ -1,0 +1,387 @@
+<title>Sa.To Tracking v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column design spec; sections numbered because they are the review order */
+:root {
+  --bg: #f4f6f5;
+  --surface: #ffffff;
+  --ink: #16201d;
+  --muted: #56645f;
+  --line: #d9e0dd;
+  --accent: #0d6b5e;
+  --accent-soft: #e2f0ec;
+  --warn: #9a5a00;
+  --warn-soft: #fbf0dd;
+  --bad: #a2302a;
+  --bad-soft: #f8e3e1;
+  --code-bg: #eaefed;
+  --f-display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101614; --surface: #17201d; --ink: #e4ece9; --muted: #98a8a2; --line: #2a3632;
+    --accent: #4fc3a9; --accent-soft: #173a32; --warn: #e3a64a; --warn-soft: #3a2c14;
+    --bad: #f08a80; --bad-soft: #3d1f1c; --code-bg: #1e2a26;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101614; --surface: #17201d; --ink: #e4ece9; --muted: #98a8a2; --line: #2a3632;
+  --accent: #4fc3a9; --accent-soft: #173a32; --warn: #e3a64a; --warn-soft: #3a2c14;
+  --bad: #f08a80; --bad-soft: #3d1f1c; --code-bg: #1e2a26;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 960px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: flex; flex-direction: column; gap: 52px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 22px; font-weight: 800; }
+h3 { font-size: 16px; font-weight: 600; }
+p { margin: 0; max-width: 70ch; }
+code, .mono { font-family: var(--f-mono); font-size: 0.88em; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.sec-head { display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+header { display: flex; flex-direction: column; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 28px; }
+header .lede { font-size: 17px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); align-items: center; }
+.status { font-family: var(--f-mono); font-size: 12px; padding: 2px 10px; border: 1px solid var(--warn); color: var(--warn); border-radius: 999px; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px; }
+nav.toc a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-color: var(--accent); }
+
+.tbl { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--f-mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td .mono, td.mono { white-space: nowrap; }
+td.grp { font-family: var(--f-display); font-weight: 600; white-space: nowrap; color: var(--accent); }
+.where { display: block; font-family: var(--f-mono); font-size: 12px; color: var(--muted); margin-top: 4px; overflow-wrap: anywhere; }
+
+.sev { display: inline-block; font-family: var(--f-mono); font-size: 11px; font-weight: 500; padding: 1px 8px; border-radius: 999px; white-space: nowrap; letter-spacing: 0.04em; }
+.sev.c { background: var(--bad-soft); color: var(--bad); }
+.sev.h { background: var(--warn-soft); color: var(--warn); }
+.sev.m { background: var(--accent-soft); color: var(--accent); }
+.sev.l { background: var(--code-bg); color: var(--muted); }
+.tag { display: inline-block; font-family: var(--f-mono); font-size: 11.5px; padding: 1px 8px; border-radius: 4px; background: var(--code-bg); white-space: nowrap; }
+.tag.add { background: var(--accent-soft); color: var(--accent); }
+.tag.del { background: var(--bad-soft); color: var(--bad); }
+.tag.fix { background: var(--warn-soft); color: var(--warn); }
+
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+.box { background: var(--surface); border: 1px solid var(--line); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.box ul, .box ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.box .label { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+.flow { padding: 0; margin: 0 0 0 8px; border-left: 2px solid var(--accent); counter-reset: step; display: grid; }
+.flow li { list-style: none; position: relative; padding: 0 0 14px 26px; }
+.flow li:last-child { padding-bottom: 0; }
+.flow li::before { counter-increment: step; content: counter(step); position: absolute; left: -13px; top: 1px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--bg); font-family: var(--f-mono); font-size: 12px; display: grid; place-items: center; }
+
+.scen { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.scen .box h3 { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.rec { font-family: var(--f-mono); font-size: 12.5px; color: var(--accent); }
+
+.note { border-left: 4px solid var(--warn); background: var(--warn-soft); padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; }
+.note .t { font-weight: 600; color: var(--warn); }
+.small { font-size: 13px; color: var(--muted); }
+pre.cmd { margin: 0; background: var(--code-bg); padding: 12px 14px; overflow-x: auto; font-family: var(--f-mono); font-size: 13px; line-height: 1.55; }
+.q { display: grid; gap: 12px; counter-reset: q; padding: 0; margin: 0; }
+.q li { list-style: none; background: var(--surface); border: 1px solid var(--line); padding: 14px 18px 14px 52px; position: relative; }
+.q li::before { counter-increment: q; content: "Q" counter(q); position: absolute; left: 16px; top: 14px; font-family: var(--f-mono); font-size: 12px; color: var(--warn); font-weight: 500; }
+footer { border-top: 1px solid var(--line); padding-top: 18px; font-size: 13px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Desain · Core.Tracking + Sa.To Android</div>
+  <h1>Sa.To Tracking v2</h1>
+  <p class="lede">Konsep background tracking Sa.To yang bisa diandalkan: event apa saja yang dicatat, data apa saja yang diambil, permission yang dibutuhkan, dan apa yang terjadi kalau ada error.</p>
+  <div class="meta">
+    <span class="status">Draft, menunggu review</span>
+    <span>29 Okt 2026</span>
+    <span>Pendekatan A: satu event recorder di Core.Tracking</span>
+  </div>
+  <nav class="toc" aria-label="Isi">
+    <a href="#tujuan">1. Tujuan</a><a href="#temuan">2. Temuan</a><a href="#arsitektur">3. Arsitektur</a><a href="#event">4. Event</a><a href="#skenario">5. Skenario</a><a href="#tabel">6. TrackingTable</a><a href="#permission">7. Permission</a><a href="#error">8. Error</a><a href="#uji">9. Pengujian</a><a href="#file">10. File</a><a href="#terbuka">11. Keputusan terbuka</a>
+  </nav>
+</header>
+
+<section id="tujuan">
+  <div class="sec-head"><div class="eyebrow">1 · Tujuan &amp; batasan</div><h2>Yang mau dicapai</h2></div>
+  <div class="split">
+    <div class="box">
+      <span class="label">Diminta</span>
+      <ul>
+        <li>Tracking benar-benar jalan di background, termasuk setelah HP restart.</li>
+        <li>Permission yang dipakai jelas: lokasi, baterai, dan lainnya.</li>
+        <li>Kejadian HP nyala dan HP mati/restart tercatat sebagai data.</li>
+        <li>Tracking berhenti/lanjut, app dimatikan paksa, dan jam HP diubah manual juga tercatat.</li>
+        <li>Data dipakai untuk audit salesman dan diagnosa teknis.</li>
+        <li><code>TrackingTable</code> boleh diubah. Field yang sudah tidak bisa didapat (misalnya IMEI) dibuang.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <span class="label">Batasan</span>
+      <ul>
+        <li>Tanpa notifikasi permanen, jadi tetap memakai alarm dan tidak memakai foreground service.</li>
+        <li>API pengiriman ke server (<code>addTrackingV2.php</code>) tidak diubah. Payload JSON akan berisi kolom baru dan tidak lagi berisi kolom IMEI.</li>
+        <li>Hanya Android. iOS tidak disentuh.</li>
+        <li>Event baru bisa dinyalakan per app. Sa.To menyalakannya, SM.To tetap seperti sekarang.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="temuan">
+  <div class="sec-head"><div class="eyebrow">2 · Temuan di kode sekarang</div><h2>Yang perlu dibenerin</h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Tingkat</th><th>Masalah</th><th>Dampak</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sev c">KRITIS</span></td><td>Setelah Send sukses, <code>ClearTrackings</code> menghapus <b>semua</b> baris milik user, bukan hanya yang terkirim.<span class="where">TrackingService.cs:136, TrackingSqliteConnection.cs:116</span></td><td>Send hanya mengambil <code>ROWTRACKING</code> baris. Baris sisanya ikut terhapus tanpa pernah terkirim, misalnya setelah HP lama offline. Baris dari Get yang masuk saat upload berjalan juga bisa ikut terhapus.</td></tr>
+        <tr><td><span class="sev c">KRITIS</span></td><td>Reverse geocoding tidak dibungkus try/catch.<span class="where">GeocodingImpl.cs:29, TrackingService.cs:97</span></td><td>Saat HP offline, Geocoder melempar error. Get gagal, dicoba sekali lagi, lalu gagal lagi. Akibatnya <b>tidak ada baris tersimpan selama offline</b>, padahal di saat itulah lokasi paling dibutuhkan.</td></tr>
+        <tr><td><span class="sev c">KRITIS</span></td><td>Kalau GPS gagal, koordinat diisi <code>Latitude</code>/<code>Longitude</code> lama dari session.<span class="where">Core.LogsMaui/Tracking.cs:33</span></td><td>Baris terlihat valid padahal lokasinya basi. Ini menyesatkan untuk audit.</td></tr>
+        <tr><td><span class="sev h">TINGGI</span></td><td>Fallback lokasi terakhir yang diketahui HP tidak ditandai, dan akurasi serta waktu fix tidak dicatat.<span class="where">LocationUtils.cs:93</span></td><td>Lokasi berumur berjam-jam bisa tercatat sebagai lokasi sekarang.</td></tr>
+        <tr><td><span class="sev h">TINGGI</span></td><td><code>BootReceiver</code> Sa.To membuka <code>MainActivity</code> dari background.<span class="where">Sa.To/Platforms/Android/Receivers/BootReceiver.cs:20</span></td><td>Diblokir sejak Android 10, sehingga log "StartUp" tidak pernah tercatat.</td></tr>
+        <tr><td><span class="sev h">TINGGI</span></td><td>Manifest memakai <code>android:installLocation="preferExternal"</code>.</td><td>Kalau app terpasang di SD card, Android tidak mengirim event boot. Alarm tidak terpasang ulang setelah restart.</td></tr>
+        <tr><td><span class="sev h">TINGGI</span></td><td>Kalau permission dicabut, alarm dibatalkan diam-diam.<span class="where">AlarmReceiver.cs:69</span></td><td>Server tidak tahu tracking berhenti, dan salesman juga tidak diberi tahu.</td></tr>
+        <tr><td><span class="sev h">TINGGI</span></td><td>Wizard belum punya langkah Autostart untuk Xiaomi, Oppo, Vivo dan merek sejenis.</td><td>Di HyperOS/MIUI, app tanpa Autostart tidak menerima event boot.</td></tr>
+        <tr><td><span class="sev m">SEDANG</span></td><td>Receiver GPS on/off, airplane mode dan wifi/data didaftarkan di <code>MainActivity</code>.</td><td>Hanya tercatat selama layar Sa.To hidup.</td></tr>
+        <tr><td><span class="sev m">SEDANG</span></td><td>Daftar aplikasi fake GPS dibaca dengan <code>GetInstalledPackages</code> tanpa <code>QUERY_ALL_PACKAGES</code>.<span class="where">HelperImpl.cs:64</span></td><td>Di Android 11+, daftar ini hampir selalu kosong karena aturan package visibility.</td></tr>
+        <tr><td><span class="sev m">SEDANG</span></td><td>Koordinat ditulis dengan <code>double.ToString()</code> yang mengikuti bahasa HP.</td><td>Di HP berbahasa Indonesia, koordinat bisa tertulis <code>-6,16</code> (pakai koma, bukan titik).</td></tr>
+        <tr><td><span class="sev m">SEDANG</span></td><td>Send punya alarm sendiri, dan di HyperOS alarm itu digeser ke kelipatan 5 menit.</td><td>Send telat 1,5–4 menit saat layar mati (hasil uji 29 Okt).</td></tr>
+        <tr><td><span class="sev l">RENDAH</span></td><td><code>DeviceIMEISlot1/2</code> dan <code>DeviceSerialNumber</code> berisi ANDROID_ID di Android 10+. <code>IsRooted</code> selalu "N".</td><td>Kolom ini tidak berguna (lihat bagian 6).</td></tr>
+        <tr><td><span class="sev l">RENDAH</span></td><td><code>CurrentTime</code> berisi teks seperti <code>"Time is: ..."</code>, dan sinyal seluler diambil dari sel pertama di daftar, bukan sel yang sedang dipakai.</td><td>Susah diolah di laporan, dan nilai sinyal bisa salah.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="arsitektur">
+  <div class="sec-head"><div class="eyebrow">3 · Arsitektur</div><h2>Komponen di Core.Tracking</h2></div>
+  <p>Semua jalur yang menghasilkan data masuk lewat satu pintu, <code>TrackingEventRecorder</code>. Recorder ini tidak pernah melempar error. Dalam kondisi terburuk pun, satu baris tetap tersimpan dengan field yang berhasil diambil.</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Komponen</th><th>Tugas</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">TrackingEventRecorder</td><td><code>RecordAsync(eventType, detail)</code>. Menyusun satu baris (snapshot HP + lokasi kalau diminta) lalu insert ke SQLite. Semua error ditangkap dan dicatat di kolom <code>CollectError</code>.</td><td><span class="tag add">baru</span></td></tr>
+        <tr><td class="mono">LocationReader</td><td>Mengembalikan <code>LocationResult</code>: status, lat/lon, akurasi, waktu fix, mock atau tidak. Tidak pernah memakai koordinat session yang lama.</td><td><span class="tag add">baru</span></td></tr>
+        <tr><td class="mono">DeviceSnapshot</td><td>Mengambil data baterai, koneksi, jam, perangkat, status permission dan status Doze. Setiap field diambil terpisah, jadi satu field gagal tidak menggagalkan field lain.</td><td><span class="tag add">baru</span>, menggantikan bagian dari <code>Tracking.GetTracking</code></td></tr>
+        <tr><td class="mono">HeartbeatStore</td><td>Disimpan di Preferences: waktu hidup terakhir, <code>elapsedRealtime</code>, boot count, baterai terakhir, waktu Get/Send terakhir, penanda shutdown, state permission terakhir, dan timestamp exit-info terakhir.</td><td><span class="tag add">baru</span></td></tr>
+        <tr><td class="mono">SystemEventReceiver</td><td>Receiver di manifest untuk <code>BOOT_COMPLETED</code>, <code>QUICKBOOT_POWERON</code>, <code>MY_PACKAGE_REPLACED</code>, <code>TIME_SET</code> dan <code>TIMEZONE_CHANGED</code>. Keempat event ini masih dikirim Android ke receiver manifest.</td><td><span class="tag add">baru</span>, mengambil alih bagian boot dari AlarmReceiver dan BootReceiver Sa.To</td></tr>
+        <tr><td class="mono">RuntimeEventReceiver</td><td>Didaftarkan di <code>MainApplication.OnCreate</code>, jadi aktif selama proses hidup, termasuk saat dibangunkan alarm. Menangani <code>ACTION_SHUTDOWN</code>, GPS on/off dan airplane mode.</td><td><span class="tag fix">pindah</span> dari MainActivity</td></tr>
+        <tr><td class="mono">ProcessExitInspector</td><td>Android 11+. Membaca riwayat exit proses (<code>getHistoricalProcessExitReasons</code>) yang lebih baru dari timestamp terakhir, lalu mencatat force stop, dibunuh sistem, crash, atau ANR.</td><td><span class="tag add">baru</span></td></tr>
+        <tr><td class="mono">PrerequisiteMonitor</td><td>Membandingkan state permission sekarang dengan yang tersimpan. Saat berubah, mencatat <code>TRACKING_STOPPED</code> atau <code>TRACKING_RESUMED</code> dan menampilkan notifikasi biasa saat berhenti.</td><td><span class="tag add">baru</span>, membungkus TrackingPrerequisites</td></tr>
+        <tr><td class="mono">AlarmManagerUtils + WorkManager</td><td>Tetap: alarm exact Get/Send dan watchdog Hourly/Daily. Tambahan: kalau izin exact alarm ditolak, alarm turun ke versi tidak-exact. Tracking jadi kurang tepat waktu, tapi tidak mati.</td><td><span class="tag fix">diubah</span></td></tr>
+        <tr><td class="mono">TrackingSender</td><td>Mengirim per batch <code>ROWTRACKING</code> baris, maksimal 5 batch per jalan. Hanya menghapus baris berdasarkan <code>TrackingId</code> yang benar-benar terkirim. Juga dipanggil dari Get kalau Send sudah lewat jadwal.</td><td><span class="tag fix">diubah</span> dari ExecuteSendTracking</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box">
+    <h3>Alur satu alarm Get</h3>
+    <ol class="flow">
+      <li>Alarm berbunyi. Jadwalkan Get berikutnya, lalu hitung <code>AlarmDelaySec</code> (jam sekarang dikurangi jadwal).</li>
+      <li><code>PrerequisiteMonitor</code>: kalau tidak siap, catat <code>TRACKING_STOPPED</code>, coba kirim data yang tertunda, tampilkan notifikasi, lalu batalkan job. Berhenti di sini.</li>
+      <li><code>ProcessExitInspector</code>: catat exit proses yang baru.</li>
+      <li>Cek heartbeat. Kalau jaraknya dari Get terakhir lebih dari 3× interval (minimal 15 menit) dan HP tidak reboot, catat <code>TRACKING_GAP</code>.</li>
+      <li>Catat <code>LOCATION</code> lewat recorder (GPS, geocode, snapshot), lalu perbarui heartbeat.</li>
+      <li>Kalau Send sudah lewat jadwal (≥ interval Send), jalankan <code>TrackingSender</code> sekarang. Alarm Send tetap ada sebagai cadangan.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="event">
+  <div class="sec-head"><div class="eyebrow">4 · Katalog event</div><h2>Kolom <code>EventType</code></h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>EventType</th><th>Kapan</th><th>Lokasi</th><th><code>Reason</code> / detail</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">LOCATION</td><td>Alarm Get rutin</td><td>ya</td><td><code>AlarmDelaySec</code>, status lokasi</td></tr>
+        <tr><td class="mono">DEVICE_SHUTDOWN</td><td>Dicatat saat boot, dengan waktu kejadian mundur ke saat HP mati</td><td>koordinat heartbeat terakhir</td><td><code>SHUTDOWN</code> (ada penanda, waktu tepat) · <code>BATTERY_DEAD_LIKELY</code> (baterai terakhir ≤ 3% dan tidak charging) · <code>UNKNOWN</code> (waktu = heartbeat terakhir, selisih maksimal 1 interval Get)</td></tr>
+        <tr><td class="mono">DEVICE_BOOT</td><td><code>BOOT_COMPLETED</code> / <code>QUICKBOOT_POWERON</code></td><td>ya</td><td><code>REBOOT</code> (mati &lt; 3 menit) · <code>POWER_ON</code>. <code>PeriodStart</code>/<code>PeriodEnd</code> = jendela mati, <code>DurationSec</code>, <code>BootCount</code></td></tr>
+        <tr><td class="mono">TRACKING_STOPPED</td><td>Permission tidak terpenuhi, flag background dimatikan, atau logout</td><td>kalau masih diizinkan</td><td><code>LOCATION_DENIED</code> · <code>BACKGROUND_LOCATION_DENIED</code> · <code>BATTERY_OPTIMIZED</code> · <code>BACKGROUND_SERVICE_OFF</code> · <code>LOGOUT</code></td></tr>
+        <tr><td class="mono">TRACKING_RESUMED</td><td>Syarat terpenuhi lagi (app dibuka atau wizard selesai)</td><td>ya</td><td><code>PeriodStart</code> = sejak berhenti, <code>DurationSec</code></td></tr>
+        <tr><td class="mono">TRACKING_GAP</td><td>Get berikutnya terlambat jauh tanpa ada reboot</td><td>ya</td><td>Penyebab dari exit info kalau ada, kalau tidak <code>DELAYED_BY_SYSTEM</code>. Dilengkapi <code>StandbyBucket</code> dan status Doze</td></tr>
+        <tr><td class="mono">APP_FORCE_STOPPED</td><td>Exit info <code>USER_REQUESTED</code> / <code>USER_STOPPED</code>. Baru tercatat saat Sa.To dibuka lagi, karena setelah force stop Android tidak menjalankan apa pun dari Sa.To</td><td>tidak</td><td>Waktu kejadian = waktu exit, ditambah deskripsi dari sistem</td></tr>
+        <tr><td class="mono">APP_KILLED</td><td>Exit info <code>LOW_MEMORY</code>, <code>SIGNALED</code>, <code>FREEZER</code>, <code>CRASH</code>, <code>ANR</code>, <code>PERMISSION_CHANGE</code>, dll.</td><td>tidak</td><td>Kode reason dari sistem</td></tr>
+        <tr><td class="mono">TIME_CHANGED</td><td><code>TIME_SET</code> dengan lompatan ≥ 60 detik, atau saat jam otomatis mati</td><td>tidak</td><td><code>DurationSec</code> = besar lompatan (hitungan wall clock dibanding elapsedRealtime), status jam otomatis</td></tr>
+        <tr><td class="mono">TIMEZONE_CHANGED</td><td><code>TIMEZONE_CHANGED</code></td><td>tidak</td><td>Zona lama → zona baru</td></tr>
+        <tr><td class="mono">GPS_ON / GPS_OFF</td><td>Selama proses hidup (sebaik mungkin). Setiap baris <code>LOCATION</code> tetap mencatat <code>GpsActive</code></td><td>tidak</td><td>-</td></tr>
+        <tr><td class="mono">AIRPLANE_ON / AIRPLANE_OFF</td><td>Selama proses hidup (sebaik mungkin)</td><td>tidak</td><td>-</td></tr>
+        <tr><td class="mono">LOGIN / LOGOUT / APP_OPEN</td><td>Jalur yang sudah ada sekarang (yang sekarang ditulis di kolom <code>Source</code>)</td><td>ya</td><td>-</td></tr>
+        <tr><td class="mono">ERROR</td><td>Error pipeline yang tidak terduga, maksimal 1 per kode per jam</td><td>tidak</td><td>Kode: <code>SQLITE_INSERT_FAILED</code>, <code>SEND_FAILED_REPEATED</code>, <code>ALARM_EXACT_DENIED</code>, <code>STORAGE_TRIMMED</code>, <code>UNHANDLED</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">Sesi impersonate tetap tidak mencatat apa pun, sama seperti aturan sekarang.</p>
+</section>
+
+<section id="skenario">
+  <div class="sec-head"><div class="eyebrow">5 · Skenario</div><h2>Apa yang tercatat di tiap kejadian</h2></div>
+  <div class="scen">
+    <div class="box"><h3>HP dimatikan normal</h3>
+      <p>Kalau proses Sa.To sedang hidup, <code>ACTION_SHUTDOWN</code> menulis penanda waktu ke Preferences (cepat, tanpa SQLite). Kalau proses tidak hidup, tidak ada penanda.</p>
+      <span class="rec">→ saat boot: DEVICE_SHUTDOWN (SHUTDOWN / UNKNOWN) + DEVICE_BOOT</span></div>
+    <div class="box"><h3>Baterai habis atau mati paksa</h3>
+      <p>Tidak ada event yang bisa ditangkap. Saat boot, waktu mati diperkirakan dari heartbeat terakhir. Kalau baterai terakhir ≤ 3% dan tidak charging, reason-nya baterai habis.</p>
+      <span class="rec">→ DEVICE_SHUTDOWN (BATTERY_DEAD_LIKELY / UNKNOWN) + DEVICE_BOOT</span></div>
+    <div class="box"><h3>Restart</h3>
+      <p>Sama seperti HP dimatikan. Kalau jarak mati ke nyala kurang dari 3 menit, dianggap restart.</p>
+      <span class="rec">→ DEVICE_SHUTDOWN + DEVICE_BOOT (REBOOT)</span></div>
+    <div class="box"><h3>Force stop dari Pengaturan</h3>
+      <p>Android menghapus semua alarm dan tidak mengirim event apa pun sampai Sa.To dibuka lagi, bahkan setelah HP restart. Saat dibuka, exit info dibaca.</p>
+      <span class="rec">→ APP_FORCE_STOPPED (waktu exit) + TRACKING_GAP / TRACKING_RESUMED</span></div>
+    <div class="box"><h3>Izin lokasi atau baterai dicabut</h3>
+      <p>Terdeteksi di alarm berikutnya. Data yang tertunda dicoba dikirim, notifikasi "Tracking Sa.To berhenti, ketuk untuk memperbaiki" muncul, lalu job dibatalkan.</p>
+      <span class="rec">→ TRACKING_STOPPED (reason), lalu TRACKING_RESUMED setelah diperbaiki</span></div>
+    <div class="box"><h3>Jam HP diubah manual</h3>
+      <p><code>TIME_SET</code> tetap dikirim walaupun app tertutup (kecuali setelah force stop). Penyesuaian kecil dari sinkronisasi jaringan (&lt; 60 detik) diabaikan.</p>
+      <span class="rec">→ TIME_CHANGED / TIMEZONE_CHANGED</span></div>
+    <div class="box"><h3>Offline lama</h3>
+      <p>Get tetap mencatat lokasi dengan alamat kosong. Send gagal tapi baris tetap disimpan. Setelah online, data dikirim per batch sampai habis.</p>
+      <span class="rec">→ LOCATION (TrackingAddress kosong), tidak ada yang hilang</span></div>
+    <div class="box"><h3>Ditahan Doze atau OEM</h3>
+      <p>Alarm telat. <code>AlarmDelaySec</code>, <code>IsDeviceIdle</code> dan <code>StandbyBucket</code> di setiap baris menunjukkan penyebabnya.</p>
+      <span class="rec">→ LOCATION dengan delay, atau TRACKING_GAP kalau telatnya jauh</span></div>
+  </div>
+</section>
+
+<section id="tabel">
+  <div class="sec-head"><div class="eyebrow">6 · TrackingTable</div><h2>Perubahan kolom</h2></div>
+  <div class="note">
+    <span class="t">Soal IMEI, sudah dicek</span>
+    <p>Sa.To memakai targetSdk 36 dan minSdk 23. Sejak Android 10, <code>getImei()</code>, <code>getSerial()</code> dan <code>getSimSerialNumber()</code> butuh <code>READ_PRIVILEGED_PHONE_STATE</code>, yang hanya diberikan ke app sistem dan device owner (MDM). App biasa akan mendapat SecurityException. Hanya HP Android 6–9 yang masih bisa membacanya. Karena itu ketiga kolom dibuang, dan identitas HP memakai ANDROID_ID di <code>UUID</code> untuk semua versi. ANDROID_ID tetap sama selama HP tidak di-factory reset dan app ditandatangani dengan key yang sama.</p>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Status</th><th>Kolom</th><th>Isi / alasan</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag del">hapus</span></td><td class="mono">DeviceIMEISlot1, DeviceIMEISlot2, DeviceSerialNumber</td><td>Tidak bisa didapat di Android 10+. Selama ini isinya ANDROID_ID.</td></tr>
+        <tr><td><span class="tag fix">perbaiki</span></td><td class="mono">UUID</td><td>ANDROID_ID di semua versi. Sebelumnya, Android 6–9 memakai hash dari IMEI dan SIM serial.</td></tr>
+        <tr><td><span class="tag fix">perbaiki</span></td><td class="mono">LastLatitude, LastLongitude</td><td>Format invariant (selalu titik desimal). Kosong kalau lokasi gagal, tidak lagi memakai nilai lama.</td></tr>
+        <tr><td><span class="tag fix">perbaiki</span></td><td class="mono">CurrentTime, CurrentTimeZone</td><td>ISO 8601 dengan offset (<code>2026-10-29T13:05:05+07:00</code>) dan ID zona (<code>Asia/Jakarta</code>), tanpa awalan teks.</td></tr>
+        <tr><td><span class="tag fix">perbaiki</span></td><td class="mono">IsRooted</td><td>Cek sederhana: binary <code>su</code>, jejak Magisk, dan build <code>test-keys</code>. Ini indikasi, bukan bukti pasti.</td></tr>
+        <tr><td><span class="tag fix">perbaiki</span></td><td class="mono">CelullarSignalStrength</td><td>Diambil dari sel yang sedang dipakai (<code>IsRegistered</code>). Skala tetap 0–100 dengan langkah 25.</td></tr>
+        <tr><td><span class="tag">tetap</span></td><td class="mono">Source, Action, ErrorMessage</td><td>Tetap diisi dengan cara lama (Mockup, teks "gps mode set to on", daftar fake app) supaya laporan server yang ada tidak rusak. Laporan baru sebaiknya memakai kolom baru.</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">EventType</td><td>Lihat katalog di bagian 4</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">EventTime</td><td>Waktu kejadian (ISO 8601). Bisa beda dengan <code>CreatedDateSaTo</code> untuk event yang dicatat belakangan.</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">Reason, EventDetail</td><td>Kode reason yang bisa difilter, plus teks penjelasan untuk dibaca manusia</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">PeriodStart, PeriodEnd, DurationSec</td><td>Jendela waktu: HP mati, tracking berhenti, gap, atau lompatan jam</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">BootCount</td><td>Untuk mengelompokkan event per sesi nyala HP</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">LocationStatus</td><td><code>OK</code> · <code>LAST_KNOWN</code> · <code>FAILED</code> · <code>GPS_OFF</code> · <code>NO_PERMISSION</code> · <code>NOT_REQUESTED</code></td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">LocationAccuracyM, LocationTime</td><td>Akurasi dalam meter dan waktu fix GPS, untuk melihat umur lokasi</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">IsMockLocation, FakeGpsApps</td><td>Pengganti yang rapi untuk <code>Source="Mockup"</code> dan daftar aplikasi di ErrorMessage</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">AlarmDelaySec</td><td>Seberapa telat alarm dari jadwalnya</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">PermLocation, PermBackgroundLocation, PermBatteryExempt, PermExactAlarm, PermNotification</td><td>Y/N, snapshot status izin di setiap baris</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">IsDeviceIdle, IsInteractive, StandbyBucket</td><td>Status Doze, layar nyala atau tidak, dan bucket standby app</td></tr>
+        <tr><td><span class="tag add">tambah</span></td><td class="mono">CollectError</td><td>Error saat mengambil field di baris ini, misalnya <code>geocode: IOException</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">SQLite di HP menambah kolom baru otomatis lewat <code>CreateTable</code>. Kolom yang dihapus dari model hanya tidak dipakai lagi, sehingga tidak perlu migrasi manual.</p>
+</section>
+
+<section id="permission">
+  <div class="sec-head"><div class="eyebrow">7 · Permission</div><h2>Daftar akhir</h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Kelompok</th><th>Permission</th><th>Untuk apa</th></tr></thead>
+      <tbody>
+        <tr><td class="grp">Wajib</td><td class="mono">ACCESS_FINE_LOCATION</td><td>Membaca GPS. Juga dibutuhkan untuk data sinyal seluler.</td></tr>
+        <tr><td></td><td class="mono">ACCESS_BACKGROUND_LOCATION</td><td>Membaca lokasi saat app tidak dibuka. User harus memilih "Izinkan sepanjang waktu".</td></tr>
+        <tr><td></td><td>Pengecualian optimasi baterai</td><td>Supaya alarm tidak ditahan lama. Ini juga membuat exact alarm diizinkan di Android 14+.</td></tr>
+        <tr><td class="grp">Disarankan</td><td class="mono">POST_NOTIFICATIONS</td><td>Notifikasi "tracking berhenti". Tidak memblokir tracking.</td></tr>
+        <tr><td></td><td>Autostart (Xiaomi, Oppo, Vivo, Realme)</td><td><b>Langkah wizard baru.</b> Membuka halaman pengaturan Autostart milik merek HP. Statusnya tidak bisa dicek lewat API, jadi user mengonfirmasi sendiri.</td></tr>
+        <tr><td class="grp">Otomatis (manifest)</td><td class="mono">RECEIVE_BOOT_COMPLETED, SCHEDULE_EXACT_ALARM, WAKE_LOCK, INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE</td><td>Tidak memunculkan dialog</td></tr>
+        <tr><td class="grp">Dihapus</td><td class="mono">READ_PHONE_STATE, READ_PHONE_NUMBERS</td><td>Hanya dipakai untuk IMEI. Langkah wizard "Status Telepon" ikut dihapus. Akan dicek dulu tidak ada fitur lain yang memakainya.</td></tr>
+        <tr><td></td><td class="mono">BATTERY_STATS</td><td>Permission khusus app sistem, tidak pernah diberikan ke app biasa</td></tr>
+        <tr><td></td><td class="mono">SET_ALARM</td><td>Untuk membuat alarm di aplikasi Jam, tidak dipakai</td></tr>
+        <tr><td class="grp">Manifest</td><td class="mono">installLocation</td><td>Diganti dari <code>preferExternal</code> ke <code>internalOnly</code> supaya event boot selalu sampai</td></tr>
+        <tr><td class="grp">Perlu keputusan</td><td class="mono">QUERY_ALL_PACKAGES</td><td>Supaya daftar aplikasi fake GPS terbaca di Android 11+. Google Play membatasi permission ini (lihat Q1). Tanpa permission ini, deteksi tetap jalan lewat <code>IsMockLocation</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="error">
+  <div class="sec-head"><div class="eyebrow">8 · Penanganan error</div><h2>Prinsip: baris tetap tersimpan, error ikut tercatat</h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Tahap</th><th>Kalau gagal</th><th>Yang terjadi</th></tr></thead>
+      <tbody>
+        <tr><td>GPS</td><td>Timeout, null, atau GPS mati</td><td>Urutannya: GPS 5 detik, lalu lokasi terakhir HP (<code>LAST_KNOWN</code>, waktu fix dicatat), lalu GPS 10 detik. Kalau semua gagal: <code>LocationStatus=FAILED</code>, koordinat kosong, baris tetap disimpan.</td></tr>
+        <tr><td>Reverse geocoding</td><td>Offline atau Geocoder error</td><td><code>TrackingAddress</code> kosong, error masuk ke <code>CollectError</code>, baris tetap disimpan</td></tr>
+        <tr><td>Field snapshot</td><td>Baterai, sinyal, jam, dll. error</td><td>Field itu kosong, sisanya tetap terisi</td></tr>
+        <tr><td>Permission</td><td>Syarat tidak terpenuhi</td><td>Satu <code>TRACKING_STOPPED</code> (tidak berulang setiap alarm), coba kirim sekali, notifikasi, lalu job dibatalkan</td></tr>
+        <tr><td>Exact alarm</td><td>SecurityException</td><td>Turun ke <code>setAndAllowWhileIdle</code> (tidak exact) dan catat <code>ERROR ALARM_EXACT_DENIED</code>. Tracking tetap jalan.</td></tr>
+        <tr><td>SQLite insert</td><td>Error</td><td>Coba lagi sekali setelah 500 ms. Kalau masih gagal, penghitung error di heartbeat dinaikkan dan dilaporkan di baris sukses berikutnya.</td></tr>
+        <tr><td>Send</td><td>Jaringan, HTTP, atau <code>Code ≠ 0</code></td><td>Baris tetap disimpan dan dicoba lagi di Get/Send berikutnya. Setelah 6 kali gagal berturut-turut, catat <code>ERROR SEND_FAILED_REPEATED</code> (1× per jam).</td></tr>
+        <tr><td>Send sukses</td><td>-</td><td>Hapus hanya berdasarkan <code>TrackingId</code> yang terkirim, lalu lanjut ke batch berikutnya (maksimal 5 batch)</td></tr>
+        <tr><td>Penyimpanan</td><td>Lebih dari 20.000 baris (± 2 minggu offline dengan interval 1 menit)</td><td>Hapus baris <code>LOCATION</code> tertua. Baris event tidak pernah dihapus. Catat <code>ERROR STORAGE_TRIMMED</code>.</td></tr>
+        <tr><td>Lainnya</td><td>Exception tak terduga di receiver</td><td>Ditangkap, dicatat ke logcat <code>SaToTracking</code>, dan dibuat baris <code>ERROR UNHANDLED</code> (1× per jam)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="uji">
+  <div class="sec-head"><div class="eyebrow">9 · Pengujian</div><h2>Unit test + uji di HP via adb</h2></div>
+  <p>Logika murni dibuat sebagai fungsi tanpa ketergantungan Android, supaya bisa di-unit test. Contohnya: perhitungan jendela mati, klasifikasi reason, deteksi gap, filter lompatan jam, pemetaan exit reason, batching dan hapus-per-id, serta rate limiter error. Sisanya diuji di HP:</p>
+  <pre class="cmd">adb logcat -s SaToTracking:V                                  # pantau selama uji
+adb reboot                                                    # DEVICE_SHUTDOWN + DEVICE_BOOT (REBOOT)
+adb shell am force-stop &lt;pkg&gt;  → buka Sa.To                  # APP_FORCE_STOPPED + TRACKING_RESUMED
+adb shell pm revoke &lt;pkg&gt; android.permission.ACCESS_BACKGROUND_LOCATION   # TRACKING_STOPPED + notifikasi
+adb shell dumpsys deviceidle whitelist -&lt;pkg&gt;                 # TRACKING_STOPPED (BATTERY_OPTIMIZED)
+adb shell dumpsys deviceidle force-idle                       # AlarmDelaySec, IsDeviceIdle=Y
+adb shell cmd connectivity airplane-mode enable               # offline: LOCATION tanpa alamat, Send ditunda</pre>
+  <p class="small">Dicek manual: tahan tombol power untuk mematikan HP (reason UNKNOWN atau SHUTDOWN), ubah jam di Pengaturan (TIME_CHANGED), dan matikan Autostart di HyperOS lalu restart (memastikan langkah wizard baru diperlukan).</p>
+</section>
+
+<section id="file">
+  <div class="sec-head"><div class="eyebrow">10 · File yang berubah</div><h2>Perkiraan cakupan</h2></div>
+  <div class="split">
+    <div class="box"><span class="label">core</span>
+      <ul class="mono" style="font-size:13px">
+        <li>ModelProjectMaui/General/TrackingM.cs</li>
+        <li>Core.Tracking/TrackingService.cs → dipecah: Recorder, Sender</li>
+        <li>Core.Tracking/Impl/AppDeviceInfoImpl.cs, HelperImpl.cs, GeocodingImpl.cs</li>
+        <li>Core.Tracking/Platforms/Android/Receivers/* (+ SystemEventReceiver)</li>
+        <li>Core.Tracking/Platforms/Android/Utils/AlarmManagerUtils.cs, TrackingPrerequisites.cs</li>
+        <li>Core.Tracking/AppBuilderExtensions.cs (opsi aktifkan event)</li>
+        <li>Core.LogsMaui/Tracking.cs, LocationUtils.cs</li>
+      </ul></div>
+    <div class="box"><span class="label">sato</span>
+      <ul class="mono" style="font-size:13px">
+        <li>Platforms/Android/AndroidManifest.xml</li>
+        <li>Platforms/Android/MainApplication.cs (receiver runtime)</li>
+        <li>Platforms/Android/MainActivity.cs (receiver dipindah)</li>
+        <li>Platforms/Android/Receivers/BootReceiver.cs (dihapus)</li>
+        <li>Platforms/Android/Persistence/AppVersionProvider.cs</li>
+        <li>ViewModels/LaunchScreenViewModel.cs (Autostart, hapus Status Telepon)</li>
+        <li>MauiProgram.cs (aktifkan event)</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="terbuka">
+  <div class="sec-head"><div class="eyebrow">11 · Keputusan terbuka</div><h2>Perlu jawaban sebelum rencana implementasi</h2></div>
+  <ol class="q">
+    <li><b>Sa.To dirilis lewat Google Play atau APK internal/MDM?</b> Kalau internal, <code>QUERY_ALL_PACKAGES</code> aman dipakai untuk daftar aplikasi fake GPS. Kalau lewat Play, permission ini perlu justifikasi dan kemungkinan ditolak.</li>
+    <li><b>Server sanggup menerima payload baru?</b> API tidak diubah, tapi JSON akan berisi kolom baru dan tidak lagi berisi kolom IMEI. Tolong pastikan dengan tim server bahwa <code>addTrackingV2.php</code> tidak error kalau ada key tambahan atau key yang hilang. Kolom baru baru tersimpan setelah server siap.</li>
+    <li><b>Event untuk SM.To:</b> default mati. Setuju?</li>
+    <li><b>Langkah "Status Telepon" dihapus dari wizard.</b> Setuju, dengan syarat tidak ada fitur lain yang butuh <code>READ_PHONE_STATE</code>?</li>
+  </ol>
+</section>
+
+<footer>Disusun dari pembacaan kode <code>core/Core.Tracking</code>, <code>Core.LogsMaui</code>, <code>ModelProjectMaui</code>, <code>sato/Maui/Sa.To</code>, dan hasil monitoring adb 29 Okt 2026. Halaman kondisi sekarang: "Sa.To Background Tracking".</footer>
+
+</div>

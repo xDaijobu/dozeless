@@ -1,0 +1,258 @@
+<title>Sa.To Background Tracking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column, technical reference sheet; tables scroll inside their own frame */
+:root {
+  --bg: #f4f6f5;
+  --surface: #ffffff;
+  --ink: #16201d;
+  --muted: #56645f;
+  --line: #d9e0dd;
+  --accent: #0d6b5e;
+  --accent-soft: #e2f0ec;
+  --warn: #9a5a00;
+  --warn-soft: #fbf0dd;
+  --bad: #a2302a;
+  --code-bg: #eaefed;
+  --f-display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101614; --surface: #17201d; --ink: #e4ece9; --muted: #98a8a2; --line: #2a3632;
+    --accent: #4fc3a9; --accent-soft: #173a32; --warn: #e3a64a; --warn-soft: #3a2c14; --bad: #f08a80; --code-bg: #1e2a26;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101614; --surface: #17201d; --ink: #e4ece9; --muted: #98a8a2; --line: #2a3632;
+  --accent: #4fc3a9; --accent-soft: #173a32; --warn: #e3a64a; --warn-soft: #3a2c14; --bad: #f08a80; --code-bg: #1e2a26;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: flex; flex-direction: column; gap: 48px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 22px; font-weight: 800; }
+h3 { font-size: 16px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+code, .mono { font-family: var(--f-mono); font-size: 0.88em; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+header { display: flex; flex-direction: column; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 28px; }
+header .lede { font-size: 17px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); }
+
+/* key facts */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.fact { background: var(--surface); padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.fact .k { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.fact .v { font-family: var(--f-display); font-size: 20px; font-weight: 800; }
+.fact .d { font-size: 13px; color: var(--muted); }
+
+/* tables */
+.tbl { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--f-mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.grp { font-family: var(--f-display); font-weight: 600; white-space: nowrap; color: var(--accent); }
+td .mono { white-space: nowrap; }
+
+/* flow */
+.flow { display: grid; gap: 0; counter-reset: step; border-left: 2px solid var(--accent); margin-left: 8px; }
+.flow li { list-style: none; position: relative; padding: 0 0 18px 26px; }
+.flow li::before { counter-increment: step; content: counter(step); position: absolute; left: -13px; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--bg); font-family: var(--f-mono); font-size: 12px; font-weight: 500; display: grid; place-items: center; }
+.flow li:last-child { padding-bottom: 0; }
+.flow b { font-weight: 600; }
+.flow { padding: 0; margin-block: 0; }
+
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.box { background: var(--surface); border: 1px solid var(--line); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.box ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+
+.note { border-left: 4px solid var(--warn); background: var(--warn-soft); padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; }
+.note .t { font-weight: 600; color: var(--warn); }
+.ok { color: var(--accent); font-weight: 600; }
+.pill { display: inline-block; font-family: var(--f-mono); font-size: 11.5px; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.pill.w { background: var(--warn-soft); color: var(--warn); }
+.small { font-size: 13px; color: var(--muted); }
+pre.cmd { margin: 0; background: var(--code-bg); padding: 12px 14px; overflow-x: auto; font-family: var(--f-mono); font-size: 13px; }
+footer { border-top: 1px solid var(--line); padding-top: 18px; font-size: 13px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Core.Tracking · Android</div>
+  <h1>Sa.To Background Tracking</h1>
+  <p class="lede">Cara Sa.To mencatat lokasi dan kondisi HP salesman di background, aturan baterai yang harus dipenuhi, dan data apa saja yang dikirim ke server.</p>
+  <div class="meta">
+    <span>Sumber: core/Core.Tracking + Sa.To/Maui</span>
+    <span>Diuji: HP Xiaomi (HyperOS), 29 Okt 2026</span>
+  </div>
+</header>
+
+<section>
+  <div class="facts">
+    <div class="fact"><span class="k">Get (ambil lokasi)</span><span class="v">tiap 5 menit</span><span class="d">default; diatur flag server <code>GET_TRACKING_TIME</code></span></div>
+    <div class="fact"><span class="k">Send (upload)</span><span class="v">tiap 10 menit</span><span class="d">default; diatur flag server <code>SEND_TRACKING_TIME</code></span></div>
+    <div class="fact"><span class="k">Mesin utama</span><span class="v">AlarmManager</span><span class="d">exact alarm, bisa bangunkan HP saat Doze</span></div>
+    <div class="fact"><span class="k">Notifikasi permanen</span><span class="v">Tidak ada</span><span class="d">tidak memakai foreground service</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Alur kerja</div>
+  <h2>Satu siklus tracking</h2>
+  <ol class="flow">
+    <li><b>Login / buka app.</b> Setelah wizard permission selesai, <code>TrackingManager.InitJobs()</code> memasang 2 alarm one-shot (<code>Cron_Get_Data_Tracking</code>, <code>Cron_Send_Data_Tracking</code>) dan 2 job WorkManager (Hourly, Daily).</li>
+    <li><b>Alarm berbunyi.</b> Android membangunkan <code>AlarmReceiver</code> (BroadcastReceiver), walaupun app sudah ditutup atau layar mati.</li>
+    <li><b>Cek syarat.</b> Receiver mengecek <code>IsBackgroundService = "Y"</code> dan semua permission. Kalau ada yang kurang, semua alarm dibatalkan dan log <code>[SKIP_NOT_READY]</code> mencatat alasannya.</li>
+    <li><b>Jadwalkan alarm berikutnya dulu.</b> Alarm berikutnya dipasang sebelum kerja dimulai, jadi rantai jadwal tidak putus walaupun proses gagal di tengah.</li>
+    <li><b>Kerjakan di background.</b> <code>goAsync()</code> + <code>Task.Run</code> menjalankan <code>TrackingService.ExecuteTracking()</code>. Kalau sesi impersonate, langkah ini dilewati dan data lokal dihapus.</li>
+    <li><b>Get:</b> ambil GPS, ubah koordinat jadi alamat, kumpulkan data HP, lalu simpan 1 baris ke SQLite lokal.</li>
+    <li><b>Send:</b> ambil semua baris SQLite, kirim sekaligus ke API <code>AddTracking</code>. Baris baru dihapus setelah server membalas sukses. Kalau gagal, baris tetap disimpan dan ikut di Send berikutnya.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Teknik Android</div>
+  <h2>Komponen yang dipakai</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Komponen</th><th>Fungsi di Sa.To</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mono">AlarmManager<br>setExactAndAllowWhileIdle</span><br><span class="small">RTC_WAKEUP</span></td><td>Penggerak utama Get dan Send. Alarm sekali jalan yang dipasang ulang setiap kali berbunyi. Tetap boleh berbunyi saat HP masuk mode Doze. Get dan Send punya alarm terpisah supaya upload yang lambat tidak menahan pengambilan lokasi.</td></tr>
+        <tr><td><span class="mono">BroadcastReceiver</span><br><span class="small">AlarmReceiver, exported=false</span></td><td>Menerima alarm Get/Send, serta event <code>BOOT_COMPLETED</code>, <code>QUICKBOOT_POWERON</code> dan <code>MY_PACKAGE_REPLACED</code>. Setelah HP restart atau app di-update, jadwal dipasang ulang otomatis tanpa perlu buka app.</td></tr>
+        <tr><td><span class="mono">goAsync() + Task.Run</span></td><td>Menjaga receiver tetap hidup selama GPS dan HTTP berjalan, tanpa membuka Activity atau Service.</td></tr>
+        <tr><td><span class="mono">WorkManager</span><br><span class="small">Hourly_Job, Daily_Job</span></td><td>Watchdog. Tiap 1 jam (Hourly) dan tiap hari mulai jam 09:00 (Daily), alarm Get/Send dipasang ulang untuk berjaga kalau rantai alarm sempat putus.</td></tr>
+        <tr><td><span class="mono">SQLite lokal</span><br><span class="small">TrackingSqliteConnection</span></td><td>Penampung sementara. Saat offline, data tetap tersimpan di HP dan terkirim saat ada koneksi.</td></tr>
+        <tr><td><span class="mono">SemaphoreSlim</span><br><span class="small">GetGate, SendGate</span></td><td>Mencegah dua Get atau dua Send berjalan bersamaan, misalnya saat alarm dan watchdog jalan berdekatan.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">Tidak dipakai: foreground service (tidak ada notifikasi permanen) dan update lokasi terus-menerus. GPS hanya dinyalakan sebentar setiap kali Get berjalan.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Syarat jalan</div>
+  <h2>Tracking hanya aktif kalau semua ini terpenuhi</h2>
+  <div class="split">
+    <div class="box">
+      <h3>Dari sesi / server</h3>
+      <ul>
+        <li><code>IsBackgroundService = "Y"</code> (flag user dari server)</li>
+        <li>Bukan sesi impersonate. Login lewat menu impersonate atau memakai password admin akan mematikan tracking dan menghapus data tracking lokal.</li>
+        <li>Interval diambil dari flag <code>GET_TRACKING_TIME</code> dan <code>SEND_TRACKING_TIME</code> (dalam menit)</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Dari HP (dicek <code>TrackingPrerequisites</code>)</h3>
+      <ul>
+        <li>Wizard permission di LaunchScreen sudah selesai</li>
+        <li>Lokasi diizinkan (<code>ACCESS_FINE_LOCATION</code>)</li>
+        <li>Lokasi <b>"Izinkan sepanjang waktu"</b> (<code>ACCESS_BACKGROUND_LOCATION</code>, Android 10+)</li>
+        <li>Sa.To dikecualikan dari <b>optimasi baterai</b> (Android 6+)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small">Wizard juga meminta izin Notifikasi, Telepon, Penyimpanan dan Kamera, tapi keempatnya tidak menghentikan tracking kalau ditolak.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Baterai &amp; power saver</div>
+  <h2>Hubungan tracking dengan fitur hemat daya</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Fitur Android</th><th>Dampak</th><th>Cara Sa.To menangani</th></tr></thead>
+      <tbody>
+        <tr><td>Optimasi baterai</td><td>Kalau aktif, app dibatasi saat di background dan alarm bisa ditunda lama.</td><td><span class="pill">Wajib</span> Tracking tidak jalan sama sekali sebelum Sa.To dikecualikan. Wizard punya tombol ke daftar optimasi baterai dan ke "Buka Pengaturan Sa.To" (Baterai → Tidak dibatasi). Statusnya dicek ulang setiap kali user kembali ke Sa.To.</td></tr>
+        <tr><td>Doze (layar mati, HP diam)</td><td>Kerja background ditahan sampai jendela maintenance.</td><td>Memakai <code>setExactAndAllowWhileIdle</code>, satu-satunya jenis alarm yang boleh berbunyi di dalam Doze. Status pengecualian baterai membuat batas frekuensinya lebih longgar.</td></tr>
+        <tr><td>Izin exact alarm (Android 12+)</td><td>Android 14 menolak izin ini secara default untuk app baru.</td><td><code>SCHEDULE_EXACT_ALARM</code> dideklarasikan di manifest. App yang sudah dikecualikan dari optimasi baterai tetap boleh memasang exact alarm. Log <code>[CAPABILITY]</code> mencatat <code>CanExact</code> dan <code>PowerExempt</code>.</td></tr>
+        <tr><td>Battery Saver / hemat daya</td><td>Sistem bisa menunda kerja background.</td><td>Status hemat daya, persentase dan status charging dicatat di setiap baris, jadi bisa dicek dari server.</td></tr>
+        <tr><td>Force stop dari Pengaturan</td><td>Android membatalkan semua alarm app.</td><td><span class="pill w">Tidak bisa ditangani</span> Tracking berhenti sampai user membuka Sa.To lagi.</td></tr>
+        <tr><td>Restart HP / update app</td><td>Semua alarm hilang.</td><td>Receiver menangkap event boot dan update, lalu memasang ulang jadwal.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="t">Temuan di HyperOS (Xiaomi)</span>
+    <p>Saat layar mati, HyperOS membulatkan waktu alarm ke kelipatan 5 menit. Dengan interval uji Get 1 menit dan Send 2 menit, Get tetap tepat waktu, tapi Send telat 1,5–4 menit. Tidak ada data hilang, karena baris menunggu di SQLite dan terkirim di Send berikutnya.</p>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Data yang diambil</div>
+  <h2>Isi satu baris tracking</h2>
+  <p>Setiap Get menyimpan satu baris <code>TrackingTable</code>. Lokasi diambil dengan GPS akurasi terbaik (tunggu 5 detik). Kalau gagal, dipakai lokasi terakhir yang diketahui HP. Kalau itu juga kosong, GPS dicoba lagi selama 10 detik.</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Kelompok</th><th>Field</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td class="grp">Lokasi</td><td class="mono">LastLatitude, LastLongitude</td><td>Koordinat GPS</td></tr>
+        <tr><td></td><td class="mono">TrackingAddress</td><td>Alamat hasil reverse geocoding dari koordinat</td></tr>
+        <tr><td></td><td class="mono">GpsActive</td><td>Y/N, GPS HP menyala atau tidak</td></tr>
+        <tr><td></td><td class="mono">Source, ErrorMessage</td><td><code>Service</code> untuk data normal. Kalau lokasi palsu terdeteksi, Source jadi <code>Mockup</code> dan ErrorMessage berisi daftar aplikasi fake GPS yang terpasang.</td></tr>
+        <tr><td class="grp">Baterai</td><td class="mono">BatteryPercentage</td><td>Sisa baterai</td></tr>
+        <tr><td></td><td class="mono">BatteryState, BatteryPowerSource</td><td>Sedang charging atau tidak, sumber daya (baterai/AC/USB/wireless)</td></tr>
+        <tr><td></td><td class="mono">EnergySaverStatus</td><td>Mode hemat daya aktif atau tidak</td></tr>
+        <tr><td class="grp">Koneksi</td><td class="mono">NetworkAccess</td><td>Y/N, ada internet atau tidak</td></tr>
+        <tr><td></td><td class="mono">ConnectionProfiles</td><td>WiFi, Cellular, Bluetooth, dll.</td></tr>
+        <tr><td></td><td class="mono">CelullarSignalStrength, WifiSignalStrength</td><td>Kekuatan sinyal, skala 0–4</td></tr>
+        <tr><td class="grp">Waktu</td><td class="mono">CreatedDateSaTo, CurrentTime</td><td>Waktu baris dibuat dan jam HP</td></tr>
+        <tr><td></td><td class="mono">CurrentTimeZone</td><td>Zona waktu HP</td></tr>
+        <tr><td></td><td class="mono">AutomaticDate</td><td>Y/N, tanggal/jam otomatis aktif atau tidak (mendeteksi jam HP yang diubah manual)</td></tr>
+        <tr><td class="grp">Perangkat</td><td class="mono">DeviceType, AppOSVersion</td><td>Model HP dan versi Android</td></tr>
+        <tr><td></td><td class="mono">UUID, DeviceIMEISlot1/2, DeviceSerialNumber</td><td>Identitas HP. Di Android 10+ IMEI dan serial tidak bisa dibaca app, jadi field ini berisi ANDROID_ID.</td></tr>
+        <tr><td></td><td class="mono">IsRooted</td><td>Saat ini selalu <code>N</code>, karena pengecekan root sedang dinonaktifkan di kode</td></tr>
+        <tr><td class="grp">Aplikasi</td><td class="mono">AppCode, AppVersion</td><td>Nama app (Sa.To) dan versinya</td></tr>
+        <tr><td class="grp">User</td><td class="mono">UserCode, UserCodeReal, UserId</td><td>Siapa yang login</td></tr>
+        <tr><td></td><td class="mono">InitialServer, WebServer, FromDb</td><td>Server dan database tujuan. Send mengelompokkan baris berdasarkan kombinasi ini.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Hasil uji</div>
+  <h2>Monitoring adb logcat, 29 Okt 2026, 12:08–13:05</h2>
+  <div class="facts">
+    <div class="fact"><span class="k">Get</span><span class="v ok">58 / 58</span><span class="d">sukses, interval uji 1 menit</span></div>
+    <div class="fact"><span class="k">Send</span><span class="v ok">14 / 14</span><span class="d">sukses, interval uji 2 menit</span></div>
+    <div class="fact"><span class="k">Baris terkirim</span><span class="v">54</span><span class="d">4 baris terakhir masih menunggu di HP</span></div>
+    <div class="fact"><span class="k">Error</span><span class="v ok">0</span><span class="d">tidak ada crash, SEND_FAILED, API_FAILED</span></div>
+  </div>
+  <p class="small">Sebelum login normal, HP sedang di sesi impersonate. Selama itu 3 Get dan 2 Send tercatat sebagai SKIP, sesuai desain.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Debug</div>
+  <h2>Cara cek di HP</h2>
+  <pre class="cmd">adb logcat -s SaToTracking:V</pre>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Log</th><th>Arti</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">[SCHEDULED]</td><td>Alarm berikutnya dipasang, lengkap dengan jam pemicunya</td></tr>
+        <tr><td class="mono">[RECEIVED]</td><td>Alarm berbunyi dan diterima receiver</td></tr>
+        <tr><td class="mono">[GET] Tracking row inserted</td><td>Satu baris lokasi tersimpan di SQLite</td></tr>
+        <tr><td class="mono">[SEND_SUCCESS]</td><td>Server menerima N baris (beserta Id dari server)</td></tr>
+        <tr><td class="mono">[EXECUTE_SKIP]</td><td>Sesi impersonate, tracking dilewati</td></tr>
+        <tr><td class="mono">[SKIP_NOT_READY]</td><td>Ada permission yang kurang, alasannya tertulis di log</td></tr>
+        <tr><td class="mono">[SEND_FAILED], [API_FAILED]</td><td>Upload gagal, baris tetap disimpan untuk dicoba lagi</td></tr>
+        <tr><td class="mono">[CAPABILITY]</td><td>Status izin exact alarm dan pengecualian baterai</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Disusun dari kode di <code>core/Core.Tracking</code> (AlarmReceiver, AlarmManagerUtils, TrackingPrerequisites, WorkManagerUtils, TrackingService), <code>Core.LogsMaui/Tracking.cs</code>, <code>ModelProjectMaui/General/TrackingM.cs</code>, dan wizard permission di <code>Sa.To/ViewModels/LaunchScreenViewModel.cs</code>.</footer>
+
+</div>
