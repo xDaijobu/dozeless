@@ -1,0 +1,24 @@
+--------- beginning of main
+10-30 00:08:29.252 I/flutter ( 4446): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:08:29.275 I/flutter ( 4446): The Dart VM service is listening on http://127.0.0.1:33763/axYbo-3uuQU=/
+10-30 00:08:30.826 I/Dozeless( 4446): watchdog armed
+10-30 00:08:44.165 I/Dozeless( 4446): schedule id=spike everyMs=60000 next=1793293784158 mode=exact
+10-30 00:08:44.208 I/Dozeless( 4446): schedule id=slow everyMs=300000 next=1793294024194 mode=exact
+10-30 00:09:44.163 I/Dozeless( 4446): fire id=spike trigger=alarm delayMs=3
+10-30 00:09:44.315 I/flutter ( 4446): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:09:45.088 I/Dozeless( 4446): engine ready in 892ms
+10-30 00:09:49.088 I/flutter ( 4446): DOZELESS_ROW job=spike trigger=alarm delayMs=3 durMs=3865 idle=false loc=OK fixAgeS=0 events=
+10-30 00:09:49.102 I/Dozeless( 4446): done id=spike result=ok durMs=4934
+10-30 00:10:24.321 I/Dozeless( 5814): device admin enabled
+10-30 00:10:40.367 I/flutter ( 5814): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:10:40.593 I/flutter ( 5814): The Dart VM service is listening on http://127.0.0.1:36361/0jDWvax7Jrk=/
+10-30 00:10:41.534 I/Dozeless( 5814): event #1 processExit {reason=USER_REQUESTED, reasonCode=10, importance=100, description=[FORCE STOP] stop io.github.xdaijobu.dozeless_example due to from pid 5804}
+10-30 00:10:41.538 I/Dozeless( 5814): watchdog armed
+10-30 00:10:41.558 I/Dozeless( 5814): reconcile armed id=slow at=1793294024194
+10-30 00:10:41.560 I/Dozeless( 5814): reconcile armed id=spike at=1793293844161
+10-30 00:10:46.564 I/Dozeless( 5814): fire id=spike trigger=alarm delayMs=2402
+10-30 00:10:46.659 I/flutter ( 5814): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:10:46.801 I/Dozeless( 5814): engine ready in 216ms
+10-30 00:10:50.955 I/flutter ( 5814): DOZELESS_ROW job=spike trigger=alarm delayMs=2402 durMs=4076 idle=false loc=OK fixAgeS=0 events=processExit
+10-30 00:10:50.962 I/Dozeless( 5814): done id=spike result=ok durMs=4394
+10-30 00:10:50.965 I/Dozeless( 5814): device admin disabled

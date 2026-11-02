@@ -1,0 +1,83 @@
+--------- beginning of main
+10-30 00:03:03.898 I/Dozeless(18005): event #9 processExit {reason=LOW_MEMORY, reasonCode=3, importance=400, description=}
+10-30 00:03:03.912 I/Dozeless(18005): event #10 processExit {reason=LOW_MEMORY, reasonCode=3, importance=300, description=}
+10-30 00:03:03.927 I/Dozeless(18005): event #11 processExit {reason=USER_REQUESTED, reasonCode=10, importance=400, description=[FORCE STOP] stop io.github.xdaijobu.dozeless_example due to from pid 17963}
+10-30 00:03:03.932 I/Dozeless(18005): watchdog armed
+10-30 00:03:03.973 I/Dozeless(18005): reconcile armed id=spike at=1793293384957
+10-30 00:03:03.976 I/Dozeless(18005): reconcile armed id=slow at=1793293434008
+10-30 00:03:03.993 I/Dozeless(18005): watchdog armed
+10-30 00:03:03.999 I/Dozeless(18005): reconcile armed id=spike at=1793293384957
+10-30 00:03:04.009 I/Dozeless(18005): reconcile armed id=slow at=1793293434008
+10-30 00:03:09.005 I/Dozeless(18005): fire id=spike trigger=alarm delayMs=4047
+10-30 00:03:09.457 I/flutter (18005): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:03:09.722 I/flutter (18005): The Dart VM service is listening on http://127.0.0.1:37311/ryqfT3I3g8s=/
+10-30 00:03:10.276 I/Dozeless(18005): engine ready in 1204ms
+10-30 00:03:10.461 I/flutter (18005): DOZELESS_ROW job=spike trigger=alarm delayMs=4047 durMs=84 idle=false loc=OK fixAgeS=141 events=processExit,processExit,processExit,processExit,processExit,processExit
+10-30 00:03:10.464 I/Dozeless(18005): done id=spike result=ok durMs=1458
+10-30 00:03:15.835 I/Dozeless(18065): event #12 processExit {reason=LOW_MEMORY, reasonCode=3, importance=400, description=}
+10-30 00:03:15.839 I/Dozeless(18065): watchdog armed
+10-30 00:03:15.855 I/Dozeless(18065): reconcile armed id=spike at=1793293449004
+10-30 00:03:15.858 I/Dozeless(18065): reconcile armed id=slow at=1793293434008
+10-30 00:03:47.051 I/Dozeless(18635): device admin enabled
+10-30 00:03:54.338 I/Dozeless(19143): fire id=slow trigger=alarm delayMs=319
+10-30 00:03:54.586 I/Dozeless(19143): event #13 processExit {reason=LOW_MEMORY, reasonCode=3, importance=400, description=}
+10-30 00:03:54.603 I/Dozeless(19143): event #14 processExit {reason=LOW_MEMORY, reasonCode=3, importance=400, description=}
+10-30 00:03:54.620 I/Dozeless(19143): event #15 processExit {reason=LOW_MEMORY, reasonCode=3, importance=400, description=}
+10-30 00:03:55.155 I/flutter (19143): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:03:55.644 I/flutter (19143): The Dart VM service is listening on http://127.0.0.1:42433/7KHkl3DRUNA=/
+10-30 00:03:56.582 I/Dozeless(19143): engine ready in 1862ms
+10-30 00:04:16.967 I/flutter (19143): DOZELESS_ROW job=slow trigger=alarm delayMs=319 durMs=20009 idle=false loc=SLOW fixAgeS=- events=processExit,processExit,processExit,processExit,processExit,processExit,processExit,processExit,processExit,processExit
+10-30 00:04:16.997 I/Dozeless(19143): done id=slow result=ok durMs=22648
+10-30 00:04:17.018 I/Dozeless(19143): fire id=spike trigger=alarm delayMs=8014
+10-30 00:04:17.309 I/flutter (19143): DOZELESS_ROW job=spike trigger=alarm delayMs=8014 durMs=168 idle=false loc=OK fixAgeS=208 events=processExit,processExit,processExit,processExit
+10-30 00:04:17.326 I/Dozeless(19143): done id=spike result=ok durMs=294
+10-30 00:04:43.039 I/flutter (19707): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:04:43.155 I/flutter (19707): The Dart VM service is listening on http://127.0.0.1:38013/UOwTH_0WFt4=/
+10-30 00:04:43.823 I/Dozeless(19707): event #16 processExit {reason=LOW_MEMORY, reasonCode=3, importance=400, description=}
+10-30 00:04:43.831 I/Dozeless(19707): watchdog armed
+10-30 00:04:43.841 I/Dozeless(19707): reconcile armed id=spike at=1793293517018
+10-30 00:04:43.842 I/Dozeless(19707): reconcile armed id=slow at=1793293734327
+10-30 00:05:17.023 I/Dozeless(19707): fire id=spike trigger=alarm delayMs=4
+10-30 00:05:17.090 I/flutter (19707): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:05:17.267 I/Dozeless(19707): engine ready in 229ms
+10-30 00:05:21.216 I/flutter (19707): DOZELESS_ROW job=spike trigger=alarm delayMs=4 durMs=3873 idle=false loc=OK fixAgeS=0 events=processExit
+10-30 00:05:21.219 I/Dozeless(19707): done id=spike result=ok durMs=4194
+10-30 00:06:17.025 I/Dozeless(19707): fire id=spike trigger=alarm delayMs=3
+10-30 00:06:21.170 I/flutter (19707): DOZELESS_ROW job=spike trigger=alarm delayMs=3 durMs=4132 idle=false loc=OK fixAgeS=0 events=
+10-30 00:06:21.175 I/Dozeless(19707): done id=spike result=ok durMs=4147
+10-30 00:07:11.018 I/Dozeless(20160): package replaced
+10-30 00:07:11.136 I/Dozeless(20160): fire id=spike trigger=packageReplaced delayMs=48
+10-30 00:07:11.262 I/Dozeless(20160): event #17 processExit {reason=PACKAGE_UPDATED, reasonCode=16, importance=100, description=stop io.github.xdaijobu.dozeless_example due to installPackageLI}
+10-30 00:07:13.197 I/flutter (20160): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:07:17.902 I/Dozeless(20386): fire id=slow trigger=packageReplaced delayMs=6720
+10-30 00:07:18.157 I/Dozeless(20386): event #18 processExit {reason=LOW_MEMORY, reasonCode=3, importance=300, description=}
+10-30 00:07:18.806 I/flutter (20386): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:07:19.921 I/flutter (20386): The Dart VM service is listening on http://127.0.0.1:38155/fU81c7-i5z8=/
+10-30 00:07:20.653 I/Dozeless(20386): engine ready in 2291ms
+10-30 00:07:32.889 I/flutter (21303): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:07:33.352 I/flutter (21303): The Dart VM service is listening on http://127.0.0.1:35505/67rGhd1zcb8=/
+10-30 00:07:34.921 I/flutter (21441): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:07:35.085 I/flutter (21441): The Dart VM service is listening on http://127.0.0.1:36079/cpLevyk137A=/
+10-30 00:07:37.040 I/Dozeless(21441): event #19 processExit {reason=LOW_MEMORY, reasonCode=3, importance=300, description=}
+10-30 00:07:37.053 I/Dozeless(21441): event #20 processExit {reason=LOW_MEMORY, reasonCode=3, importance=100, description=}
+10-30 00:07:37.068 I/Dozeless(21441): watchdog armed
+10-30 00:07:37.119 I/Dozeless(21441): reconcile armed id=spike at=1793293691135
+10-30 00:07:37.129 I/Dozeless(21441): reconcile armed id=slow at=1793293937827
+10-30 00:07:45.457 I/Dozeless(21441): device admin disabled
+10-30 00:07:59.530 I/Dozeless(22092): device admin enabled
+10-30 00:07:59.644 I/Dozeless(22092): boot broadcast, no new boot to restart: reconciling
+10-30 00:07:59.722 I/Dozeless(22092): event #21 processExit {reason=USER_REQUESTED, reasonCode=10, importance=100, description=[FORCE STOP] stop io.github.xdaijobu.dozeless_example due to from pid 22026}
+10-30 00:07:59.738 I/Dozeless(22092): watchdog armed
+10-30 00:07:59.818 I/Dozeless(22092): reconcile armed id=spike at=1793293691135
+10-30 00:07:59.821 I/Dozeless(22092): reconcile armed id=slow at=1793293937827
+10-30 00:08:10.564 I/flutter (22092): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:08:10.817 I/flutter (22092): The Dart VM service is listening on http://127.0.0.1:46157/c9r-XNzYcrE=/
+10-30 00:08:11.500 I/Dozeless(22092): watchdog armed
+10-30 00:08:11.508 I/Dozeless(22092): reconcile armed id=spike at=1793293692502
+10-30 00:08:11.511 I/Dozeless(22092): reconcile armed id=slow at=1793293937827
+10-30 00:08:12.153 I/Dozeless(22092): fire id=spike trigger=alarm delayMs=1017
+10-30 00:08:12.301 I/flutter (22092): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+10-30 00:08:12.559 I/Dozeless(22092): engine ready in 382ms
+10-30 00:08:19.340 I/flutter (22092): DOZELESS_ROW job=spike trigger=alarm delayMs=1017 durMs=6653 idle=false loc=OK fixAgeS=0 events=processExit,processExit,processExit,processExit,processExit
+10-30 00:08:19.346 I/Dozeless(22092): done id=spike result=ok durMs=7191
+10-30 00:08:20.736 I/Dozeless(22092): device admin disabled

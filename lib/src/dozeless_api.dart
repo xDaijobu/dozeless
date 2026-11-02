@@ -81,9 +81,15 @@ class Dozeless {
   static Future<PrerequisiteStatus> checkPrerequisites() async =>
       PrerequisiteStatus.fromMap((await channel.invokeMapMethod<Object?, Object?>('checkPrerequisites'))!);
 
-  /// Returns false when this device has no such page.
+  /// Returns false when this device has no such page. [Setting.forceStopGuard]
+  /// opens the system dialog that activates the force-stop guard; it needs the
+  /// app in the foreground and `DozelessAdminReceiver` in the app manifest.
   static Future<bool> openSettings(Setting setting) async =>
       (await channel.invokeMethod<bool>('openSettings', {'setting': setting.name})) ?? false;
+
+  /// Deactivates the force-stop guard, for example when the user signs out.
+  /// An active device admin blocks uninstalling the app, so turn it off first.
+  static Future<void> disableForceStopGuard() => channel.invokeMethod<void>('disableForceStopGuard');
 
   /// Debug: move [id]'s next alarm to [delay] from now.
   static Future<void> debugFireIn(String id, Duration delay) =>

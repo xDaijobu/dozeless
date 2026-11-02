@@ -1,5 +1,6 @@
 package io.github.xdaijobu.dozeless
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
@@ -31,6 +32,9 @@ internal object AutostartIntents {
 internal sealed interface SettingsTarget {
     data class Action(val action: String, val withPackage: Boolean) : SettingsTarget
     data class Component(val pkg: String, val cls: String) : SettingsTarget
+
+    /** The system dialog that activates [DozelessAdminReceiver]. It refuses to open in a new task. */
+    data object DeviceAdmin : SettingsTarget
 }
 
 internal object SettingsTargets {
@@ -45,22 +49,25 @@ internal object SettingsTargets {
             listOf(appDetails)
         }
         "autostart" -> AutostartIntents.candidates(manufacturer).map { SettingsTarget.Component(it.first, it.second) }
+        "forceStopGuard" -> listOf(SettingsTarget.DeviceAdmin)
         else -> throw IllegalArgumentException("unknown setting $setting")
     }
 }
 
 internal object SettingsOpener {
     /** Opens the first page that exists. Returns false if none could be opened. */
-    fun open(context: Context, setting: String): Boolean {
+    fun open(context: Context, setting: String, activity: Activity?): Boolean {
         for (target in SettingsTargets.of(setting, Build.VERSION.SDK_INT, Build.MANUFACTURER)) {
             val intent = when (target) {
                 is SettingsTarget.Action -> Intent(target.action).apply {
                     if (target.withPackage) data = Uri.parse("package:${context.packageName}")
-                }
-                is SettingsTarget.Component -> Intent().setComponent(ComponentName(target.pkg, target.cls))
-            }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                is SettingsTarget.Component -> Intent().setComponent(ComponentName(target.pkg, target.cls)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                SettingsTarget.DeviceAdmin -> ForceStopGuard.activationIntent(context) ?: continue
+            }
+            val starter = if (target == SettingsTarget.DeviceAdmin) activity ?: continue else context
             try {
-                context.startActivity(intent)
+                starter.startActivity(intent)
                 return true
             } catch (e: ActivityNotFoundException) {
                 Log.i(TAG, "settings target not found: $target")

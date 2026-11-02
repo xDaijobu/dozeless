@@ -31,6 +31,10 @@ internal class SettingsTargetsTest {
         assertTrue(SettingsTargets.of("autostart", 34, "samsung").isEmpty())
 
     @Test
+    fun forceStopGuardOpensTheDeviceAdminDialog() =
+        assertEquals(listOf(SettingsTarget.DeviceAdmin), SettingsTargets.of("forceStopGuard", 34, "samsung"))
+
+    @Test
     fun unknownSettingIsRejected() {
         assertFailsWith<IllegalArgumentException> { SettingsTargets.of("wifi", 34, "Xiaomi") }
     }

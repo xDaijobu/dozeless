@@ -1,13 +1,19 @@
 package io.github.xdaijobu.dozeless
 
+import android.app.Activity
 import android.content.Context
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class DozelessPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
+class DozelessPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler {
     private lateinit var channel: MethodChannel
     private lateinit var app: Context
+
+    // Only the UI engine has one; background job engines run without an activity.
+    private var activity: Activity? = null
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         app = binding.applicationContext
@@ -17,6 +23,22 @@ class DozelessPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        activity = null
+    }
+
+    override fun onDetachedFromActivity() {
+        activity = null
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -49,7 +71,11 @@ class DozelessPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
                     result.success(null)
                 }
                 "checkPrerequisites" -> result.success(PrereqReader.read(app).toMap())
-                "openSettings" -> result.success(SettingsOpener.open(app, call.str("setting")))
+                "openSettings" -> result.success(SettingsOpener.open(app, call.str("setting"), activity))
+                "disableForceStopGuard" -> {
+                    ForceStopGuard.deactivate(app)
+                    result.success(null)
+                }
                 "debugFireIn" -> {
                     Jobs.debugFireIn(app, call.str("id"), call.long("delayMs"))
                     result.success(null)

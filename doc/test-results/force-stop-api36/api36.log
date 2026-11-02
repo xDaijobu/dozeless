@@ -1,0 +1,12 @@
+[00:07:29] == api36: Android 16 API 36
+[00:08:09] 0. Force stop → app dibangunkan sistem (aktivasi device admin), tanpa dibuka: - (API 35+: alarm kembali) sebelum: proses= stopped=true alarm=6; sesudah 15 s: proses=22092 stopped=false alarm=8; BOOT_COMPLETED tanpa reboot: 1×
+[00:08:28] 1. force stop, menunggu 60 menit
+[01:08:29] 1. Force stop, tanpa interaksi apa pun: 0 (0 (aturan Android)) admin=off; proses= stopped= alarm=0
+[01:08:36] 2. panel Quick Settings dibuka sekali, menunggu 60 menit
+[02:08:36] 2. Force stop → panel Quick Settings dibuka (app tidak dibuka): 0 (~60) run pertama + s; proses= stopped= alarm=0
+[02:09:16] 3. pengaman aktif, Force stop ditekan (tidak ada dialog konfirmasi, stopped=), menunggu 60 menit
+[03:09:17] 3. Pengaman force stop aktif → tombol Force stop di Settings ditekan: 0 (~60) tidak ada dialog konfirmasi; stopped setelah tekan=; admin=off; proses= stopped= alarm=0
+[03:09:22] 3b. Pengaman aktif → am force-stop (adb / pembersih OEM): - (tetap berhenti) proses= stopped= alarm=0
+[03:09:47] 4. swipe dari Recents + layar mati (pid setelah swipe: mati), menunggu 60 menit
+[04:09:48] 4. Di-swipe dari Recents, lalu layar mati: 0 (~60) proses setelah swipe: mati; proses= stopped= alarm=0
+[04:09:48] SELESAI api36

@@ -18,7 +18,7 @@ Future<void> main() async {
       channelName: 'Status spike',
     ),
   );
-  runApp(const MaterialApp(home: SpikePage()));
+  runApp(const MaterialApp(debugShowCheckedModeBanner: false, home: SpikePage()));
 }
 
 class SpikePage extends StatefulWidget {
@@ -99,6 +99,7 @@ class _SpikePageState extends State<SpikePage> with WidgetsBindingObserver {
             _check('Tidak "Dibatasi"', !p.backgroundRestricted),
             _check('Exact alarm', p.exactAlarm),
             _check('Notifikasi', p.notification),
+            if (p.forceStopGuardAvailable) _check('Pengaman force stop', p.forceStopGuard),
           ],
           Wrap(spacing: 8, runSpacing: 8, children: [
             OutlinedButton(onPressed: () => _act(Permission.location.request), child: const Text('Izin lokasi')),
@@ -113,6 +114,12 @@ class _SpikePageState extends State<SpikePage> with WidgetsBindingObserver {
             if (p?.autostartSettingAvailable ?? false)
               OutlinedButton(
                   onPressed: () => _act(() => Dozeless.openSettings(Setting.autostart)), child: const Text('Autostart')),
+            if ((p?.forceStopGuardAvailable ?? false) && !p!.forceStopGuard)
+              OutlinedButton(
+                  onPressed: () => _act(() => Dozeless.openSettings(Setting.forceStopGuard)),
+                  child: const Text('Pengaman force stop')),
+            if (p?.forceStopGuard ?? false)
+              OutlinedButton(onPressed: () => _act(Dozeless.disableForceStopGuard), child: const Text('Matikan pengaman')),
           ]),
           const Divider(height: 32),
           Text('Job', style: Theme.of(context).textTheme.titleMedium),

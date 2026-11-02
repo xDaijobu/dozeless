@@ -17,6 +17,9 @@ internal data class PrereqSnapshot(
     val exactAlarm: Boolean,
     val notification: Boolean,
     val autostartSettingAvailable: Boolean,
+    // Not blocking: the optional device admin that disables Settings' "Force stop" button.
+    val forceStopGuard: Boolean = false,
+    val forceStopGuardAvailable: Boolean = false,
 ) {
     fun has(p: Prereq): Boolean = when (p) {
         Prereq.LOCATION -> location
@@ -36,6 +39,8 @@ internal data class PrereqSnapshot(
         "exactAlarm" to exactAlarm,
         "notification" to notification,
         "autostartSettingAvailable" to autostartSettingAvailable,
+        "forceStopGuard" to forceStopGuard,
+        "forceStopGuardAvailable" to forceStopGuardAvailable,
     )
 }
 
@@ -60,6 +65,8 @@ internal object PrereqReader {
             exactAlarm = AlarmScheduler(context).canExact(),
             notification = notificationAllowed,
             autostartSettingAvailable = AutostartIntents.candidates(Build.MANUFACTURER).isNotEmpty(),
+            forceStopGuard = ForceStopGuard.active(context),
+            forceStopGuardAvailable = ForceStopGuard.available(context),
         )
     }
 

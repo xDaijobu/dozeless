@@ -24,6 +24,7 @@ internal object Reconciler {
     fun reconcile(app: Context) {
         ExitInfoReader.collect(app)
         WatchdogReceiver.ensureArmed(app, force = true)
+        ForceStopGuard.applyOwnerPolicy(app)
         val dispatched = BootHandler.handleIfNew(app, viaBroadcast = false)
         val store = JobStore(app)
         val scheduler = AlarmScheduler(app)

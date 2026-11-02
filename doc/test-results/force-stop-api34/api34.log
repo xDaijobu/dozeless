@@ -1,0 +1,12 @@
+[00:10:19] == api34: Android 14 API 34
+[00:10:40] 0. Force stop → app dibangunkan sistem (aktivasi device admin), tanpa dibuka: - (API 35+: alarm kembali) sebelum: proses=5814 stopped=false alarm=0; sesudah 15 s: proses=5814 stopped=false alarm=0; BOOT_COMPLETED tanpa reboot: 0×
+[00:11:00] 1. force stop, menunggu 60 menit
+[01:11:00] 1. Force stop, tanpa interaksi apa pun: 0 (0 (aturan Android)) admin=off; proses= stopped= alarm=0
+[01:11:07] 2. panel Quick Settings dibuka sekali, menunggu 60 menit
+[02:11:07] 2. Force stop → panel Quick Settings dibuka (app tidak dibuka): 0 (~60) run pertama + s; proses= stopped= alarm=0
+[02:11:47] 3. pengaman aktif, Force stop ditekan (tidak ada dialog konfirmasi, stopped=), menunggu 60 menit
+[03:11:48] 3. Pengaman force stop aktif → tombol Force stop di Settings ditekan: 0 (~60) tidak ada dialog konfirmasi; stopped setelah tekan=; admin=off; proses= stopped= alarm=0
+[03:11:53] 3b. Pengaman aktif → am force-stop (adb / pembersih OEM): - (tetap berhenti) proses= stopped= alarm=0
+[03:12:18] 4. swipe dari Recents + layar mati (pid setelah swipe: mati), menunggu 60 menit
+[04:12:19] 4. Di-swipe dari Recents, lalu layar mati: 0 (~60) proses setelah swipe: mati; proses= stopped= alarm=0
+[04:12:19] SELESAI api34

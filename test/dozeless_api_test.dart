@@ -115,6 +115,19 @@ void main() {
     expect(p.missingFor({Prereq.location}), [Prereq.batteryUnrestricted]);
   });
 
+  test('checkPrerequisites parses the force-stop guard', () async {
+    reply = {'forceStopGuard': true, 'forceStopGuardAvailable': true};
+    final p = await Dozeless.checkPrerequisites();
+    expect(p.forceStopGuard, isTrue);
+    expect(p.forceStopGuardAvailable, isTrue);
+    expect(p.missingFor(const {}), [Prereq.batteryUnrestricted]); // the guard never blocks
+  });
+
+  test('disableForceStopGuard calls the plugin', () async {
+    await Dozeless.disableForceStopGuard();
+    expect(calls.single.method, 'disableForceStopGuard');
+  });
+
   test('openSettings sends the setting name and returns the result', () async {
     reply = true;
     expect(await Dozeless.openSettings(Setting.autostart), isTrue);

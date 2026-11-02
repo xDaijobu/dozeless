@@ -11,7 +11,7 @@ enum Prereq { location, backgroundLocation, batteryUnrestricted, notBackgroundRe
 enum JobMode { exact, inexact, stopped }
 
 /// Pages [Dozeless.openSettings] can open.
-enum Setting { batteryOptimization, appDetails, exactAlarm, autostart }
+enum Setting { batteryOptimization, appDetails, exactAlarm, autostart, forceStopGuard }
 
 List<Prereq> _prereqs(Object? raw) => [
       for (final name in (raw as List?) ?? const [])
@@ -74,6 +74,8 @@ class PrerequisiteStatus {
     required this.exactAlarm,
     required this.notification,
     this.autostartSettingAvailable = false,
+    this.forceStopGuard = false,
+    this.forceStopGuardAvailable = false,
   });
 
   factory PrerequisiteStatus.fromMap(Map<Object?, Object?> m) => PrerequisiteStatus(
@@ -84,6 +86,8 @@ class PrerequisiteStatus {
         exactAlarm: m['exactAlarm'] == true,
         notification: m['notification'] == true,
         autostartSettingAvailable: m['autostartSettingAvailable'] == true,
+        forceStopGuard: m['forceStopGuard'] == true,
+        forceStopGuardAvailable: m['forceStopGuardAvailable'] == true,
       );
 
   /// Enforced for every job.
@@ -103,6 +107,13 @@ class PrerequisiteStatus {
 
   /// This brand has an Autostart page; the wizard should ask the user to enable it.
   final bool autostartSettingAvailable;
+
+  /// Not blocking: the force-stop guard (a device admin without policies) is active,
+  /// so Settings disables this app's "Force stop" button.
+  final bool forceStopGuard;
+
+  /// The app declared `DozelessAdminReceiver`, so [Setting.forceStopGuard] can be requested.
+  final bool forceStopGuardAvailable;
 
   bool has(Prereq p) => switch (p) {
         Prereq.location => location,
