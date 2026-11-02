@@ -1,6 +1,8 @@
 # dozeless
 
+[![pub package](https://img.shields.io/pub/v/dozeless.svg)](https://pub.dev/packages/dozeless)
 [![CI](https://github.com/xDaijobu/dozeless/actions/workflows/ci.yaml/badge.svg)](https://github.com/xDaijobu/dozeless/actions/workflows/ci.yaml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/xDaijobu/dozeless/blob/main/LICENSE)
 ![Platform: Android](https://img.shields.io/badge/platform-Android-3DDC84)
 ![minSdk 24](https://img.shields.io/badge/minSdk-24-blue)
 
@@ -17,9 +19,9 @@ await Dozeless.schedule(id: 'track', callback: trackLocation, every: const Durat
 
 <table>
   <tr>
-    <td align="center"><img src="doc/screenshots/example-app.png" width="250" alt="Example app: prerequisites, job status and statistics"></td>
-    <td align="center"><img src="doc/screenshots/doze-rows.png" width="250" alt="Rows written once a minute while the device was in Doze"></td>
-    <td align="center"><img src="doc/screenshots/quick-settings-tile.png" width="250" alt="The optional Quick Settings tile"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/example-app.png" width="250" alt="Example app: prerequisites, job status and statistics"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/doze-rows.png" width="250" alt="Rows written once a minute while the device was in Doze"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/quick-settings-tile.png" width="250" alt="The optional Quick Settings tile"></td>
   </tr>
   <tr>
     <td align="center"><sub>Example app: prerequisites, jobs, statistics</sub></td>
@@ -57,20 +59,12 @@ await Dozeless.schedule(id: 'track', callback: trackLocation, every: const Durat
 
 ## How it works
 
-dozeless chains one-shot exact alarms (`setExactAndAllowWhileIdle`) per job. The next alarm is armed *before* your callback runs, so a crash or a timeout never breaks the chain. The callback runs in a cached headless FlutterEngine, and the plugin waits for it under its own wake lock.
+dozeless chains one-shot exact alarms (`setExactAndAllowWhileIdle`) per job. Every run goes like this:
 
-```mermaid
-sequenceDiagram
-    participant AM as AlarmManager
-    participant P as dozeless (native)
-    participant D as Your Dart job
-    AM->>P: exact alarm fires (also in Doze)
-    P->>AM: arm the next alarm first
-    P->>P: wake lock, one run per job at a time
-    P->>D: callback(JobContext) in a headless FlutterEngine
-    D-->>P: returns, throws or times out
-    P->>P: record status, release wake lock
-```
+1. The job's exact alarm fires, also in Doze.
+2. dozeless arms the next alarm first, so a crash or a timeout never breaks the chain.
+3. It takes a wake lock and calls your callback with a `JobContext` in a cached headless FlutterEngine, one run per job at a time.
+4. It waits until the callback returns, throws or times out, records the status and releases the wake lock.
 
 Around the chain, an hourly watchdog repairs lost or late alarms, and a receiver re-arms everything after boot, app update, clock changes and a force stop.
 
@@ -91,7 +85,7 @@ Emulator results (Pixel 9 / Pixel 5 profiles, battery set to *Unrestricted*). Ea
 
 ¹ Android blocks every alarm of a force-stopped app until the user brings it back. That holds for every app. dozeless recovers as soon as the app is opened and reports the stop as a `processExit` event (`USER_REQUESTED`). See [Surviving a force stop](#surviving-a-force-stop) for ways back that do not need the app to be opened.
 
-Raw evidence (databases written by the jobs, logcat, per-condition logs) is in [`doc/test-results/`](doc/test-results/). Real devices are still to be tested, starting with HyperOS.
+Raw evidence (databases written by the jobs, logcat, per-condition logs) is in [`doc/test-results/`](https://github.com/xDaijobu/dozeless/tree/main/doc/test-results). Real devices are still to be tested, starting with HyperOS.
 
 ## Features
 
@@ -105,11 +99,8 @@ Raw evidence (databases written by the jobs, logcat, per-condition logs) is in [
 
 ## Install
 
-```yaml
-dependencies:
-  dozeless:
-    git:
-      url: https://github.com/xDaijobu/dozeless.git
+```bash
+flutter pub add dozeless
 ```
 
 Android only. `minSdk` 24. Developed with Flutter 3.47.6 / Dart 3.13.5.
@@ -123,8 +114,7 @@ The plugin adds `RECEIVE_BOOT_COMPLETED`, `SCHEDULE_EXACT_ALARM`, `WAKE_LOCK`, `
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
 
-> [!WARNING]
-> Do not use `android:installLocation="preferExternal"`: apps on external storage do not receive `BOOT_COMPLETED`.
+> **Warning:** do not use `android:installLocation="preferExternal"`: apps on external storage do not receive `BOOT_COMPLETED`.
 
 ## Usage
 
@@ -196,8 +186,8 @@ A force stop (App info → **Force stop**, and on some brands swiping the app aw
 
 <table>
   <tr>
-    <td align="center"><img src="doc/screenshots/quick-settings-tile.png" width="250" alt="Quick Settings with the Spike tile"></td>
-    <td align="center"><img src="doc/screenshots/force-stop-disabled.png" width="250" alt="App info with Force stop disabled"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/quick-settings-tile.png" width="250" alt="Quick Settings with the Spike tile"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/force-stop-disabled.png" width="250" alt="App info with Force stop disabled"></td>
   </tr>
   <tr>
     <td align="center"><sub>The tile in Quick Settings</sub></td>
@@ -205,7 +195,7 @@ A force stop (App info → **Force stop**, and on some brands swiping the app aw
   </tr>
 </table>
 
-"Verified" means checked on the Android 16 emulator, a few minutes per case. The planned one-hour runs per condition were cut short; what was measured, and how to rerun them, is in [`doc/test-results/FORCE-STOP.md`](doc/test-results/FORCE-STOP.md) (Indonesian).
+"Verified" means checked on the Android 16 emulator, a few minutes per case. The planned one-hour runs per condition were cut short; what was measured, and how to rerun them, is in [`doc/test-results/FORCE-STOP.md`](https://github.com/xDaijobu/dozeless/blob/main/doc/test-results/FORCE-STOP.md) (Indonesian).
 
 ### Quick Settings tile
 
@@ -304,7 +294,7 @@ What to know before you use it:
 
 ## Example app
 
-[`example/`](example/) is the feasibility app used for every test above. Two jobs write a row to `spike.db` on every run: `spike` every minute (location, delay, Doze, screen, fix age) and `slow` every 5 minutes (awaits 20 seconds to prove the wake lock holds). The screen shows the prerequisites with buttons to fix them, job status, statistics for the 90-minute screen-off test and the latest rows. It declares both force-stop helpers.
+[`example/`](https://github.com/xDaijobu/dozeless/tree/main/example) is the feasibility app used for every test above. Two jobs write a row to `spike.db` on every run: `spike` every minute (location, delay, Doze, screen, fix age) and `slow` every 5 minutes (awaits 20 seconds to prove the wake lock holds). The screen shows the prerequisites with buttons to fix them, job status, statistics for the 90-minute screen-off test and the latest rows. It declares both force-stop helpers.
 
 ```bash
 cd example
@@ -338,8 +328,8 @@ Integration tests need battery *Unrestricted* for the example app (`adb shell du
 
 ## Documentation
 
-`doc/` is in Indonesian: the design spec, the implementation plan (task by task, TDD), test results per Android version, and a one-page summary (`doc/ringkasan.html`). `doc/internal/` holds notes about the app this plugin was extracted from and is not published.
+[`doc/`](https://github.com/xDaijobu/dozeless/tree/main/doc) on GitHub is in Indonesian: the design spec, the implementation plan (task by task, TDD), test results per Android version, and a one-page summary (`doc/ringkasan.html`). It is not part of the pub.dev package.
 
 ## License
 
-Not chosen yet. A license is required before publishing to pub.dev.
+[Apache License 2.0](https://github.com/xDaijobu/dozeless/blob/main/LICENSE).
