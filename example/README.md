@@ -7,6 +7,8 @@ Feasibility app for `dozeless` (spec §9). Two jobs write a row to `spike.db` on
 
 The screen shows the prerequisites with buttons to fix them, job status, statistics for the 90-minute screen-off test and the latest rows.
 
+The manifest also declares both optional force-stop helpers: the Quick Settings tile (`DozelessTileService`, label "Spike") and the force-stop guard (`DozelessAdminReceiver`, button "Pengaman force stop").
+
 ```bash
 flutter test                                    # statistics unit tests
 flutter build apk --debug && adb install -r build/app/outputs/flutter-apk/app-debug.apk

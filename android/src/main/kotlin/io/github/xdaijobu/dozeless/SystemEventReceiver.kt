@@ -13,7 +13,14 @@ class SystemEventReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val app = context.applicationContext
         when (intent.action) {
-            Intent.ACTION_BOOT_COMPLETED, ACTION_QUICKBOOT_POWERON -> BootHandler.handleIfNew(app, viaBroadcast = true)
+            Intent.ACTION_BOOT_COMPLETED, ACTION_QUICKBOOT_POWERON -> {
+                // Android 15+ also sends BOOT_COMPLETED without a reboot, when a user action (the tile, a widget,
+                // the share sheet) takes a force-stopped app out of the stopped state. Its alarms are gone then.
+                if (BootHandler.handleIfNew(app, viaBroadcast = true).isEmpty()) {
+                    Log.i(TAG, "boot broadcast, no new boot to restart: reconciling")
+                    Reconciler.reconcile(app)
+                }
+            }
             Intent.ACTION_MY_PACKAGE_REPLACED -> {
                 Log.i(TAG, "package replaced")
                 WatchdogReceiver.ensureArmed(app)
