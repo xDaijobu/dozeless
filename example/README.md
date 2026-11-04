@@ -11,26 +11,30 @@ The example app for [`dozeless`](../README.md), and the feasibility rig behind e
 
 The app has three tabs. It refreshes when it comes back to the foreground, every 10 seconds, and when you pull down.
 
-**Overview** shows whether the jobs are running, in `exact`, `inexact` or `stopped` mode, with a live countdown to
-the next run, the run count and the last error. Below that is one card per job and the setup checklist: every
+**Overview** shows whether the jobs are running, in `exact`, `inexact` or `stopped` mode (`mixed` when the two jobs
+differ), with a live countdown to the next run, the run count and the last error. `schedule()` doesn't check
+prerequisites, so a job started without one runs until its first alarm and stops there; the Overview says so ahead
+of time ("Setup needed") instead of looking healthy. Below that is one card per job and the setup checklist: every
 prerequisite with its status, why it matters and a Fix button that opens the right permission dialog or settings
 page (location, location all the time, battery optimization, background usage, exact alarms, notifications,
 Autostart on brands that have it, and the force-stop guard).
 
 **Runs** is a timeline of the last 24 hours, newest first: when each run fired, which job, its trigger
 (`alarm`, `watchdog`, `boot`, `manual`, ...), how late it was, how long it took, the location result and fix age, a
-Doze badge when the phone was idle, the standby bucket and the system events dozeless saw.
+Doze badge when the phone was idle, the standby bucket and the system events dozeless saw. Runs 10 seconds late or
+more, and fixes older than two intervals, are marked in the warning color: the same bars the screen-off test uses.
 
 **Lab** holds the screen-off test and the debug actions:
 
 - Screen-off test: start the jobs, turn the screen off and leave the phone alone, then check the numbers for the last
-  30 or 90 minutes. It passes with at least 95% of the expected `spike` runs, a median delay under 10 seconds and a
-  location on every run.
+  30 or 90 minutes. Counting starts at the first `spike` alarm run, and the verdict reads NOT YET, with the minutes
+  collected so far, until the runs cover the whole window. Then it is PASS or FAIL: PASS needs at least 95% of the
+  expected `spike` runs, a median delay under 10 seconds and a location on every run.
 - Run now, Alarm in 10 s and Simulate lost alarm (drops the alarm, then runs the watchdog that repairs it) act on
-  `spike`, so they work once the jobs are started. Clear rows works any time, and Turn off force-stop guard while
-  the guard is on.
+  `spike`, so they work while `spike` is scheduled and not stopped. Run now waits for a run that is already going.
+  Clear rows works any time, and Turn off force-stop guard while the guard is on.
 - Shortcuts to the settings pages, so you can undo a fix and watch dozeless stop the jobs and resume them when you
-  come back to the app.
+  come back to the app. Exact alarms is different: without it the jobs keep running on inexact alarms.
 
 The manifest declares both optional force-stop helpers: the Quick Settings tile (`DozelessTileService`, label
 "Spike") and the force-stop guard (`DozelessAdminReceiver`).

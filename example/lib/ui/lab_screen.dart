@@ -15,7 +15,7 @@ class LabScreen extends StatefulWidget {
     super.key,
     required this.rows,
     required this.prerequisites,
-    required this.spikeScheduled,
+    required this.spikeMode,
     required this.now,
     required this.onRefresh,
     required this.onAction,
@@ -26,8 +26,9 @@ class LabScreen extends StatefulWidget {
   final List<SpikeRow> rows;
   final PrerequisiteStatus prerequisites;
 
-  /// Run now, Alarm in 10 s and Simulate lost alarm need the spike job; the plugin rejects an unknown id.
-  final bool spikeScheduled;
+  /// Null while spike is not scheduled. Run now, Alarm in 10 s and Simulate lost alarm need it scheduled (the
+  /// plugin rejects an unknown id) and not stopped (the plugin skips the run or records another stop).
+  final JobMode? spikeMode;
   final DateTime now;
   final Future<void> Function() onRefresh;
   final ValueChanged<LabAction> onAction;
@@ -42,23 +43,24 @@ class _LabScreenState extends State<LabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final now = widget.now;
-    final rows = widget.rows;
-    final oldest = rows.isEmpty ? now : DateTime.fromMillisecondsSinceEpoch(rows.last.firedAt);
-    final windowStart = now.subtract(_window);
-    final from = oldest.isAfter(windowStart) ? oldest : windowStart;
-    final stats = SpikeStats.compute(rows, jobId: spikeJobId, interval: spikeInterval, from: from, to: now);
+    final window = ScreenOffWindow.of(widget.rows, _window, widget.now);
+    final stats =
+        SpikeStats.compute(widget.rows, jobId: spikeJobId, interval: spikeInterval, from: window.from, to: widget.now);
     final p = widget.prerequisites;
     final muted = Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
-    final ready = widget.spikeScheduled;
-    String spike(String what) => ready ? what : '$what Start the jobs first.';
-    VoidCallback? whenSpike(VoidCallback action) => ready ? action : null;
+    final blocked = switch (widget.spikeMode) {
+      null => 'Start the jobs first.',
+      JobMode.stopped => 'Spike is stopped: fix Setup first.',
+      _ => null,
+    };
+    String spike(String what) => blocked == null ? what : '$what $blocked';
+    VoidCallback? whenSpike(VoidCallback action) => blocked == null ? action : null;
 
     return Refreshable(onRefresh: widget.onRefresh, children: [
       ScreenOffTestCard(
         stats: stats,
-        window: _window,
-        from: from,
+        window: window,
+        spikeRunning: blocked == null,
         onWindowChanged: (w) => setState(() => _window = w),
       ),
       const SectionHeader('Debug actions'),
@@ -67,7 +69,8 @@ class _LabScreenState extends State<LabScreen> {
           _ActionTile(
             icon: Icons.play_circle_outline,
             title: 'Run now',
-            subtitle: spike('Runs spike once with trigger manual. Its alarm chain stays as it is.'),
+            subtitle: spike('Runs spike once with trigger manual, after any run already going. '
+                'Its alarm chain stays as it is.'),
             onTap: whenSpike(() => widget.onAction(LabAction.runNow)),
           ),
           _ActionTile(
@@ -102,7 +105,11 @@ class _LabScreenState extends State<LabScreen> {
       const SectionHeader('Settings pages'),
       Padding(
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
-        child: Text('Undo a fix here to watch dozeless stop the jobs, then resume them when you come back.', style: muted),
+        child: Text(
+          'Undo a fix here to watch dozeless stop the jobs, then resume them when you come back. '
+          'Exact alarms is different: without it the jobs keep running on inexact alarms.',
+          style: muted,
+        ),
       ),
       Card(
         child: Column(children: [
@@ -167,24 +174,49 @@ class _ActionTile extends StatelessWidget {
       );
 }
 
+/// The stretch of time the screen-off test judges.
+class ScreenOffWindow {
+  const ScreenOffWindow({required this.length, required this.from, required this.covered});
+
+  /// Starts at the first `spike` alarm run in [rows] (newest first), so time before the jobs ran doesn't count
+  /// against them, and at most [length] before [now].
+  factory ScreenOffWindow.of(List<SpikeRow> rows, Duration length, DateTime now) {
+    final first = rows.where((r) => r.jobId == spikeJobId && r.trigger == 'alarm').lastOrNull;
+    if (first == null) return ScreenOffWindow(length: length, from: now, covered: Duration.zero);
+    final start = now.subtract(length);
+    final firstAt = DateTime.fromMillisecondsSinceEpoch(first.firedAt);
+    final from = firstAt.isAfter(start) ? firstAt : start;
+    return ScreenOffWindow(length: length, from: from, covered: now.difference(from));
+  }
+
+  final Duration length;
+  final DateTime from;
+
+  /// How much of [length] the runs cover so far.
+  final Duration covered;
+
+  /// The runs cover the whole window, so the numbers can pass or fail.
+  bool get complete => covered >= length;
+}
+
 /// Pass/fail numbers of the "screen off for 90 minutes" test.
 class ScreenOffTestCard extends StatelessWidget {
   const ScreenOffTestCard({
     super.key,
     required this.stats,
     required this.window,
-    required this.from,
     required this.onWindowChanged,
+    this.spikeRunning = true,
   });
 
   static const windows = [Duration(minutes: 30), Duration(minutes: 90)];
 
   final SpikeStats stats;
-  final Duration window;
-
-  /// Where counting starts: the window start, or the oldest row when that is later.
-  final DateTime from;
+  final ScreenOffWindow window;
   final ValueChanged<Duration> onWindowChanged;
+
+  /// False while spike isn't scheduled or is stopped, so no new runs come in.
+  final bool spikeRunning;
 
   @override
   Widget build(BuildContext context) {
@@ -193,25 +225,27 @@ class ScreenOffTestCard extends StatelessWidget {
     final status = StatusColors.of(context);
     final muted = theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant);
     final s = stats;
-    // With no runs yet there is nothing to judge, so the criteria stay neutral.
-    Color? verdict(bool ok) => s.ran == 0 ? null : ok ? status.good : scheme.error;
+    final done = window.complete;
+    // Until the runs cover the whole window there is nothing to judge, so the criteria stay neutral.
+    Color? verdict(bool ok) => !done ? null : ok ? status.good : scheme.error;
+    final (String label, IconData icon, Color bg, Color fg) = switch (done) {
+      false => ('NOT YET', Icons.hourglass_empty, scheme.surfaceContainerHighest, scheme.onSurfaceVariant),
+      true when s.passes => ('PASS', Icons.check, status.goodContainer, status.onGoodContainer),
+      true => ('FAIL', Icons.close, scheme.errorContainer, scheme.onErrorContainer),
+    };
+    final minutes = window.length.inMinutes;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
             Expanded(child: Text('Screen-off test', style: theme.textTheme.titleMedium)),
-            Pill(
-              label: s.passes ? 'PASS' : 'NOT YET',
-              icon: s.passes ? Icons.check : Icons.hourglass_empty,
-              background: s.passes ? status.goodContainer : scheme.surfaceContainerHighest,
-              foreground: s.passes ? status.onGoodContainer : scheme.onSurfaceVariant,
-            ),
+            Pill(label: label, icon: icon, background: bg, foreground: fg),
           ]),
           const SizedBox(height: 4),
           Text(
-            'Start the jobs, turn the screen off and leave the phone alone. '
-            'This counts the alarm runs of the spike job.',
+            'Start the jobs, turn the screen off and leave the phone alone. This counts the alarm runs of the '
+            'spike job from its first one.',
             style: theme.textTheme.bodyMedium,
           ),
           const SizedBox(height: 12),
@@ -219,10 +253,26 @@ class ScreenOffTestCard extends StatelessWidget {
             for (final w in windows)
               ChoiceChip(
                 label: Text('${w.inMinutes} min'),
-                selected: window == w,
+                selected: window.length == w,
                 onSelected: (_) => onWindowChanged(w),
               ),
           ]),
+          if (!done) ...[
+            const SizedBox(height: 12),
+            Text(
+              '${window.covered.inMinutes} of $minutes min collected',
+              style: theme.textTheme.labelLarge?.copyWith(fontFeatures: tabularFigures),
+            ),
+            const SizedBox(height: 6),
+            LinearProgressIndicator(
+              value: window.covered.inMilliseconds / window.length.inMilliseconds,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            if (!spikeRunning) ...[
+              const SizedBox(height: 6),
+              Text('spike isn’t running, so no new runs come in.', style: muted),
+            ],
+          ],
           const SizedBox(height: 16),
           LayoutBuilder(builder: (context, constraints) {
             final width = (constraints.maxWidth - 16) / 2;
@@ -244,8 +294,8 @@ class ScreenOffTestCard extends StatelessWidget {
           }),
           const SizedBox(height: 16),
           Text(
-            'Passes with at least 95% of the expected runs, a median delay under 10 s and a location on every run. '
-            'Counting from ${clock(from)}.',
+            'Passes with at least 95% of the expected runs, a median delay under 10 s and a location on every run, '
+            'once the runs cover the whole $minutes min. Counting from ${clock(window.from)}.',
             style: muted,
           ),
         ]),

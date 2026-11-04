@@ -23,7 +23,7 @@ class RunsScreen extends StatefulWidget {
   final List<SpikeRow> rows;
 
   /// The empty state says what to do next from this.
-  final JobsState jobs;
+  final JobsSummary jobs;
   final DateTime now;
   final Future<void> Function() onRefresh;
   final VoidCallback onStart;
@@ -35,6 +35,7 @@ class RunsScreen extends StatefulWidget {
 
 class _RunsScreenState extends State<RunsScreen> {
   static const _all = '';
+  static final _intervals = {for (final j in exampleJobs) j.id: j.every};
 
   String _job = _all;
 
@@ -63,7 +64,7 @@ class _RunsScreenState extends State<RunsScreen> {
         itemBuilder: (context, i) {
           if (i == 0) return _header(rows);
           return switch (entries[i - 1]) {
-            final SpikeRow r => RunTile(row: r),
+            final SpikeRow r => RunTile(row: r, interval: _intervals[r.jobId] ?? spikeJobInfo.every),
             final label => Padding(
                 padding: const EdgeInsets.fromLTRB(4, 20, 4, 4),
                 child: Text('$label', style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary)),
@@ -127,7 +128,7 @@ class RunsSummary extends StatelessWidget {
 class RunsEmptyState extends StatelessWidget {
   const RunsEmptyState({super.key, required this.jobs, required this.onStart, required this.onShowSetup});
 
-  final JobsState jobs;
+  final JobsSummary jobs;
   final VoidCallback onStart;
   final VoidCallback onShowSetup;
 
@@ -135,24 +136,25 @@ class RunsEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final muted = theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    final active = [for (final s in jobs.active) s.job];
+    final stopped = [for (final s in jobs.stopped) s.job];
     final (String title, String body, String? hint) = switch (jobs) {
-      JobsState.notScheduled => (
+      _ when !jobs.anyScheduled => (
           'No runs yet',
-          'Start the jobs and every run shows up here: the spike job every minute, '
-              'the slow job every 5 minutes, also while the screen is off.',
+          'Start the jobs and every run shows up here: ${_cadence(jobs.all)}, also while the screen is off.',
           null,
         ),
-      JobsState.stopped => (
+      _ when jobs.allStopped => (
           'The jobs are stopped',
-          'A setting they need is missing, so no runs come in. Fix it under Setup on the Overview tab: '
+          'A setting they need is missing, so no runs come in. Fix it in Setup on the Overview tab: '
               'the jobs resume when you come back to the app.',
           null,
         ),
-      JobsState.running => (
+      _ => (
           'Waiting for the first run',
-          'The spike job adds a run here every minute and the slow job every 5 minutes, '
-              'also while the screen is off.',
-          'For a run right away, use Run now in the Lab.',
+          'A run shows up here for ${_cadence(active)}, also while the screen is off.'
+              '${stopped.isEmpty ? '' : ' ${stopped.map((j) => j.id).join(' and ')} is stopped: fix Setup first.'}',
+          active.any((j) => j.id == spikeJobInfo.id) ? 'For a run right away, use Run now in the Lab.' : null,
         ),
     };
     return Padding(
@@ -173,23 +175,25 @@ class RunsEmptyState extends StatelessWidget {
           const SizedBox(height: 8),
           Text(hint, textAlign: TextAlign.center, style: muted),
         ],
-        if (jobs == JobsState.notScheduled) ...[
+        if (!jobs.anyScheduled) ...[
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: onStart,
             icon: const Icon(Icons.play_arrow_rounded),
             label: const Text('Start jobs'),
           ),
-        ],
-        if (jobs == JobsState.stopped) ...[
+        ] else if (stopped.isNotEmpty) ...[
           const SizedBox(height: 24),
           FilledButton.tonalIcon(
             onPressed: onShowSetup,
-            icon: const Icon(Icons.space_dashboard_outlined),
-            label: const Text('Open Overview'),
+            icon: const Icon(Icons.checklist),
+            label: const Text('Open Setup'),
           ),
         ],
       ]),
     );
   }
+
+  /// the spike job every minute and the slow job every 5 minutes
+  static String _cadence(List<JobInfo> jobs) => jobs.map((j) => 'the ${j.id} job ${every(j.every)}').join(' and ');
 }
