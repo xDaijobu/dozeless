@@ -21,7 +21,7 @@ void main() {
       expect(setupProgress(items), '6 of 6 ready');
     });
 
-    test('adds Autostart and the force-stop guard only when the device has them', () {
+    test('adds Autostart only on brands that have it and the guard only when the app declares it', () {
       final items = setupItemsFor(prereqs(autostartSettingAvailable: true, forceStopGuardAvailable: true));
       expect(items.map((i) => i.action), containsAllInOrder([SetupAction.autostart, SetupAction.forceStopGuard]));
       expect(items.firstWhere((i) => i.action == SetupAction.autostart).state, SetupState.unknown);

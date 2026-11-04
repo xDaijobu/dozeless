@@ -15,6 +15,7 @@ class LabScreen extends StatefulWidget {
     super.key,
     required this.rows,
     required this.prerequisites,
+    required this.spikeScheduled,
     required this.now,
     required this.onRefresh,
     required this.onAction,
@@ -24,6 +25,9 @@ class LabScreen extends StatefulWidget {
   /// Newest first.
   final List<SpikeRow> rows;
   final PrerequisiteStatus prerequisites;
+
+  /// Run now, Alarm in 10 s and Simulate lost alarm need the spike job; the plugin rejects an unknown id.
+  final bool spikeScheduled;
   final DateTime now;
   final Future<void> Function() onRefresh;
   final ValueChanged<LabAction> onAction;
@@ -46,6 +50,9 @@ class _LabScreenState extends State<LabScreen> {
     final stats = SpikeStats.compute(rows, jobId: spikeJobId, interval: spikeInterval, from: from, to: now);
     final p = widget.prerequisites;
     final muted = Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
+    final ready = widget.spikeScheduled;
+    String spike(String what) => ready ? what : '$what Start the jobs first.';
+    VoidCallback? whenSpike(VoidCallback action) => ready ? action : null;
 
     return Refreshable(onRefresh: widget.onRefresh, children: [
       ScreenOffTestCard(
@@ -60,20 +67,20 @@ class _LabScreenState extends State<LabScreen> {
           _ActionTile(
             icon: Icons.play_circle_outline,
             title: 'Run now',
-            subtitle: 'Runs spike once with trigger manual. Its alarm chain stays as it is.',
-            onTap: () => widget.onAction(LabAction.runNow),
+            subtitle: spike('Runs spike once with trigger manual. Its alarm chain stays as it is.'),
+            onTap: whenSpike(() => widget.onAction(LabAction.runNow)),
           ),
           _ActionTile(
             icon: Icons.alarm_add_outlined,
             title: 'Alarm in 10 s',
-            subtitle: 'Moves the next spike alarm to 10 seconds from now.',
-            onTap: () => widget.onAction(LabAction.fireIn10s),
+            subtitle: spike('Moves the next spike alarm to 10 seconds from now.'),
+            onTap: whenSpike(() => widget.onAction(LabAction.fireIn10s)),
           ),
           _ActionTile(
             icon: Icons.alarm_off_outlined,
             title: 'Simulate lost alarm',
-            subtitle: 'Cancels the spike alarm as if the phone dropped it, then runs the watchdog that repairs it.',
-            onTap: () => widget.onAction(LabAction.simulateLostAlarm),
+            subtitle: spike('Cancels the spike alarm as if the phone dropped it, then runs the watchdog that repairs it.'),
+            onTap: whenSpike(() => widget.onAction(LabAction.simulateLostAlarm)),
           ),
           _ActionTile(
             icon: Icons.delete_sweep_outlined,
@@ -185,8 +192,9 @@ class ScreenOffTestCard extends StatelessWidget {
     final scheme = theme.colorScheme;
     final status = StatusColors.of(context);
     final muted = theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant);
-    Color verdict(bool ok) => ok ? status.good : scheme.error;
     final s = stats;
+    // With no runs yet there is nothing to judge, so the criteria stay neutral.
+    Color? verdict(bool ok) => s.ran == 0 ? null : ok ? status.good : scheme.error;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -229,7 +237,7 @@ class ScreenOffTestCard extends StatelessWidget {
               metric('expected', count(s.expected)),
               metric('ran', '${count(s.ran)} (${(s.ranRatio * 100).toStringAsFixed(1)}%)',
                   color: verdict(s.ranRatio >= 0.95)),
-              metric('median delay', span(s.medianDelayMs), color: verdict(s.medianDelayMs < 10000)),
+              metric('median delay', s.ran == 0 ? '–' : span(s.medianDelayMs), color: verdict(s.medianDelayMs < 10000)),
               metric('located', count(s.withLocation), color: verdict(s.withLocation == s.ran)),
               metric('fresh fix', count(s.withFreshLocation)),
             ]);

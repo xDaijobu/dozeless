@@ -88,10 +88,16 @@ class FakeBackend implements ExampleBackend {
 
   Snapshot snapshot;
   bool fixOpens = true;
+
+  /// When set, [load] throws it.
+  Object? loadError;
   final calls = <Object>[];
 
   @override
-  Future<Snapshot> load() async => snapshot;
+  Future<Snapshot> load() async {
+    if (loadError case final error?) throw error;
+    return snapshot;
+  }
 
   @override
   Future<void> startJobs() async => calls.add('start');

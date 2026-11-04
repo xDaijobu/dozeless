@@ -29,6 +29,21 @@ class Snapshot {
   final List<SpikeRow> rows;
 }
 
+/// How the jobs are doing, taken together.
+enum JobsState {
+  notScheduled,
+
+  /// Every scheduled job is stopped for a missing prerequisite.
+  stopped,
+  running;
+
+  factory JobsState.of(Map<String, JobStatus> statuses) => statuses.isEmpty
+      ? notScheduled
+      : statuses.values.every((s) => s.mode == JobMode.stopped)
+          ? stopped
+          : running;
+}
+
 /// What a Fix button (or a settings shortcut) does.
 enum SetupAction {
   location('location'),

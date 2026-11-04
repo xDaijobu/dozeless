@@ -89,12 +89,16 @@ class StatusHero extends StatelessWidget {
     required this.statuses,
     required this.onStart,
     required this.onStop,
+    this.now = DateTime.now,
   });
 
   final List<JobInfo> jobs;
   final Map<String, JobStatus> statuses;
   final VoidCallback onStart;
   final VoidCallback onStop;
+
+  /// The countdown's clock; tests pass a fixed one.
+  final DateTime Function() now;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +145,7 @@ class StatusHero extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(children: [
-            _NextRunRing(job: s.nextJob, at: s.nextRunAt, color: fg),
+            _NextRunRing(job: s.nextJob, at: s.nextRunAt, color: fg, now: now),
             const SizedBox(width: 20),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -207,13 +211,14 @@ class StatusHero extends StatelessWidget {
 
 /// A dial that fills up over the job's interval, with the time left in the middle.
 class _NextRunRing extends StatelessWidget {
-  const _NextRunRing({required this.job, required this.at, required this.color});
+  const _NextRunRing({required this.job, required this.at, required this.color, required this.now});
 
   static const size = 112.0;
 
   final JobInfo? job;
   final DateTime? at;
   final Color color;
+  final DateTime Function() now;
 
   @override
   Widget build(BuildContext context) {
@@ -230,6 +235,7 @@ class _NextRunRing extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     return Countdown(
       target: at,
+      clock: now,
       builder: (context, left) => SizedBox.square(
         dimension: size,
         child: Stack(alignment: Alignment.center, children: [
@@ -279,10 +285,13 @@ class _Figure extends StatelessWidget {
 
 /// One scheduled job: what it does and how its alarm chain is doing.
 class JobCard extends StatelessWidget {
-  const JobCard({super.key, required this.job, required this.status});
+  const JobCard({super.key, required this.job, required this.status, this.now = DateTime.now});
 
   final JobInfo job;
   final JobStatus? status;
+
+  /// The countdown's clock; tests pass a fixed one.
+  final DateTime Function() now;
 
   @override
   Widget build(BuildContext context) {
@@ -337,6 +346,7 @@ class JobCard extends StatelessWidget {
     if (at == null || s.mode == JobMode.stopped) return Builder(builder: (c) => Text('–', style: _value(Theme.of(c))));
     return Countdown(
       target: at,
+      clock: now,
       builder: (c, left) => Text(
         left <= Duration.zero ? '${clock(at)}, due' : '${clock(at)}, in ${countdown(left)}',
         style: _value(Theme.of(c)),

@@ -1,6 +1,7 @@
 import 'package:dozeless_example/ui/format.dart';
 import 'package:dozeless_example/ui/run_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support.dart';
@@ -22,6 +23,18 @@ void main() {
     expect(find.text('bucket active'), findsOneWidget);
     expect(find.text('boot, processExit'), findsOneWidget);
     expect(find.text('Doze'), findsNothing);
+  });
+
+  testWidgets('keeps the time on one line with a larger system font', (tester) async {
+    usePhoneScreen(tester);
+    tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await tester.pumpWidget(themed(RunTile(row: runRow(firedAt: firedAt))));
+    expect(MediaQuery.textScalerOf(tester.element(find.byType(RunTile))).scale(10), closeTo(13, 0.01));
+
+    final time = tester.renderObject<RenderParagraph>(find.text('14:02:13'));
+    expect(time.getMaxIntrinsicWidth(double.infinity), lessThanOrEqualTo(time.size.width));
+    expect(time.didExceedMaxLines, isFalse);
   });
 
   testWidgets('marks runs in Doze', (tester) async {

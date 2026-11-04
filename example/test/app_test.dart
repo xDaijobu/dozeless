@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:dozeless/dozeless.dart';
 import 'package:dozeless_example/ui/app.dart';
 import 'package:dozeless_example/ui/model.dart';
+import 'package:dozeless_example/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -34,6 +37,11 @@ void main() {
         runCount: 128,
       );
 
+  JobStatus stoppedStatus(String id) =>
+      JobStatus(id: id, mode: JobMode.stopped, missing: const [Prereq.batteryUnrestricted]);
+
+  final running = {'spike': status('spike'), 'slow': status('slow', nextIn: const Duration(minutes: 4))};
+
   Future<FakeBackend> pumpApp(WidgetTester tester, Snapshot s) async {
     usePhoneScreen(tester);
     final backend = FakeBackend(s);
@@ -50,6 +58,7 @@ void main() {
   testWidgets('Overview: not started, Start jobs schedules them', (tester) async {
     final backend = await pumpApp(tester, snapshot());
 
+    expect(find.text('Dozeless Example'), findsOneWidget);
     expect(find.text('Not started'), findsOneWidget);
     expect(find.text('Not scheduled.'), findsNWidgets(2));
     await tester.tap(find.widgetWithText(FilledButton, 'Start jobs'));
@@ -58,15 +67,13 @@ void main() {
     expect(find.text('Started spike and slow'), findsOneWidget);
   });
 
-  testWidgets('Overview: running jobs show a live countdown and Stop jobs', (tester) async {
-    final backend = await pumpApp(
-      tester,
-      snapshot(statuses: {'spike': status('spike'), 'slow': status('slow', nextIn: const Duration(minutes: 4))}),
-    );
+  testWidgets('Overview: running jobs show a countdown and Stop jobs', (tester) async {
+    final backend = await pumpApp(tester, snapshot(statuses: running));
 
     expect(find.text('Running'), findsOneWidget);
     expect(find.text('spike next'), findsOneWidget);
-    expect(find.text('0:42'), findsOneWidget);
+    // The exact value depends on the wall clock; overview_test.dart checks it with a fixed clock.
+    expect(find.textContaining(RegExp(r'^0:[34]\d$')), findsOneWidget);
     expect(find.text('256'), findsOneWidget);
 
     await tester.ensureVisible(find.text('Stop jobs'));
@@ -79,13 +86,7 @@ void main() {
   testWidgets('Overview: a stopped job says what is missing', (tester) async {
     await pumpApp(
       tester,
-      snapshot(
-        batteryUnrestricted: false,
-        statuses: {
-          'spike': const JobStatus(id: 'spike', mode: JobMode.stopped, missing: [Prereq.batteryUnrestricted]),
-          'slow': const JobStatus(id: 'slow', mode: JobMode.stopped, missing: [Prereq.batteryUnrestricted]),
-        },
-      ),
+      snapshot(batteryUnrestricted: false, statuses: {'spike': stoppedStatus('spike'), 'slow': stoppedStatus('slow')}),
     );
 
     expect(find.text('Stopped'), findsOneWidget);
@@ -137,10 +138,35 @@ void main() {
     expect(find.text('Doze'), findsOneWidget);
   });
 
+  testWidgets('Runs: waiting for the first run while the jobs are running', (tester) async {
+    await pumpApp(tester, snapshot(statuses: running));
+    await openTab(tester, 'Runs');
+
+    expect(find.text('Waiting for the first run'), findsOneWidget);
+    expect(find.text('Start jobs'), findsNothing);
+  });
+
+  testWidgets('Runs: with every job stopped, the empty state points to Setup', (tester) async {
+    await pumpApp(
+      tester,
+      snapshot(batteryUnrestricted: false, statuses: {'spike': stoppedStatus('spike'), 'slow': stoppedStatus('slow')}),
+    );
+    await openTab(tester, 'Runs');
+
+    expect(find.text('The jobs are stopped'), findsOneWidget);
+    expect(find.text('Waiting for the first run'), findsNothing);
+
+    await tester.tap(find.text('Open Overview'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Dozeless Example'), findsOneWidget);
+    expect(find.text('Stopped'), findsOneWidget);
+  });
+
   testWidgets('Lab: screen-off statistics and every debug action', (tester) async {
     final backend = await pumpApp(
       tester,
       snapshot(
+        statuses: running,
         forceStopGuard: true,
         rows: [for (var m = 0; m < 30; m++) runRow(ago: Duration(minutes: m, seconds: 30))],
       ),
@@ -186,10 +212,89 @@ void main() {
     ]);
   });
 
+  testWidgets('Lab: the spike actions wait until the jobs are started', (tester) async {
+    final backend = await pumpApp(tester, snapshot());
+    await openTab(tester, 'Lab');
+
+    for (final title in ['Run now', 'Alarm in 10 s', 'Simulate lost alarm']) {
+      final tile = find.widgetWithText(ListTile, title);
+      expect(tester.widget<ListTile>(tile).enabled, isFalse, reason: title);
+      expect(find.descendant(of: tile, matching: find.textContaining('Start the jobs first.')), findsOneWidget);
+    }
+    await tester.tap(find.text('Run now'));
+    await tester.pump();
+    expect(backend.calls, isEmpty);
+  });
+
   testWidgets('Lab: NOT YET without enough runs', (tester) async {
     await pumpApp(tester, snapshot(rows: [runRow(ago: const Duration(minutes: 89)), runRow(ago: Duration.zero)]));
     await openTab(tester, 'Lab');
 
     expect(find.text('NOT YET'), findsOneWidget);
   });
+
+  testWidgets('Lab: with no runs the criteria stay neutral', (tester) async {
+    await pumpApp(tester, snapshot());
+    await openTab(tester, 'Lab');
+
+    final context = tester.element(find.text('Screen-off test'));
+    final pass = StatusColors.of(context).good;
+    final fail = Theme.of(context).colorScheme.error;
+    Color? colorOf(String text) => tester.widget<Text>(find.text(text)).style?.color;
+
+    expect(find.text('–'), findsOneWidget, reason: 'median delay');
+    for (final value in ['–', '0 (0.0%)']) {
+      expect(colorOf(value), isNot(anyOf(pass, fail)), reason: value);
+    }
+    // "located" and "fresh fix" both read 0.
+    for (final zero in tester.widgetList<Text>(find.text('0'))) {
+      expect(zero.style?.color, isNot(anyOf(pass, fail)));
+    }
+  });
+
+  testWidgets('Shell: a failed first load shows the error and Try again', (tester) async {
+    usePhoneScreen(tester);
+    final backend = FakeBackend(snapshot())..loadError = Exception('channel down');
+    await tester.pumpWidget(DozelessExampleApp(backend: backend));
+    await tester.pump();
+
+    expect(find.text('Couldn’t read the job status'), findsOneWidget);
+    expect(find.text('Exception: channel down'), findsOneWidget);
+
+    backend.loadError = null;
+    await tester.tap(find.text('Try again'));
+    await tester.pump();
+    expect(find.text('Not started'), findsOneWidget);
+  });
+
+  testWidgets('Shell: a load that finishes after a newer one started is dropped', (tester) async {
+    usePhoneScreen(tester);
+    final backend = _ManualBackend(snapshot());
+    await tester.pumpWidget(DozelessExampleApp(backend: backend));
+    await tester.tap(find.byTooltip('Refresh'));
+    expect(backend.loads, hasLength(2));
+
+    backend.loads[1].complete(snapshot(statuses: running));
+    await tester.pump();
+    expect(find.text('Running'), findsOneWidget);
+
+    backend.loads[0].complete(snapshot());
+    await tester.pump();
+    expect(find.text('Running'), findsOneWidget);
+    expect(find.text('Not started'), findsNothing);
+  });
+}
+
+/// Every [load] waits until the test completes it.
+class _ManualBackend extends FakeBackend {
+  _ManualBackend(super.snapshot);
+
+  final loads = <Completer<Snapshot>>[];
+
+  @override
+  Future<Snapshot> load() {
+    final load = Completer<Snapshot>();
+    loads.add(load);
+    return load.future;
+  }
 }

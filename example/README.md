@@ -14,8 +14,8 @@ The app has three tabs. It refreshes when it comes back to the foreground, every
 **Overview** shows whether the jobs are running, in `exact`, `inexact` or `stopped` mode, with a live countdown to
 the next run, the run count and the last error. Below that is one card per job and the setup checklist: every
 prerequisite with its status, why it matters and a Fix button that opens the right permission dialog or settings
-page (location, location all the time, battery optimization, background usage, exact alarms, notifications, and
-Autostart and the force-stop guard on devices that have them).
+page (location, location all the time, battery optimization, background usage, exact alarms, notifications,
+Autostart on brands that have it, and the force-stop guard).
 
 **Runs** is a timeline of the last 24 hours, newest first: when each run fired, which job, its trigger
 (`alarm`, `watchdog`, `boot`, `manual`, ...), how late it was, how long it took, the location result and fix age, a
@@ -26,8 +26,9 @@ Doze badge when the phone was idle, the standby bucket and the system events doz
 - Screen-off test: start the jobs, turn the screen off and leave the phone alone, then check the numbers for the last
   30 or 90 minutes. It passes with at least 95% of the expected `spike` runs, a median delay under 10 seconds and a
   location on every run.
-- Run now, Alarm in 10 s, Simulate lost alarm (drops the alarm, then runs the watchdog that repairs it), Clear rows
-  and Turn off force-stop guard.
+- Run now, Alarm in 10 s and Simulate lost alarm (drops the alarm, then runs the watchdog that repairs it) act on
+  `spike`, so they work once the jobs are started. Clear rows works any time, and Turn off force-stop guard while
+  the guard is on.
 - Shortcuts to the settings pages, so you can undo a fix and watch dozeless stop the jobs and resume them when you
   come back to the app.
 

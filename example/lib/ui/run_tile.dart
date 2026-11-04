@@ -32,13 +32,15 @@ class RunTile extends StatelessWidget {
       _ => (scheme.tertiaryContainer, scheme.onTertiaryContainer),
     };
 
+    final timeStyle = theme.textTheme.titleSmall?.copyWith(fontFeatures: tabularFigures);
+
     return IntrinsicHeight(
       child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         SizedBox(
-          width: 68,
+          width: _timeWidth(context, timeStyle) + 8,
           child: Padding(
             padding: const EdgeInsets.only(top: 12),
-            child: Text(clockMs(r.firedAt), style: theme.textTheme.titleSmall?.copyWith(fontFeatures: tabularFigures)),
+            child: Text(clockMs(r.firedAt), style: timeStyle, maxLines: 1, softWrap: false),
           ),
         ),
         _Rail(color: locColor, line: scheme.outlineVariant),
@@ -80,6 +82,19 @@ class RunTile extends StatelessWidget {
       ]),
     );
   }
+}
+
+/// Width of the widest time, "00:00:00" in tabular figures, at the user's text size.
+double _timeWidth(BuildContext context, TextStyle? style) {
+  final painter = TextPainter(
+    text: TextSpan(text: '00:00:00', style: DefaultTextStyle.of(context).style.merge(style)),
+    textDirection: TextDirection.ltr,
+    textScaler: MediaQuery.textScalerOf(context),
+    maxLines: 1,
+  )..layout();
+  final width = painter.width.ceilToDouble();
+  painter.dispose();
+  return width;
 }
 
 /// The timeline's vertical line with a dot in the run's location color.

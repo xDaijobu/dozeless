@@ -12,20 +12,22 @@ class RunsScreen extends StatefulWidget {
   const RunsScreen({
     super.key,
     required this.rows,
-    required this.scheduled,
+    required this.jobs,
     required this.now,
     required this.onRefresh,
     required this.onStart,
+    required this.onShowSetup,
   });
 
   /// Newest first.
   final List<SpikeRow> rows;
 
-  /// Whether any job is scheduled; the empty state says what to do next.
-  final bool scheduled;
+  /// The empty state says what to do next from this.
+  final JobsState jobs;
   final DateTime now;
   final Future<void> Function() onRefresh;
   final VoidCallback onStart;
+  final VoidCallback onShowSetup;
 
   @override
   State<RunsScreen> createState() => _RunsScreenState();
@@ -40,7 +42,7 @@ class _RunsScreenState extends State<RunsScreen> {
   Widget build(BuildContext context) {
     if (widget.rows.isEmpty) {
       return Refreshable(onRefresh: widget.onRefresh, children: [
-        RunsEmptyState(scheduled: widget.scheduled, onStart: widget.onStart),
+        RunsEmptyState(jobs: widget.jobs, onStart: widget.onStart, onShowSetup: widget.onShowSetup),
       ]);
     }
     final rows = _job == _all ? widget.rows : widget.rows.where((r) => r.jobId == _job).toList();
@@ -123,15 +125,36 @@ class RunsSummary extends StatelessWidget {
 
 /// Shown before the first run: says how to get one.
 class RunsEmptyState extends StatelessWidget {
-  const RunsEmptyState({super.key, required this.scheduled, required this.onStart});
+  const RunsEmptyState({super.key, required this.jobs, required this.onStart, required this.onShowSetup});
 
-  final bool scheduled;
+  final JobsState jobs;
   final VoidCallback onStart;
+  final VoidCallback onShowSetup;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final muted = theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    final (String title, String body, String? hint) = switch (jobs) {
+      JobsState.notScheduled => (
+          'No runs yet',
+          'Start the jobs and every run shows up here: the spike job every minute, '
+              'the slow job every 5 minutes, also while the screen is off.',
+          null,
+        ),
+      JobsState.stopped => (
+          'The jobs are stopped',
+          'A setting they need is missing, so no runs come in. Fix it under Setup on the Overview tab: '
+              'the jobs resume when you come back to the app.',
+          null,
+        ),
+      JobsState.running => (
+          'Waiting for the first run',
+          'The spike job adds a run here every minute and the slow job every 5 minutes, '
+              'also while the screen is off.',
+          'For a run right away, use Run now in the Lab.',
+        ),
+    };
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 72, 16, 16),
       child: Column(children: [
@@ -143,25 +166,27 @@ class RunsEmptyState extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        Text(scheduled ? 'Waiting for the first run' : 'No runs yet', style: theme.textTheme.titleLarge),
+        Text(title, style: theme.textTheme.titleLarge, textAlign: TextAlign.center),
         const SizedBox(height: 8),
-        Text(
-          scheduled
-              ? 'The spike job adds a run here every minute and the slow job every 5 minutes, '
-                  'also while the screen is off.'
-              : 'Start the jobs and every run shows up here: the spike job every minute, '
-                  'the slow job every 5 minutes, also while the screen is off.',
-          textAlign: TextAlign.center,
-          style: muted,
-        ),
-        const SizedBox(height: 8),
-        Text('For a run right away, use Run now in the Lab.', textAlign: TextAlign.center, style: muted),
-        if (!scheduled) ...[
+        Text(body, textAlign: TextAlign.center, style: muted),
+        if (hint != null) ...[
+          const SizedBox(height: 8),
+          Text(hint, textAlign: TextAlign.center, style: muted),
+        ],
+        if (jobs == JobsState.notScheduled) ...[
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: onStart,
             icon: const Icon(Icons.play_arrow_rounded),
             label: const Text('Start jobs'),
+          ),
+        ],
+        if (jobs == JobsState.stopped) ...[
+          const SizedBox(height: 24),
+          FilledButton.tonalIcon(
+            onPressed: onShowSetup,
+            icon: const Icon(Icons.space_dashboard_outlined),
+            label: const Text('Open Overview'),
           ),
         ],
       ]),

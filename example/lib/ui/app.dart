@@ -36,9 +36,15 @@ class HomeShell extends StatefulWidget {
 }
 
 class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
-  static const _titles = ['Dozeless example', 'Runs', 'Lab'];
+  static const _titles = ['Dozeless Example', 'Runs', 'Lab'];
 
   Snapshot? _snapshot;
+
+  /// Why the first load failed. Once a snapshot is shown, a failed refresh keeps it.
+  Object? _loadError;
+
+  /// Loads started so far. Only the latest one may update the screen.
+  int _loads = 0;
   int _tab = 0;
   Timer? _timer;
 
@@ -64,13 +70,34 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) _refresh();
   }
 
-  Future<void> _refresh() async {
+  /// The timer, resume and actions can overlap; a load that finishes after a newer one started is dropped,
+  /// so an older snapshot never replaces a newer one. With [report], a failed refresh says so.
+  Future<void> _refresh({bool report = false}) async {
+    final load = ++_loads;
     try {
       final snapshot = await _backend.load();
-      if (mounted) setState(() => _snapshot = snapshot);
+      if (!mounted || load != _loads) return;
+      setState(() {
+        _snapshot = snapshot;
+        _loadError = null;
+      });
     } catch (e) {
       debugPrint('dozeless example: refresh failed: $e');
+      if (!mounted || load != _loads) return;
+      if (_snapshot == null) {
+        setState(() => _loadError = e);
+      } else if (report) {
+        _say('Couldn’t refresh: $e');
+      }
     }
+  }
+
+  /// Pull to refresh and the refresh button.
+  Future<void> _reload() => _refresh(report: true);
+
+  void _retry() {
+    setState(() => _loadError = null);
+    _refresh();
   }
 
   /// Runs [action], says how it went, then refreshes.
@@ -131,9 +158,13 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     return Scaffold(
       appBar: AppBar(
         title: Text(_titles[_tab]),
-        actions: [IconButton(tooltip: 'Refresh', onPressed: _refresh, icon: const Icon(Icons.refresh))],
+        actions: [IconButton(tooltip: 'Refresh', onPressed: _reload, icon: const Icon(Icons.refresh))],
       ),
-      body: snapshot == null ? const Center(child: CircularProgressIndicator()) : _body(snapshot),
+      body: switch ((snapshot, _loadError)) {
+        (final Snapshot s, _) => _body(s),
+        (null, final Object error) => _LoadError(error: error, onRetry: _retry),
+        _ => const Center(child: CircularProgressIndicator()),
+      },
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),
@@ -153,22 +184,57 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   Widget _body(Snapshot snapshot) {
     final now = DateTime.now();
     return IndexedStack(index: _tab, children: [
-      OverviewScreen(snapshot: snapshot, onRefresh: _refresh, onStart: _start, onStop: _stop, onFix: _fix),
+      OverviewScreen(snapshot: snapshot, onRefresh: _reload, onStart: _start, onStop: _stop, onFix: _fix),
       RunsScreen(
         rows: snapshot.rows,
-        scheduled: snapshot.statuses.isNotEmpty,
+        jobs: JobsState.of(snapshot.statuses),
         now: now,
-        onRefresh: _refresh,
+        onRefresh: _reload,
         onStart: _start,
+        onShowSetup: () => setState(() => _tab = 0),
       ),
       LabScreen(
         rows: snapshot.rows,
         prerequisites: snapshot.prerequisites,
+        spikeScheduled: snapshot.statuses.containsKey(spikeJobInfo.id),
         now: now,
-        onRefresh: _refresh,
+        onRefresh: _reload,
         onAction: _lab,
         onOpen: _fix,
       ),
     ]);
+  }
+}
+
+/// Shown when the very first load fails, so the app never spins forever.
+class _LoadError extends StatelessWidget {
+  const _LoadError({required this.error, required this.onRetry});
+
+  final Object error;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Icon(Icons.error_outline, size: 48, color: theme.colorScheme.error),
+          const SizedBox(height: 16),
+          Text('Couldn’t read the job status', style: theme.textTheme.titleLarge, textAlign: TextAlign.center),
+          const SizedBox(height: 8),
+          Text(
+            '$error',
+            maxLines: 6,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 24),
+          FilledButton.icon(onPressed: onRetry, icon: const Icon(Icons.refresh), label: const Text('Try again')),
+        ]),
+      ),
+    );
   }
 }

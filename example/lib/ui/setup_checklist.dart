@@ -89,7 +89,8 @@ List<SetupItem> setupItemsFor(PrerequisiteStatus p) {
       const SetupItem(
         action: SetupAction.autostart,
         title: 'Autostart',
-        why: 'On this brand the jobs only come back after a reboot with Autostart on. Android can’t report it.',
+        why: 'Without it this brand may block the boot broadcast, so after a reboot the jobs wait until you open '
+            'the app. Android can’t report it.',
         state: SetupState.unknown,
         needed: false,
       ),
