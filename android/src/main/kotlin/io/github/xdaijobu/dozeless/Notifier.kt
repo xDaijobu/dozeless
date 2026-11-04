@@ -10,7 +10,7 @@ import android.util.Log
 
 internal data class StopText(val title: String, val body: String, val channelName: String)
 
-/** The ordinary (dismissable) "jobs stopped" notification of spec §3 step 3. */
+/** The ordinary (dismissable) "jobs stopped" notification. */
 internal object Notifier {
     private const val CHANNEL_ID = "dozeless_status"
     private const val NOTIFICATION_ID = 46_101

@@ -36,7 +36,7 @@ internal object BootDedupe {
 }
 
 internal object ShutdownGuess {
-    /** Best guess of when the phone went down before the boot at [bootTime] (spec §6 DEVICE_SHUTDOWN). */
+    /** Best guess of when the phone went down before the boot at [bootTime]. */
     fun of(markerAt: Long?, lastAliveAt: Long?, bootTime: Long): Pair<Long?, String> = when {
         markerAt != null && markerAt <= bootTime -> markerAt to "marker"
         lastAliveAt != null && lastAliveAt <= bootTime -> lastAliveAt to "lastJob"

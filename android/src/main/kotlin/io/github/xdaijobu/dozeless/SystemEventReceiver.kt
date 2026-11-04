@@ -8,7 +8,7 @@ import android.provider.Settings
 import android.util.Log
 import java.util.TimeZone
 
-/** Manifest receiver for boot, app update and clock changes (spec §3 SystemEventReceiver). Never opens UI. */
+/** Manifest receiver for boot, app update and clock changes. Never opens UI. */
 class SystemEventReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val app = context.applicationContext

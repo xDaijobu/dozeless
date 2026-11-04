@@ -1,6 +1,6 @@
 import 'spike_row.dart';
 
-/// Pass/fail numbers for the "screen off 90 minutes" test (spec §9).
+/// Pass/fail numbers for the "screen off 90 minutes" test.
 class SpikeStats {
   const SpikeStats({
     required this.expected,

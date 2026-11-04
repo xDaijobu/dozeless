@@ -1,6 +1,6 @@
 package io.github.xdaijobu.dozeless
 
-/** One run per job at a time (spec §3 step 4). Main thread only. */
+/** One run per job at a time. Main thread only. */
 internal class RunLocks {
     private val heldSince = HashMap<String, Long>()
 

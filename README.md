@@ -405,7 +405,7 @@ Integration tests need battery *Unrestricted* for the example app (`adb shell du
 
 ## Documentation
 
-[`doc/`](https://github.com/xDaijobu/dozeless/tree/main/doc) on GitHub is in Indonesian: the design spec, the implementation plan (task by task, TDD), test results per Android version, and a one-page summary (`doc/ringkasan.html`). It is not part of the pub.dev package.
+[`doc/`](https://github.com/xDaijobu/dozeless/tree/main/doc) on GitHub is in Indonesian: test results per Android version (databases written by the jobs, logcat, the scripts that ran them) and the screenshots used in this README. It is not part of the pub.dev package.
 
 ## License
 
