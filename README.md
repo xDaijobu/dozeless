@@ -1,44 +1,94 @@
 # dozeless
 
+**Run Dart background jobs on Android every minute, even in Doze, with no foreground service and no permanent notification.**
+
 [![pub package](https://img.shields.io/pub/v/dozeless.svg)](https://pub.dev/packages/dozeless)
 [![CI](https://github.com/xDaijobu/dozeless/actions/workflows/ci.yaml/badge.svg)](https://github.com/xDaijobu/dozeless/actions/workflows/ci.yaml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/xDaijobu/dozeless/blob/main/LICENSE)
 ![Platform: Android](https://img.shields.io/badge/platform-Android-3DDC84)
 ![minSdk 24](https://img.shields.io/badge/minSdk-24-blue)
 
-Background jobs for Flutter on Android that keep running while the phone sleeps: screen off, Doze, killed process, reboot, app update. Built only on `AlarmManager`: no WorkManager, no foreground service, no permanent notification. Your job logic stays in Dart.
+- **Every minute, also in Doze.** One-shot exact alarms keep firing with the screen off and in deep idle.
+- **No foreground service, no permanent notification.** Built only on `AlarmManager`, without WorkManager. A notification appears only when a job stops for a missing prerequisite.
+- **Your job logic stays in Dart.** Callbacks run in a background FlutterEngine, and dozeless waits for them with a wake lock and a timeout.
+- **Survives a killed process, a reboot and an app update.** Jobs come back without the app being opened.
+- **Recovers from a force stop.** Android blocks every alarm until a user action brings the app back, then every job is re-armed. Two opt-in helpers go further: a Quick Settings tile that does it without opening the app, and a guard that disables Settings' **Force stop** button.
+
+Tested on emulators, Android 11 to 16. Real devices are still to be tested, starting with HyperOS. See [Tested](#tested).
+
+## Quick start
+
+**1. Add the package.** Android only, `minSdk` 24. Needs Dart `^3.13.5`; developed with Flutter 3.47.6 / Dart 3.13.5.
+
+```bash
+flutter pub add dozeless
+```
+
+**2. Check the manifest.** The plugin adds `RECEIVE_BOOT_COMPLETED`, `SCHEDULE_EXACT_ALARM`, `WAKE_LOCK`, `ACCESS_WIFI_STATE`, its receivers and a start-up provider, so the job below needs nothing more. Your app adds what its own jobs need, for example:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+```
+
+> **Warning:** do not use `android:installLocation="preferExternal"`: apps on external storage do not receive `BOOT_COMPLETED`.
+
+**3. Schedule a job** before `runApp`.
 
 ```dart
+import 'package:dozeless/dozeless.dart';
+import 'package:flutter/widgets.dart';
+
 @pragma('vm:entry-point')
-Future<void> trackLocation(JobContext ctx) async {
-  // runs every minute, even in Doze, in a background FlutterEngine
+Future<void> heartbeat(JobContext ctx) async {
+  // Runs every minute, even in Doze, in a background FlutterEngine.
+  debugPrint('${ctx.trigger.name}: ${ctx.delayMs} ms late, Doze ${ctx.device.deviceIdle}');
 }
 
-await Dozeless.schedule(id: 'track', callback: trackLocation, every: const Duration(minutes: 1));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Dozeless.initialize();
+  await Dozeless.schedule(id: 'heartbeat', callback: heartbeat, every: const Duration(minutes: 1));
+  runApp(const MyApp());
+}
 ```
+
+**4. Allow it and watch it.** Every job needs battery *Unrestricted*. For a quick test, start the app and run:
+
+```bash
+adb shell dumpsys deviceidle whitelist +<package>   # battery Unrestricted, for tests
+adb logcat -s Dozeless:I flutter:I
+```
+
+A job whose alarm fires without it stops and shows a notification. It resumes once the setting is fixed and the app comes back to the foreground. In a real app, ask the user: see [Prerequisites](#prerequisites).
+
+## Screenshots
 
 <table>
   <tr>
-    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/example-app.png" width="250" alt="Example app: prerequisites, job status and statistics"></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/doze-rows.png" width="250" alt="Rows written once a minute while the device was in Doze"></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/quick-settings-tile.png" width="250" alt="The optional Quick Settings tile"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/example-overview.png" width="250" alt="Example app, Overview tab: job status, a card per job and the setup checklist"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/example-runs.png" width="250" alt="Example app, Runs tab: timeline of the last 24 hours of runs"></td>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/example-lab.png" width="250" alt="Example app, Lab tab: screen-off test statistics and debug actions"></td>
   </tr>
   <tr>
-    <td align="center"><sub>Example app: prerequisites, jobs, statistics</sub></td>
-    <td align="center"><sub>One row a minute while in Doze (<code>idle true</code>)</sub></td>
-    <td align="center"><sub>Optional Quick Settings tile</sub></td>
+    <td align="center"><sub>Overview: job status, jobs, setup checklist</sub></td>
+    <td align="center"><sub>Runs: the last 24 h of runs</sub></td>
+    <td align="center"><sub>Lab: test statistics, debug actions</sub></td>
   </tr>
 </table>
 
-<sub>Android 16 emulator (Pixel 9). The example app's UI is in Indonesian.</sub>
+<sub>The [example app](#example-app) on a POCO X6 Pro, Android 16, HyperOS 3. These are screenshots, not test results: see [Tested](#tested).</sub>
 
 ## Contents
 
-- [Why](#why)
+- [Quick start](#quick-start)
+- [Screenshots](#screenshots)
+- [Why dozeless](#why-dozeless)
 - [How it works](#how-it-works)
 - [Tested](#tested)
 - [Features](#features)
-- [Install](#install)
 - [Usage](#usage)
 - [Surviving a force stop](#surviving-a-force-stop)
 - [Reference](#reference)
@@ -49,13 +99,22 @@ await Dozeless.schedule(id: 'track', callback: trackLocation, every: const Durat
 - [Documentation](#documentation)
 - [License](#license)
 
-## Why
+## Why dozeless
 
-| Option | Problem |
-|---|---|
-| **WorkManager** | Periodic work runs at most every 15 minutes, and Doze defers it further. |
-| **Foreground service** | Keeps a notification on screen for as long as it runs. |
-| **`android_alarm_manager_plus`** | Does not wait for your callback, releases the wake lock too early, skips silently when exact alarms are denied, and its `periodic` alarms are not exact. |
+Each usual option gives up something a job that runs every minute needs:
+
+| | dozeless | WorkManager | Foreground service | `android_alarm_manager_plus` |
+|---|:-:|:-:|:-:|:-:|
+| Runs every minute | ✅ | ❌ periodic work runs at most every 15 minutes | – | ⚠️ `periodic` alarms are not exact |
+| Keeps its schedule in Doze | ✅ | ❌ Doze defers it further | – | – |
+| No notification while it runs | ✅ | – | ❌ on screen for as long as it runs | – |
+| Waits for your callback | ✅ | – | – | ❌ does not wait |
+| Holds the wake lock until the callback ends | ✅ | – | – | ❌ released too early |
+| When exact alarms are denied | ✅ falls back to inexact | – | – | ❌ skips silently |
+
+– means this comparison makes no claim about that cell.
+
+What dozeless asks in return: every job needs battery *Unrestricted* ([Prerequisites](#prerequisites)), a force stop still stops everything until a user action ([Surviving a force stop](#surviving-a-force-stop)), and the ✅ above rest on emulator tests ([Tested](#tested)).
 
 ## How it works
 
@@ -70,7 +129,7 @@ Around the chain, an hourly watchdog repairs lost or late alarms, and a receiver
 
 ## Tested
 
-Emulator results (Pixel 9 / Pixel 5 profiles, battery set to *Unrestricted*). Each ✅ means the job kept writing rows to the example app's database in that state.
+Emulator results (Pixel 9 / Pixel 5 profiles, battery set to *Unrestricted*). Each ✅ means the job kept writing rows to the example app's database in that state. – means not measured.
 
 | Condition | 11 | 12 | 13 | 14 | 15 | 16 |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -85,7 +144,24 @@ Emulator results (Pixel 9 / Pixel 5 profiles, battery set to *Unrestricted*). Ea
 
 ¹ Android blocks every alarm of a force-stopped app until the user brings it back. That holds for every app. dozeless recovers as soon as the app is opened and reports the stop as a `processExit` event (`USER_REQUESTED`). See [Surviving a force stop](#surviving-a-force-stop) for ways back that do not need the app to be opened.
 
-Raw evidence (databases written by the jobs, logcat, per-condition logs) is in [`doc/test-results/`](https://github.com/xDaijobu/dozeless/tree/main/doc/test-results). Real devices are still to be tested, starting with HyperOS.
+**Real devices are still to be tested, starting with HyperOS.** What the emulator results cover:
+
+- **Short checks.** Each ✅ on Android 11 to 15 is 1 or 2 runs per condition, 13 `spike` runs per version. The two Doze runs per version fired on time, except one 19 s late on Android 15.
+- **Doze on Android 16.** Release build, screen off, unplugged, forced Doze for 7 minutes: `spike` ran 7 times (`idle=true`) with alarms 4 to 11 ms late, and the 20-second `slow` job finished twice.
+- **Android 7 to 10** are not in the table, although `minSdk` is 24. Android 9 was tested partly: the job ran every minute, the other conditions were not tested.
+
+Raw evidence for Android 11 to 15 (databases written by the jobs, logcat, per-condition logs) is in [`doc/test-results/`](https://github.com/xDaijobu/dozeless/tree/main/doc/test-results). The Android 16 column comes from earlier manual tests, so it has no per-condition log there; the later Android 16 probes are in [`doc/test-results/FORCE-STOP.md`](https://github.com/xDaijobu/dozeless/blob/main/doc/test-results/FORCE-STOP.md) (Indonesian).
+
+<table>
+  <tr>
+    <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/doze-rows.png" width="250" alt="Rows written once a minute while the device was in Doze"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>One row a minute while in Doze (<code>idle true</code>)</sub></td>
+  </tr>
+</table>
+
+<sub>From the emulator test run (Android 16, Pixel 9), with the earlier UI of the example app.</sub>
 
 ## Features
 
@@ -96,25 +172,6 @@ Raw evidence (databases written by the jobs, logcat, per-condition logs) is in [
 - **Prerequisite gate.** When location, background location, battery *Unrestricted* or *not Restricted* go missing, the job stops, shows a notification and runs once with `prerequisiteLost`. Once fixed, it resumes with `resumed`.
 - **Force-stop helpers** (opt-in): a Quick Settings tile that brings the app back without opening it, and a guard that disables Settings' "Force stop" button.
 - **Rich `JobContext`**: trigger, how late the alarm fired, boot info, Doze, screen, standby bucket, ANDROID_ID, signal levels, and system events since the last run.
-
-## Install
-
-```bash
-flutter pub add dozeless
-```
-
-Android only. `minSdk` 24. Developed with Flutter 3.47.6 / Dart 3.13.5.
-
-The plugin adds `RECEIVE_BOOT_COMPLETED`, `SCHEDULE_EXACT_ALARM`, `WAKE_LOCK`, `ACCESS_WIFI_STATE`, its receivers and a start-up provider. Your app adds what its jobs need, for example:
-
-```xml
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-```
-
-> **Warning:** do not use `android:installLocation="preferExternal"`: apps on external storage do not receive `BOOT_COMPLETED`.
 
 ## Usage
 
@@ -152,6 +209,8 @@ Future<void> main() async {
 
 - Callbacks must be top-level or static functions annotated with `@pragma('vm:entry-point')`. Closures are rejected with an `ArgumentError`.
 - `Dozeless.initialize()` re-arms everything when the app starts and re-checks prerequisites every time the app is resumed. Call it before `runApp`.
+- `schedule()` limits, also enforced with an `ArgumentError`: `id` is 1 to 64 of `A-Z a-z 0-9 _ . -`, `every` is at least 1 minute, `timeout` is at most 50 s (default 45 s).
+- `StopNotification`'s default text is Indonesian, so pass your own.
 - Other calls: `cancel(id)`, `status(id)`, `runNow(id)`, `checkPrerequisites()`, `openSettings(Setting)`, `disableForceStopGuard()`, and `debugFireIn`, `debugSimulateLostAlarm`, `debugRunWatchdog` for testing.
 
 ### Prerequisites
@@ -174,6 +233,8 @@ if (p.autostartSettingAvailable) await Dozeless.openSettings(Setting.autostart);
 | `notification` | never | runtime dialog (Android 13+) |
 | `forceStopGuard` | never | `Setting.forceStopGuard` (system dialog), see below |
 
+`checkPrerequisites()` reports `notBackgroundRestricted` inverted, as `backgroundRestricted`.
+
 ## Surviving a force stop
 
 A force stop (App info → **Force stop**, and on some brands swiping the app away or the OEM cleaner) puts the app in Android's *stopped state*: every alarm is deleted and nothing of the app runs until a **user action** brings it back. No app can undo that by itself, and Android 15 closed the remaining gaps. dozeless gives you three ways that stay within those rules:
@@ -190,10 +251,12 @@ A force stop (App info → **Force stop**, and on some brands swiping the app aw
     <td align="center"><img src="https://raw.githubusercontent.com/xDaijobu/dozeless/main/doc/screenshots/force-stop-disabled.png" width="250" alt="App info with Force stop disabled"></td>
   </tr>
   <tr>
-    <td align="center"><sub>The tile in Quick Settings</sub></td>
+    <td align="center"><sub>The optional tile in Quick Settings</sub></td>
     <td align="center"><sub>Force-stop guard on: <b>Force stop</b> is disabled</sub></td>
   </tr>
 </table>
+
+<sub>Android 16 emulator (Pixel 9).</sub>
 
 "Verified" means checked on the Android 16 emulator, a few minutes per case. The planned one-hour runs per condition were cut short; what was measured, and how to rerun them, is in [`doc/test-results/FORCE-STOP.md`](https://github.com/xDaijobu/dozeless/blob/main/doc/test-results/FORCE-STOP.md) (Indonesian).
 
@@ -258,6 +321,7 @@ What to know before you use it:
 
 | Field | Meaning |
 |---|---|
+| `jobId` | the id passed to `schedule()` |
 | `trigger` | `alarm` · `boot` · `watchdog` · `packageReplaced` · `timeChanged` · `prerequisiteLost` · `resumed` · `manual` |
 | `scheduledAt`, `firedAt`, `delayMs` | when the alarm was due, when it fired, how late |
 | `timeout`, `deadline` | stop working before `deadline`; the plugin gives up there |
@@ -294,7 +358,15 @@ What to know before you use it:
 
 ## Example app
 
-[`example/`](https://github.com/xDaijobu/dozeless/tree/main/example) is the feasibility app used for every test above. Two jobs write a row to `spike.db` on every run: `spike` every minute (location, delay, Doze, screen, fix age) and `slow` every 5 minutes (awaits 20 seconds to prove the wake lock holds). The screen shows the prerequisites with buttons to fix them, job status, statistics for the 90-minute screen-off test and the latest rows. It declares both force-stop helpers.
+[`example/`](https://github.com/xDaijobu/dozeless/tree/main/example) is the feasibility app used for every test above, since rebuilt with a new UI. `Dozeless Example` is an English Material 3 app with three tabs:
+
+| Tab | What it shows |
+|---|---|
+| **Overview** | Job status hero (mode, next-run countdown, run count, last error), a card per job, Start/Stop, and a setup checklist of prerequisites with Fix buttons |
+| **Runs** | Timeline of the last 24 h of runs with delay, duration, location and fix age, a Doze badge, standby bucket and system events |
+| **Lab** | Statistics for the 30/90-minute screen-off test (expected, ran %, median delay, PASS / NOT YET) and debug actions (run now, alarm in 10 s, simulate lost alarm, clear rows) |
+
+Two jobs write a row to `spike.db` on every run: `spike` every minute (location, delay, Doze, screen, fix age) and `slow` every 5 minutes (awaits 20 seconds to prove the wake lock holds). The app declares both force-stop helpers; its Quick Settings tile is labelled `Spike`.
 
 ```bash
 cd example
