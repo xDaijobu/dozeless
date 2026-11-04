@@ -110,6 +110,31 @@ void main() {
     expect(find.text('stopped'), findsNothing);
   });
 
+  testWidgets('StatusHero doesn’t say the other job keeps running when it stops at its next run too',
+      (tester) async {
+    // QA 2 after the first spike alarm: spike stopped, slow still inexact, battery still optimized.
+    await tester.pumpWidget(hero(
+      {
+        'spike': JobStatus(
+          id: 'spike',
+          mode: JobMode.stopped,
+          lastRunAt: now.subtract(const Duration(seconds: 18)),
+          missing: const [Prereq.location, Prereq.backgroundLocation, Prereq.batteryUnrestricted],
+        ),
+        'slow': status('slow', nextIn: const Duration(minutes: 4), mode: JobMode.inexact),
+      },
+      prerequisites: prereqs(location: false, backgroundLocation: false, batteryUnrestricted: false),
+    ));
+
+    expect(find.text('Partly stopped'), findsOneWidget);
+    expect(find.textContaining('keeps running'), findsNothing);
+    expect(
+      find.text('spike stopped: missing location, location all the time and unrestricted battery. '
+          'slow stops at its next run too: missing unrestricted battery. Fix it in Setup and come back to the app.'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('StatusHero at font scale 2.0 keeps the figures apart and the countdown inside the ring',
       (tester) async {
     usePhoneScreen(tester);

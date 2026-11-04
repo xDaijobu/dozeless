@@ -13,8 +13,8 @@ The app has three tabs. It refreshes when it comes back to the foreground, every
 
 **Overview** shows whether the jobs are running, in `exact`, `inexact` or `stopped` mode (`mixed` when the two jobs
 differ), with a live countdown to the next run, the run count and the last error. `schedule()` doesn't check
-prerequisites, so a job started without one runs until its first alarm and stops there; the Overview says so ahead
-of time ("Setup needed") instead of looking healthy. Below that is one card per job and the setup checklist: every
+prerequisites, so a job started without one stops at its first alarm, or when the app next comes to the foreground;
+the Overview says so ahead of time ("Setup needed") instead of looking healthy. Below that is one card per job and the setup checklist: every
 prerequisite with its status, why it matters and a Fix button that opens the right permission dialog or settings
 page (location, location all the time, battery optimization, background usage, exact alarms, notifications,
 Autostart on brands that have it, and the force-stop guard).
@@ -34,7 +34,9 @@ more, and fixes older than two intervals, are marked in the warning color: the s
   `spike`, so they work while `spike` is scheduled and not stopped. Run now waits for a run that is already going.
   Clear rows works any time, and Turn off force-stop guard while the guard is on.
 - Shortcuts to the settings pages, so you can undo a fix and watch dozeless stop the jobs and resume them when you
-  come back to the app. Exact alarms is different: without it the jobs keep running on inexact alarms.
+  come back to the app. Exact alarms and Autostart are different: without exact alarms the jobs keep running on
+  inexact alarms, and turning Autostart off never stops them, because dozeless can't read it (it only matters after a
+  reboot).
 
 The manifest declares both optional force-stop helpers: the Quick Settings tile (`DozelessTileService`, label
 "Spike") and the force-stop guard (`DozelessAdminReceiver`).

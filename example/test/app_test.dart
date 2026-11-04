@@ -212,6 +212,34 @@ void main() {
     expect(find.text('Open Setup'), findsOneWidget);
   });
 
+  testWidgets('Runs: right after Start with Setup missing, no run is promised for the job that will stop',
+      (tester) async {
+    await pumpApp(tester, snapshot(location: false, statuses: running()));
+    await openTab(tester, 'Runs');
+
+    expect(find.text('Waiting for the first run'), findsOneWidget);
+    expect(
+      find.text('A run shows up here for the slow job every 5 minutes, also while the screen is off. '
+          'spike stops at its next run: a setting it needs is missing. Fix it in Setup.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Run now'), findsNothing);
+    expect(find.text('Open Setup'), findsOneWidget);
+  });
+
+  testWidgets('Runs: with every active job about to stop, the empty state says Setup needed', (tester) async {
+    await pumpApp(tester, snapshot(batteryUnrestricted: false, statuses: running()));
+    await openTab(tester, 'Runs');
+
+    expect(find.text('Setup needed'), findsOneWidget);
+    expect(
+      find.text('spike and slow stop at their next run: a setting they need is missing. Fix it in Setup.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('A run shows up here'), findsNothing);
+    expect(find.text('Open Setup'), findsOneWidget);
+  });
+
   testWidgets('Runs: with every job stopped, Open Setup goes to the checklist', (tester) async {
     await pumpApp(tester, snapshot(batteryUnrestricted: false, statuses: stopped()));
     await openTab(tester, 'Runs');

@@ -136,8 +136,10 @@ class RunsEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final muted = theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant);
-    final active = [for (final s in jobs.active) s.job];
     final stopped = [for (final s in jobs.stopped) s.job];
+    final stopping = jobs.stopping;
+    // Active jobs with everything they need: the only ones whose runs can be promised.
+    final keeps = [for (final s in jobs.active) if (!stopping.contains(s.job)) s.job];
     final (String title, String body, String? hint) = switch (jobs) {
       _ when !jobs.anyScheduled => (
           'No runs yet',
@@ -151,10 +153,17 @@ class RunsEmptyState extends StatelessWidget {
           null,
         ),
       _ => (
-          'Waiting for the first run',
-          'A run shows up here for ${_cadence(active)}, also while the screen is off.'
-              '${stopped.isEmpty ? '' : ' ${stopped.map((j) => j.id).join(' and ')} is stopped: fix Setup first.'}',
-          active.any((j) => j.id == spikeJobInfo.id) ? 'For a run right away, use Run now in the Lab.' : null,
+          keeps.isEmpty ? 'Setup needed' : 'Waiting for the first run',
+          [
+            if (keeps.isNotEmpty) 'A run shows up here for ${_cadence(keeps)}, also while the screen is off.',
+            if (stopping.isNotEmpty)
+              stopping.length == 1
+                  ? '${_ids(stopping)} stops at its next run: a setting it needs is missing. Fix it in Setup.'
+                  : '${_ids(stopping)} stop at their next run: a setting they need is missing. Fix it in Setup.',
+            if (stopped.isNotEmpty) '${_ids(stopped)} ${stopped.length == 1 ? 'is' : 'are'} stopped: fix Setup first.',
+          ].join(' '),
+          // Run now on a job that misses a prerequisite only stops it.
+          keeps.any((j) => j.id == spikeJobInfo.id) ? 'For a run right away, use Run now in the Lab.' : null,
         ),
     };
     return Padding(
@@ -182,7 +191,7 @@ class RunsEmptyState extends StatelessWidget {
             icon: const Icon(Icons.play_arrow_rounded),
             label: const Text('Start jobs'),
           ),
-        ] else if (stopped.isNotEmpty) ...[
+        ] else if (stopped.isNotEmpty || stopping.isNotEmpty) ...[
           const SizedBox(height: 24),
           FilledButton.tonalIcon(
             onPressed: onShowSetup,
@@ -196,4 +205,7 @@ class RunsEmptyState extends StatelessWidget {
 
   /// the spike job every minute and the slow job every 5 minutes
   static String _cadence(List<JobInfo> jobs) => jobs.map((j) => 'the ${j.id} job ${every(j.every)}').join(' and ');
+
+  /// spike, or spike and slow
+  static String _ids(List<JobInfo> jobs) => jobs.map((j) => j.id).join(' and ');
 }

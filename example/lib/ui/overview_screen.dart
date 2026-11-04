@@ -108,6 +108,8 @@ class StatusHero extends StatelessWidget {
     final s = JobsSummary(jobs, statuses, prerequisites);
     final stopped = [for (final e in s.stopped) e.job];
     final stopping = s.stopping;
+    // Active jobs with everything they need: the only ones that really keep running.
+    final keeps = [for (final e in s.active) if (!stopping.contains(e.job)) e.job];
     final needed = s.missingFor(jobs);
 
     final (Color bg, Color fg, String headline, String detail, bool toSetup) = switch (s) {
@@ -137,8 +139,14 @@ class StatusHero extends StatelessWidget {
           scheme.errorContainer,
           scheme.onErrorContainer,
           'Partly stopped',
-          '${_names(stopped)} stopped: missing ${_prereqs(s.stoppedFor)}. '
-              '${_names([for (final e in s.active) e.job])} keeps running. Fix it in Setup and come back to the app.',
+          [
+            '${_names(stopped)} stopped: missing ${_prereqs(s.stoppedFor)}.',
+            if (keeps.isNotEmpty) '${_names(keeps)} keeps running.',
+            if (stopping.isNotEmpty)
+              '${_names(stopping)} ${stopping.length == 1 ? 'stops at its' : 'stop at their'} next run too: '
+                  'missing ${_prereqs(s.missingFor(stopping))}.',
+            'Fix it in Setup and come back to the app.',
+          ].join(' '),
           true,
         ),
       _ when stopping.isNotEmpty => (

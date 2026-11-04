@@ -107,7 +107,8 @@ class _LabScreenState extends State<LabScreen> {
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
         child: Text(
           'Undo a fix here to watch dozeless stop the jobs, then resume them when you come back. '
-          'Exact alarms is different: without it the jobs keep running on inexact alarms.',
+          'Exact alarms and Autostart are different: without exact alarms the jobs keep running on inexact alarms, '
+          'and turning Autostart off never stops them, because dozeless can’t read it.',
           style: muted,
         ),
       ),
