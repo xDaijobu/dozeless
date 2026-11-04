@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:dozeless/dozeless.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +18,8 @@ class OverviewScreen extends StatelessWidget {
     required this.onStart,
     required this.onStop,
     required this.onFix,
+    required this.onShowSetup,
+    this.setupKey,
   });
 
   final Snapshot snapshot;
@@ -23,18 +27,34 @@ class OverviewScreen extends StatelessWidget {
   final VoidCallback onStart;
   final VoidCallback onStop;
   final ValueChanged<SetupAction> onFix;
+  final VoidCallback onShowSetup;
+
+  /// On the Setup header, so [onShowSetup] can scroll to it.
+  final Key? setupKey;
 
   @override
   Widget build(BuildContext context) {
-    final items = setupItemsFor(snapshot.prerequisites);
+    final p = snapshot.prerequisites;
+    final items = setupItemsFor(p);
     return Refreshable(onRefresh: onRefresh, children: [
-      StatusHero(jobs: exampleJobs, statuses: snapshot.statuses, onStart: onStart, onStop: onStop),
+      StatusHero(
+        jobs: exampleJobs,
+        statuses: snapshot.statuses,
+        prerequisites: p,
+        onStart: onStart,
+        onStop: onStop,
+        onShowSetup: onShowSetup,
+      ),
       const SectionHeader('Jobs'),
       for (final job in exampleJobs) ...[
-        JobCard(job: job, status: snapshot.statuses[job.id]),
+        JobCard(job: job, status: snapshot.statuses[job.id], missingNow: p.missingFor(job.requires)),
         const SizedBox(height: 12),
       ],
-      SectionHeader('Setup', trailing: Text(setupProgress(items), style: Theme.of(context).textTheme.labelLarge)),
+      SectionHeader(
+        'Setup',
+        key: setupKey,
+        trailing: Text(setupProgress(items), style: Theme.of(context).textTheme.labelLarge),
+      ),
       SetupChecklist(items: items, onFix: onFix),
     ]);
   }
@@ -47,55 +67,35 @@ String _prereqLabel(Prereq p) => switch (p) {
       Prereq.notBackgroundRestricted => 'background usage',
     };
 
-/// The jobs taken together.
-class JobsSummary {
-  factory JobsSummary(List<JobInfo> jobs, Map<String, JobStatus> statuses) {
-    JobInfo? nextJob;
-    DateTime? nextRunAt;
-    for (final job in jobs) {
-      final next = statuses[job.id]?.nextRunAt;
-      if (statuses[job.id]?.mode == JobMode.stopped || next == null) continue;
-      if (nextRunAt == null || next.isBefore(nextRunAt)) (nextJob, nextRunAt) = (job, next);
-    }
-    return JobsSummary._([for (final j in jobs) ?statuses[j.id]], nextJob, nextRunAt);
-  }
-
-  const JobsSummary._(this.scheduled, this.nextJob, this.nextRunAt);
-
-  final List<JobStatus> scheduled;
-
-  /// The job that runs first, among those not stopped.
-  final JobInfo? nextJob;
-  final DateTime? nextRunAt;
-
-  bool get anyScheduled => scheduled.isNotEmpty;
-  int get stoppedCount => scheduled.where((s) => s.mode == JobMode.stopped).length;
-  bool get anyInexact => scheduled.any((s) => s.mode == JobMode.inexact);
-  int get runCount => scheduled.fold(0, (n, s) => n + s.runCount);
-  List<Prereq> get missing => {for (final s in scheduled) ...s.missing}.toList()..sort((a, b) => a.index - b.index);
-
-  DateTime? get lastRunAt => scheduled
-      .map((s) => s.lastRunAt)
-      .fold<DateTime?>(null, (latest, t) => t != null && (latest == null || t.isAfter(latest)) ? t : latest);
-
-  JobStatus? get withError => scheduled.where((s) => s.lastError != null).firstOrNull;
+/// location, location all the time and unrestricted battery
+String _prereqs(Iterable<Prereq> missing) {
+  final labels = missing.map(_prereqLabel).toList();
+  if (labels.length < 2) return labels.join();
+  return '${labels.sublist(0, labels.length - 1).join(', ')} and ${labels.last}';
 }
 
-/// The first thing on screen: are the jobs running, and when is the next run.
+/// spike, or spike and slow.
+String _names(Iterable<JobInfo> jobs) => jobs.map((j) => j.id).join(' and ');
+
+/// The first thing on screen: are the jobs running, will they keep running, and when is the next run.
 class StatusHero extends StatelessWidget {
   const StatusHero({
     super.key,
     required this.jobs,
     required this.statuses,
+    required this.prerequisites,
     required this.onStart,
     required this.onStop,
+    required this.onShowSetup,
     this.now = DateTime.now,
   });
 
   final List<JobInfo> jobs;
   final Map<String, JobStatus> statuses;
+  final PrerequisiteStatus prerequisites;
   final VoidCallback onStart;
   final VoidCallback onStop;
+  final VoidCallback onShowSetup;
 
   /// The countdown's clock; tests pass a fixed one.
   final DateTime Function() now;
@@ -105,38 +105,76 @@ class StatusHero extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final status = StatusColors.of(context);
-    final s = JobsSummary(jobs, statuses);
-    final stopped = s.stoppedCount;
+    final s = JobsSummary(jobs, statuses, prerequisites);
+    final stopped = [for (final e in s.stopped) e.job];
+    final stopping = s.stopping;
+    // Active jobs with everything they need: the only ones that really keep running.
+    final keeps = [for (final e in s.active) if (!stopping.contains(e.job)) e.job];
+    final needed = s.missingFor(jobs);
 
-    final (Color bg, Color fg, String headline, String detail) = switch (s) {
+    final (Color bg, Color fg, String headline, String detail, bool toSetup) = switch (s) {
+      _ when !s.anyScheduled && needed.isEmpty => (
+          scheme.surfaceContainerHigh,
+          scheme.onSurface,
+          'Not started',
+          'Start the jobs, then see on the Runs tab when each run fired, also with the screen off.',
+          false,
+        ),
       _ when !s.anyScheduled => (
           scheme.surfaceContainerHigh,
           scheme.onSurface,
           'Not started',
-          'Start the jobs and dozeless runs them on schedule, also with the screen off and the phone in Doze.',
+          'Fix Setup first: without ${_prereqs(needed)}, the jobs stop at their first run.',
+          true,
         ),
-      _ when stopped > 0 => (
+      _ when s.allStopped => (
           scheme.errorContainer,
           scheme.onErrorContainer,
-          stopped == s.scheduled.length ? 'Stopped' : 'Partly stopped',
-          'Missing ${s.missing.map(_prereqLabel).join(', ')}. Fix it below and come back to the app: '
+          'Stopped',
+          'Missing ${_prereqs(s.stoppedFor)}. Fix it in Setup and come back to the app: '
               'the jobs resume on their own.',
+          true,
         ),
-      _ when s.anyInexact => (
+      _ when stopped.isNotEmpty => (
+          scheme.errorContainer,
+          scheme.onErrorContainer,
+          'Partly stopped',
+          [
+            '${_names(stopped)} stopped: missing ${_prereqs(s.stoppedFor)}.',
+            if (keeps.isNotEmpty) '${_names(keeps)} keeps running.',
+            if (stopping.isNotEmpty)
+              '${_names(stopping)} ${stopping.length == 1 ? 'stops at its' : 'stop at their'} next run too: '
+                  'missing ${_prereqs(s.missingFor(stopping))}.',
+            'Fix it in Setup and come back to the app.',
+          ].join(' '),
+          true,
+        ),
+      _ when stopping.isNotEmpty => (
+          status.warnContainer,
+          status.onWarnContainer,
+          'Setup needed',
+          '${stopping.length == s.active.length ? 'The jobs stop' : '${_names(stopping)} stops'} at the next run: '
+              'missing ${_prereqs(s.missingFor(stopping))}. Fix it in Setup.',
+          true,
+        ),
+      _ when s.active.any((e) => e.status.mode == JobMode.inexact) => (
           status.warnContainer,
           status.onWarnContainer,
           'Running',
-          'Inexact alarms: Android may move each run by minutes. Allow exact alarms below.',
+          'Inexact alarms: Android may move each run by minutes. Allow exact alarms in Setup.',
+          true,
         ),
       _ => (
           scheme.primaryContainer,
           scheme.onPrimaryContainer,
           'Running',
-          'Exact alarms: each run lands on time, also in Doze.',
+          'Exact alarms, allowed while idle. The Runs tab shows how late each run fired.',
+          false,
         ),
     };
     final error = s.withError;
     final lastRun = s.lastRunAt;
+    final next = s.next;
 
     return Card(
       color: bg,
@@ -145,7 +183,7 @@ class StatusHero extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(children: [
-            _NextRunRing(job: s.nextJob, at: s.nextRunAt, color: fg, now: now),
+            _NextRunRing(job: next?.job, at: next?.at, color: fg, now: now),
             const SizedBox(width: 20),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -157,10 +195,12 @@ class StatusHero extends StatelessWidget {
           ]),
           if (s.anyScheduled) ...[
             const SizedBox(height: 20),
-            Row(children: [
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               _Figure(label: 'Runs', value: count(s.runCount), color: fg),
+              const SizedBox(width: 12),
               _Figure(label: 'Last run', value: lastRun == null ? '–' : clock(lastRun), color: fg),
-              _Figure(label: 'Mode', value: stopped > 0 ? 'stopped' : s.anyInexact ? 'inexact' : 'exact', color: fg),
+              const SizedBox(width: 12),
+              _Figure(label: 'Mode', value: s.mode, color: fg),
             ]),
           ],
           if (error != null) ...[
@@ -203,6 +243,15 @@ class StatusHero extends StatelessWidget {
               icon: const Icon(Icons.play_arrow_rounded),
               label: const Text('Start jobs'),
             ),
+          if (toSetup) ...[
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: onShowSetup,
+              style: TextButton.styleFrom(foregroundColor: fg, minimumSize: const Size.fromHeight(40)),
+              icon: const Icon(Icons.checklist),
+              label: const Text('Open Setup'),
+            ),
+          ],
         ]),
       ),
     );
@@ -214,6 +263,10 @@ class _NextRunRing extends StatelessWidget {
   const _NextRunRing({required this.job, required this.at, required this.color, required this.now});
 
   static const size = 112.0;
+  static const stroke = 8.0;
+
+  /// The largest square inside the ring, so the text never touches it, whatever the font size.
+  static final inner = (size / 2 - stroke) * math.sqrt2;
 
   final JobInfo? job;
   final DateTime? at;
@@ -240,13 +293,20 @@ class _NextRunRing extends StatelessWidget {
         dimension: size,
         child: Stack(alignment: Alignment.center, children: [
           _ring(1 - (left.inMilliseconds / job.every.inMilliseconds).clamp(0.0, 1.0)),
-          Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(
-              countdown(left),
-              style: text.headlineMedium?.copyWith(color: color, fontWeight: FontWeight.w600, fontFeatures: tabularFigures),
+          SizedBox.square(
+            dimension: inner,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                Text(
+                  countdown(left),
+                  style: text.headlineMedium
+                      ?.copyWith(color: color, fontWeight: FontWeight.w600, fontFeatures: tabularFigures),
+                ),
+                Text('${job.id} next', style: text.labelSmall?.copyWith(color: color)),
+              ]),
             ),
-            Text('${job.id} next', style: text.labelSmall?.copyWith(color: color)),
-          ]),
+          ),
         ]),
       ),
     );
@@ -256,7 +316,7 @@ class _NextRunRing extends StatelessWidget {
         dimension: size,
         child: CircularProgressIndicator(
           value: value,
-          strokeWidth: 8,
+          strokeWidth: stroke,
           strokeCap: StrokeCap.round,
           color: color,
           backgroundColor: color.withValues(alpha: 0.15),
@@ -276,7 +336,12 @@ class _Figure extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(value, style: text.titleLarge?.copyWith(color: color, fontFeatures: tabularFigures)),
+        // Shrinks instead of running into the next figure at large font sizes.
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(value, style: text.titleLarge?.copyWith(color: color, fontFeatures: tabularFigures)),
+        ),
         Text(label, style: text.labelMedium?.copyWith(color: color.withValues(alpha: 0.8))),
       ]),
     );
@@ -285,10 +350,19 @@ class _Figure extends StatelessWidget {
 
 /// One scheduled job: what it does and how its alarm chain is doing.
 class JobCard extends StatelessWidget {
-  const JobCard({super.key, required this.job, required this.status, this.now = DateTime.now});
+  const JobCard({
+    super.key,
+    required this.job,
+    required this.status,
+    this.missingNow = const [],
+    this.now = DateTime.now,
+  });
 
   final JobInfo job;
   final JobStatus? status;
+
+  /// Prerequisites the job lacks right now. An active job stops at its next run without them.
+  final List<Prereq> missingNow;
 
   /// The countdown's clock; tests pass a fixed one.
   final DateTime Function() now;
@@ -323,8 +397,12 @@ class JobCard extends StatelessWidget {
             ]),
             if (s.missing.isNotEmpty) ...[
               const SizedBox(height: 12),
-              Text('Stopped: missing ${s.missing.map(_prereqLabel).join(', ')}.',
+              Text('Stopped: missing ${_prereqs(s.missing)}.',
                   style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error)),
+            ] else if (s.mode != JobMode.stopped && missingNow.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Text('Stops at its next run: missing ${_prereqs(missingNow)}.',
+                  style: theme.textTheme.bodySmall?.copyWith(color: StatusColors.of(context).warn)),
             ],
             if (s.lastError != null) ...[
               const SizedBox(height: 8),

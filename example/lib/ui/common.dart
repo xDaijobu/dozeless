@@ -42,7 +42,8 @@ class SectionHeader extends StatelessWidget {
       );
 }
 
-/// Pull to refresh around a list that can always be pulled, even when short.
+/// Pull to refresh around a short page that can always be pulled. Every child is built, not just the visible
+/// ones, so `Scrollable.ensureVisible` can reach any of them.
 class Refreshable extends StatelessWidget {
   const Refreshable({super.key, required this.onRefresh, required this.children});
 
@@ -52,10 +53,10 @@ class Refreshable extends StatelessWidget {
   @override
   Widget build(BuildContext context) => RefreshIndicator(
         onRefresh: onRefresh,
-        child: ListView(
+        child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-          children: children,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
         ),
       );
 }

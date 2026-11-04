@@ -47,6 +47,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   int _loads = 0;
   int _tab = 0;
   Timer? _timer;
+  final _setupKey = GlobalKey();
 
   ExampleBackend get _backend => widget.backend;
 
@@ -113,9 +114,14 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
 
   Future<void> _fix(SetupAction action) async {
     try {
-      if (!await _backend.fix(action)) {
+      final problem = switch (await _backend.fix(action)) {
+        FixResult.opened => null,
+        FixResult.noPage => 'This phone has no ${action.label} page.',
+        FixResult.wontAsk => 'Android won’t ask for ${action.label} again.',
+      };
+      if (problem != null) {
         _say(
-          'Nothing opened for ${action.label}. Change it in app info instead.',
+          action == SetupAction.appDetails ? problem : '$problem Change it in app info.',
           action: action == SetupAction.appDetails
               ? null
               : SnackBarAction(label: 'App info', onPressed: () => _fix(SetupAction.appDetails)),
@@ -127,9 +133,20 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     await _refresh();
   }
 
+  /// Shows the Setup checklist on the Overview tab.
+  void _showSetup() {
+    setState(() => _tab = 0);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final setup = _setupKey.currentContext;
+      if (setup == null || !setup.mounted) return;
+      Scrollable.ensureVisible(setup, duration: const Duration(milliseconds: 300), curve: Curves.easeOutCubic);
+    });
+  }
+
   void _lab(LabAction action) {
     final (done, failed) = switch (action) {
-      LabAction.runNow => ('Running spike now', 'Couldn’t run spike'),
+      // Runs are serialized: a manual run waits for one already going, up to the slow job's 20 s.
+      LabAction.runNow => ('Asked spike to run. It starts once no other run is busy.', 'Couldn’t run spike'),
       LabAction.fireIn10s => ('The next spike alarm fires in 10 s', 'Couldn’t move the alarm'),
       LabAction.simulateLostAlarm => ('Dropped the spike alarm and ran the watchdog', 'Couldn’t simulate a lost alarm'),
       LabAction.clearRows => ('Cleared all rows', 'Couldn’t clear the rows'),
@@ -184,19 +201,27 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   Widget _body(Snapshot snapshot) {
     final now = DateTime.now();
     return IndexedStack(index: _tab, children: [
-      OverviewScreen(snapshot: snapshot, onRefresh: _reload, onStart: _start, onStop: _stop, onFix: _fix),
+      OverviewScreen(
+        snapshot: snapshot,
+        onRefresh: _reload,
+        onStart: _start,
+        onStop: _stop,
+        onFix: _fix,
+        onShowSetup: _showSetup,
+        setupKey: _setupKey,
+      ),
       RunsScreen(
         rows: snapshot.rows,
-        jobs: JobsState.of(snapshot.statuses),
+        jobs: JobsSummary(exampleJobs, snapshot.statuses, snapshot.prerequisites),
         now: now,
         onRefresh: _reload,
         onStart: _start,
-        onShowSetup: () => setState(() => _tab = 0),
+        onShowSetup: _showSetup,
       ),
       LabScreen(
         rows: snapshot.rows,
         prerequisites: snapshot.prerequisites,
-        spikeScheduled: snapshot.statuses.containsKey(spikeJobInfo.id),
+        spikeMode: snapshot.statuses[spikeJobInfo.id]?.mode,
         now: now,
         onRefresh: _reload,
         onAction: _lab,

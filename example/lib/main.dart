@@ -40,19 +40,23 @@ class PluginBackend implements ExampleBackend {
   Future<void> stopJobs() => stopSpike();
 
   @override
-  Future<bool> fix(SetupAction action) => switch (action) {
+  Future<FixResult> fix(SetupAction action) => switch (action) {
         SetupAction.location => _request(Permission.location),
         SetupAction.backgroundLocation => _request(Permission.locationAlways),
         SetupAction.notification => _request(Permission.notification),
-        SetupAction.batteryOptimization => Dozeless.openSettings(Setting.batteryOptimization),
-        SetupAction.appDetails => Dozeless.openSettings(Setting.appDetails),
-        SetupAction.exactAlarm => Dozeless.openSettings(Setting.exactAlarm),
-        SetupAction.autostart => Dozeless.openSettings(Setting.autostart),
-        SetupAction.forceStopGuard => Dozeless.openSettings(Setting.forceStopGuard),
+        SetupAction.batteryOptimization => _open(Setting.batteryOptimization),
+        SetupAction.appDetails => _open(Setting.appDetails),
+        SetupAction.exactAlarm => _open(Setting.exactAlarm),
+        SetupAction.autostart => _open(Setting.autostart),
+        SetupAction.forceStopGuard => _open(Setting.forceStopGuard),
       };
 
-  /// False when Android no longer shows the dialog, so the user has to go to app info.
-  static Future<bool> _request(Permission permission) async => !(await permission.request()).isPermanentlyDenied;
+  /// Permanently denied also comes back right after the dialog that denied it for good.
+  static Future<FixResult> _request(Permission permission) async =>
+      (await permission.request()).isPermanentlyDenied ? FixResult.wontAsk : FixResult.opened;
+
+  static Future<FixResult> _open(Setting setting) async =>
+      await Dozeless.openSettings(setting) ? FixResult.opened : FixResult.noPage;
 
   @override
   Future<void> lab(LabAction action) async {

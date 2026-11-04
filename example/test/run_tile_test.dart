@@ -1,5 +1,7 @@
+import 'package:dozeless_example/spike_row.dart';
 import 'package:dozeless_example/ui/format.dart';
 import 'package:dozeless_example/ui/run_tile.dart';
+import 'package:dozeless_example/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,10 +11,12 @@ import 'support.dart';
 void main() {
   final firedAt = DateTime(2026, 11, 4, 14, 2, 13);
 
+  Widget tile(SpikeRow row) => themed(RunTile(row: row, interval: const Duration(minutes: 1)));
+
   testWidgets('shows time, job, trigger, delay, duration, fix, bucket and events', (tester) async {
-    await tester.pumpWidget(themed(RunTile(
-      row: runRow(firedAt: firedAt, delayMs: 1200, durationMs: 2100, fixAgeMs: 3000, events: 'boot,processExit'),
-    )));
+    await tester.pumpWidget(tile(
+      runRow(firedAt: firedAt, delayMs: 1200, durationMs: 2100, fixAgeMs: 3000, events: 'boot,processExit'),
+    ));
 
     expect(find.text('14:02:13'), findsOneWidget);
     expect(find.text('spike'), findsOneWidget);
@@ -29,7 +33,7 @@ void main() {
     usePhoneScreen(tester);
     tester.platformDispatcher.textScaleFactorTestValue = 1.3;
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-    await tester.pumpWidget(themed(RunTile(row: runRow(firedAt: firedAt))));
+    await tester.pumpWidget(tile(runRow(firedAt: firedAt)));
     expect(MediaQuery.textScalerOf(tester.element(find.byType(RunTile))).scale(10), closeTo(13, 0.01));
 
     final time = tester.renderObject<RenderParagraph>(find.text('14:02:13'));
@@ -38,16 +42,15 @@ void main() {
   });
 
   testWidgets('marks runs in Doze', (tester) async {
-    await tester.pumpWidget(themed(RunTile(row: runRow(firedAt: firedAt, deviceIdle: true))));
+    await tester.pumpWidget(tile(runRow(firedAt: firedAt, deviceIdle: true)));
 
     expect(find.text('Doze'), findsOneWidget);
     expect(find.byIcon(Icons.bedtime), findsOneWidget);
   });
 
   testWidgets('describes each location status', (tester) async {
-    Future<void> show(String status, {int? fixAgeMs}) => tester.pumpWidget(themed(RunTile(
-          row: runRow(firedAt: firedAt, locationStatus: status, fixAgeMs: fixAgeMs, accuracyM: null),
-        )));
+    Future<void> show(String status, {int? fixAgeMs}) =>
+        tester.pumpWidget(tile(runRow(firedAt: firedAt, locationStatus: status, fixAgeMs: fixAgeMs, accuracyM: null)));
 
     await show('LAST_KNOWN', fixAgeMs: 240000);
     expect(find.text('last known fix, 4 min old'), findsOneWidget);
@@ -59,10 +62,26 @@ void main() {
     expect(find.text('no location needed'), findsOneWidget);
   });
 
+  testWidgets('marks a run 10 s late or more and a fix two intervals old', (tester) async {
+    Color? colorOf(String text) => tester.widget<Text>(find.text(text)).style?.color;
+
+    await tester.pumpWidget(tile(runRow(firedAt: firedAt, delayMs: 9999, fixAgeMs: 119999, accuracyM: null)));
+    final warn = StatusColors.of(tester.element(find.byType(RunTile))).warn;
+    expect(colorOf('10.0 s late'), isNot(warn));
+    expect(find.text('fix 2 min old'), findsNothing);
+    expect(colorOf('fix 1 min 59 s old'), isNot(warn));
+    expect(find.byIcon(Icons.running_with_errors), findsNothing);
+
+    await tester.pumpWidget(tile(runRow(firedAt: firedAt, delayMs: 240000, fixAgeMs: 120000, accuracyM: null)));
+    expect(colorOf('4 min late'), warn);
+    expect(find.byIcon(Icons.running_with_errors), findsOneWidget);
+    expect(colorOf('stale fix, 2 min old'), warn);
+  });
+
   testWidgets('shows a manual run that fired early and its error', (tester) async {
-    await tester.pumpWidget(themed(RunTile(
-      row: runRow(firedAt: firedAt, trigger: 'manual', delayMs: -300, error: 'current: TimeoutException'),
-    )));
+    await tester.pumpWidget(tile(
+      runRow(firedAt: firedAt, trigger: 'manual', delayMs: -300, error: 'current: TimeoutException'),
+    ));
 
     expect(find.text('manual'), findsOneWidget);
     expect(find.text('0.3 s early'), findsOneWidget);
