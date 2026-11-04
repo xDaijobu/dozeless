@@ -38,9 +38,9 @@ internal class JobStore(context: Context) {
 
     var stopText: StopText
         get() = StopText(
-            title = prefs.getString(KEY_NOTIFY_TITLE, null) ?: "Proses latar belakang berhenti",
-            body = prefs.getString(KEY_NOTIFY_BODY, null) ?: "Buka aplikasi untuk memperbaiki pengaturan.",
-            channelName = prefs.getString(KEY_NOTIFY_CHANNEL, null) ?: "Status latar belakang",
+            title = prefs.getString(KEY_NOTIFY_TITLE, null) ?: "Background work stopped",
+            body = prefs.getString(KEY_NOTIFY_BODY, null) ?: "Open the app to fix its permissions or battery settings.",
+            channelName = prefs.getString(KEY_NOTIFY_CHANNEL, null) ?: "Background status",
         )
         set(value) = edit {
             putString(KEY_NOTIFY_TITLE, value.title)

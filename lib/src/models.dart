@@ -211,9 +211,9 @@ class SystemEvent {
 /// Text of the ordinary notification shown when jobs stop for a missing prerequisite.
 class StopNotification {
   const StopNotification({
-    this.title = 'Proses latar belakang berhenti',
-    this.body = 'Buka aplikasi untuk memperbaiki pengaturan.',
-    this.channelName = 'Status latar belakang',
+    this.title = 'Background work stopped',
+    this.body = 'Open the app to fix its permissions or battery settings.',
+    this.channelName = 'Background status',
   });
 
   final String title;
