@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="force_stop_guard_label">Pengaman force stop</string>
-    <string name="force_stop_guard_description">Mencegah aplikasi dihentikan paksa dari Pengaturan supaya pelacakan tetap jalan. Matikan dulu sebelum uninstall.</string>
+    <string name="force_stop_guard_label">Force-stop guard</string>
+    <string name="force_stop_guard_description">Keeps the app from being force-stopped in Settings, so its background jobs keep running. Turn it off before uninstalling.</string>
 </resources>
