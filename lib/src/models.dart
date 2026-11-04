@@ -4,7 +4,7 @@ import 'wire.dart';
 enum JobTrigger { alarm, boot, watchdog, packageReplaced, timeChanged, prerequisiteLost, resumed, manual }
 
 /// Conditions a job needs. [batteryUnrestricted] and [notBackgroundRestricted]
-/// are enforced for every job on every Android version, requested or not (spec §4).
+/// are enforced for every job on every Android version, requested or not.
 enum Prereq { location, backgroundLocation, batteryUnrestricted, notBackgroundRestricted }
 
 /// How a job's next alarm is armed.

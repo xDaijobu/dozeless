@@ -13,7 +13,7 @@ import android.util.Log
 
 /**
  * Its onCreate runs every time the app process starts, including when an alarm wakes it, so the runtime-only
- * ACTION_SHUTDOWN receiver is registered whenever the process is alive (spec §3 ProcessStartHook).
+ * ACTION_SHUTDOWN receiver is registered whenever the process is alive.
  */
 class ProcessStartHook : ContentProvider() {
     override fun onCreate(): Boolean {

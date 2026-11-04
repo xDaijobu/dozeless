@@ -8,7 +8,7 @@ import 'dispatcher.dart';
 import 'job_context.dart';
 import 'models.dart';
 
-/// AlarmManager-only job runner (spec §3).
+/// AlarmManager-only job runner.
 class Dozeless {
   Dozeless._();
 

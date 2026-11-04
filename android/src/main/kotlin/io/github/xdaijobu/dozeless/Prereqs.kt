@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
 
-/** What the device allows right now (spec §4 table). */
+/** What the device allows right now. */
 internal data class PrereqSnapshot(
     val location: Boolean,
     val backgroundLocation: Boolean,

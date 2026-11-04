@@ -10,7 +10,7 @@ const slowJobId = 'slow';
 const spikeInterval = Duration(minutes: 1);
 const slowInterval = Duration(minutes: 5);
 
-/// Feasibility job (spec §9): every minute, take a location and write a row.
+/// Feasibility job: every minute, take a location and write a row.
 @pragma('vm:entry-point')
 Future<void> spikeJob(JobContext ctx) async {
   final startedAt = DateTime.now().millisecondsSinceEpoch;
@@ -44,7 +44,7 @@ Future<void> spikeJob(JobContext ctx) async {
       lat: lat, lon: lon, accuracy: accuracy, fixAgeMs: fixAgeMs, status: status, error: error);
 }
 
-/// Wake-lock test (spec §9): a job that deliberately awaits 20 seconds.
+/// Wake-lock test: a job that deliberately awaits 20 seconds.
 @pragma('vm:entry-point')
 Future<void> slowJob(JobContext ctx) async {
   final startedAt = DateTime.now().millisecondsSinceEpoch;

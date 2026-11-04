@@ -6,12 +6,12 @@
 Warning: Activity not started, its current task has been brought to the front
 [22:42:32] 3. Di-swipe dari Recents: ✅ 2/2 proses mati setelah swipe; alarm(0s,idle) alarm(0s,idle)
 adb.exe: device offline
-/c/Users/UseR/AppData/Local/Temp/claude/D--Cris-MSN-Github-Xamarin-sato/ed8048bf-6ca7-4885-b3ff-df23da940387/scratchpad/matrix.sh: line 16: * 1000 : syntax error: operand expected (error token is "* 1000 ")
+<scratch>/matrix.sh: line 16: * 1000 : syntax error: operand expected (error token is "* 1000 ")
 [22:46:02] 4. Proses dibunuh: ❌ 0/2 pid ? -> mati (kill -9); 
 [22:47:17] 5. Layar mati: ✅ 1/1 alarm(4s)
 [22:50:41] 6. Doze (deep IDLE): ❌ 0/2 idle=true di 0 run; 
 adb.exe: device 'emulator-5554' not found
 adb.exe: device 'emulator-5554' not found
 adb.exe: device 'emulator-5554' not found
-/c/Users/UseR/AppData/Local/Temp/claude/D--Cris-MSN-Github-Xamarin-sato/ed8048bf-6ca7-4885-b3ff-df23da940387/scratchpad/matrix.sh: line 16: * 1000 : syntax error: operand expected (error token is "* 1000 ")
+<scratch>/matrix.sh: line 16: * 1000 : syntax error: operand expected (error token is "* 1000 ")
 error: device 'emulator-5554' not found

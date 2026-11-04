@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 
-/** One-shot exact alarm per job id, with an inexact fallback (spec §3 AlarmScheduler). */
+/** One-shot exact alarm per job id, with an inexact fallback. */
 internal class AlarmScheduler(private val context: Context) {
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 

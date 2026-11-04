@@ -10,7 +10,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import java.util.TimeZone
 
-/** Device facts for `JobContext.device` and the record's Jam/Perangkat/Sistem fields (spec §7). */
+/** Device facts for `JobContext.device` and the record's Jam/Perangkat/Sistem fields. */
 internal object DeviceState {
     @SuppressLint("HardwareIds")
     fun read(context: Context): Map<String, Any?> {

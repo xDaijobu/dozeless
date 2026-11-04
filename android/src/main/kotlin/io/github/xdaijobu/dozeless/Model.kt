@@ -34,7 +34,7 @@ internal enum class Prereq(val wire: String) {
     companion object {
         fun fromWire(value: String): Prereq? = entries.firstOrNull { it.wire == value }
 
-        /** Without these no alarm runs in the background, so every job needs them (spec §4). */
+        /** Without these no alarm runs in the background, so every job needs them. */
         val ALWAYS: Set<Prereq> = setOf(BATTERY_UNRESTRICTED, NOT_BACKGROUND_RESTRICTED)
     }
 }

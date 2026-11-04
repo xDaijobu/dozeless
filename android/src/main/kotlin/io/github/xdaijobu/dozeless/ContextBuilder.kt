@@ -4,7 +4,7 @@ import android.content.Context
 
 internal class BuiltContext(val map: Map<String, Any?>, val deliveredSeq: Long)
 
-/** Builds the map that becomes `JobContext` in Dart (spec §3 JobContext table). */
+/** Builds the map that becomes `JobContext` in Dart. */
 internal object ContextBuilder {
     fun build(app: Context, job: Job, trigger: String, scheduledAt: Long, firedAt: Long): BuiltContext {
         val boot = BootInfo.read(app)

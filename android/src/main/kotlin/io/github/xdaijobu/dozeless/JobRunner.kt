@@ -7,7 +7,7 @@ import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
 
-/** The native flow of spec §3 "Alur native saat alarm berbunyi". Main thread only. */
+/** The native flow when an alarm fires. Main thread only. */
 internal object JobRunner {
     private val main = Handler(Looper.getMainLooper())
     private val locks = RunLocks()
@@ -23,7 +23,7 @@ internal object JobRunner {
         }
         Log.i(TAG, "fire id=$id trigger=$trigger delayMs=${firedAt - scheduledAt}")
 
-        // Prerequisites (spec §3 step 3). A stopped job only comes back through Reconciler (trigger=resumed).
+        // Prerequisites. A stopped job only comes back through Reconciler (trigger=resumed).
         val missing = PrereqReader.read(app).missing(job.spec.effectiveRequires)
         var runTrigger = trigger
         if (missing.isNotEmpty()) {
@@ -42,7 +42,7 @@ internal object JobRunner {
             onDone()
             return
         } else if (trigger != Triggers.MANUAL) {
-            // Chain the next alarm before anything below can fail (spec §3 step 2).
+            // Chain the next alarm before anything below can fail.
             AlarmScheduler(app).armAndRecord(store, id, firedAt + job.spec.everyMs)
         }
 

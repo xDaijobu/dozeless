@@ -19,7 +19,7 @@ internal object SchedulePolicy {
         else -> Decision.Keep
     }
 
-    /** Hourly watchdog (spec §3): overdue means the alarm is more than 2x the interval late. */
+    /** Hourly watchdog: overdue means the alarm is more than 2x the interval late. */
     fun onWatchdog(nextRunAt: Long?, everyMs: Long, now: Long, armed: Boolean): Decision = when {
         nextRunAt == null || now - nextRunAt > 2 * everyMs -> Decision.ArmAt(now + REARM_DELAY_MS, Triggers.WATCHDOG)
         !armed -> Decision.ArmAt(rearmAt(nextRunAt, now))
