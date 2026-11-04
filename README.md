@@ -367,7 +367,7 @@ What to know before you use it:
 |---|---|
 | **Overview** | Job status hero (mode, next-run countdown, run count, last error), a card per job, Start/Stop, and a setup checklist of prerequisites with Fix buttons |
 | **Runs** | Timeline of the last 24 h of runs with delay, duration, location and fix age, a Doze badge, standby bucket and system events |
-| **Lab** | Statistics for the 30/90-minute screen-off test (expected, ran %, median delay, PASS / NOT YET) and debug actions (run now, alarm in 10 s, simulate lost alarm, clear rows) |
+| **Lab** | Statistics for the 30/90-minute screen-off test (expected, ran %, median delay, NOT YET / PASS / FAIL) and debug actions (run now, alarm in 10 s, simulate lost alarm, clear rows) |
 
 Two jobs write a row to `spike.db` on every run: `spike` every minute (location, delay, Doze, screen, fix age) and `slow` every 5 minutes (awaits 20 seconds to prove the wake lock holds). The app declares both force-stop helpers; its Quick Settings tile is labelled `Spike`.
 
