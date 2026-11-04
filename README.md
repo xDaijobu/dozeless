@@ -210,7 +210,7 @@ Future<void> main() async {
 - Callbacks must be top-level or static functions annotated with `@pragma('vm:entry-point')`. Closures are rejected with an `ArgumentError`.
 - `Dozeless.initialize()` re-arms everything when the app starts and re-checks prerequisites every time the app is resumed. Call it before `runApp`.
 - `schedule()` limits, also enforced with an `ArgumentError`: `id` is 1 to 64 of `A-Z a-z 0-9 _ . -`, `every` is at least 1 minute, `timeout` is at most 50 s (default 45 s).
-- dozeless does not request permissions. If a job `requires` location, the app must request it itself, for example with `permission_handler` as the [example app](#example-app) does. Otherwise the job stops at its first alarm.
+- dozeless does not request permissions. If a job `requires` location, the app must request it itself, for example with `permission_handler` as the [example app](#example-app) does. Otherwise the job stops at its first alarm, or sooner when the app starts or resumes.
 - `stopNotification` sets the text of the notification shown when a job stops. The default is in English; apps can pass their own `title`, `body` and `channelName`.
 - Other calls: `cancel(id)`, `status(id)`, `runNow(id)`, `checkPrerequisites()`, `openSettings(Setting)`, `disableForceStopGuard()`, and `debugFireIn`, `debugSimulateLostAlarm`, `debugRunWatchdog` for testing.
 
@@ -242,7 +242,7 @@ A force stop (App info → **Force stop**, and on some brands swiping the app aw
 
 | | What happens | Verified | Setup |
 |---|---|---|---|
-| **Recovery on unstop** | Opening the app re-arms every job. On Android 15+, other user actions that end the stopped state do too, without opening the app: the system then sends `BOOT_COMPLETED`, and dozeless reconciles. On older versions those actions re-arm nothing, apart from the tile below. | Android 16 | none |
+| **Recovery on unstop** | Opening the app re-arms every job. On Android 15+, other user actions that end the stopped state do too, without opening the app: the system then sends `BOOT_COMPLETED`, and dozeless reconciles. On older versions those actions re-arm nothing, apart from the tile below (verified on Android 16 only). | Android 16 | none |
 | **Quick Settings tile** | Pulling down Quick Settings while the tile is visible starts the app process in the background and re-arms every job. The app is not opened. | Android 16 | declare the service; the user adds the tile once |
 | **Force-stop guard** | A device admin without policies. While it is active, Settings disables the app's **Force stop** button. | Android 16 | declare the receiver; the user activates it once |
 
@@ -314,7 +314,7 @@ What to know before you use it:
 - It only disables the **Force stop** button in Settings. `adb shell am force-stop`, task killers and OEM cleaners that force-stop apps directly are not affected.
 - Android does not let the user uninstall an app with an active device admin. They have to turn it off first (Settings → Security → Device admin apps), or the app calls `disableForceStopGuard()`.
 - The admin uses no policies (`res/xml/dozeless_device_admin.xml` in the plugin), so it cannot lock, wipe or watch the device. Google Play still reviews apps that declare a device admin; check its policy before you ship it in a store build.
-- On HyperOS, the system's activation dialog is followed by a generic red **Danger** device-admin warning (erase all data, screen lock, camera; OK unlocks after 8 s), even though dozeless uses no policies. Tell users before they activate it. Observed on a POCO X6 Pro (HyperOS 3, Android 16) on 2026-11-04. That check cancelled at this screen, so the guard itself has not been tried on a real device.
+- On HyperOS, the system's activation dialog is followed by a generic red **Danger** device-admin warning (erase all data, screen lock, camera; OK unlocks after 8 s), even though dozeless uses no policies. Tell users before they activate it. Observed on a POCO X6 Pro (HyperOS 3, Android 16) on 2026-11-04. That check was cancelled at this screen, so the guard itself has not been tried on a real device.
 - If the app is the **device owner** (company-owned phones provisioned through an MDM or `dpm set-device-owner`), dozeless also calls `setUserControlDisabledPackages` on Android 11+, which blocks force stop and clear data on every Settings page. Not tested yet.
 
 ## Reference
