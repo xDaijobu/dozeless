@@ -1,0 +1,170 @@
+import 'package:flutter/material.dart';
+
+import '../spike_row.dart';
+import 'common.dart';
+import 'format.dart';
+import 'model.dart';
+import 'run_tile.dart';
+import 'theme.dart';
+
+/// The last 24 hours of runs, newest first, grouped by day.
+class RunsScreen extends StatefulWidget {
+  const RunsScreen({
+    super.key,
+    required this.rows,
+    required this.scheduled,
+    required this.now,
+    required this.onRefresh,
+    required this.onStart,
+  });
+
+  /// Newest first.
+  final List<SpikeRow> rows;
+
+  /// Whether any job is scheduled; the empty state says what to do next.
+  final bool scheduled;
+  final DateTime now;
+  final Future<void> Function() onRefresh;
+  final VoidCallback onStart;
+
+  @override
+  State<RunsScreen> createState() => _RunsScreenState();
+}
+
+class _RunsScreenState extends State<RunsScreen> {
+  static const _all = '';
+
+  String _job = _all;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.rows.isEmpty) {
+      return Refreshable(onRefresh: widget.onRefresh, children: [
+        RunsEmptyState(scheduled: widget.scheduled, onStart: widget.onStart),
+      ]);
+    }
+    final rows = _job == _all ? widget.rows : widget.rows.where((r) => r.jobId == _job).toList();
+    final entries = <Object>[];
+    String? day;
+    for (final r in rows) {
+      final label = dayLabel(DateTime.fromMillisecondsSinceEpoch(r.firedAt), widget.now);
+      if (label != day) entries.add(day = label);
+      entries.add(r);
+    }
+    final theme = Theme.of(context);
+    return RefreshIndicator(
+      onRefresh: widget.onRefresh,
+      child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        itemCount: entries.length + 1,
+        itemBuilder: (context, i) {
+          if (i == 0) return _header(rows);
+          return switch (entries[i - 1]) {
+            final SpikeRow r => RunTile(row: r),
+            final label => Padding(
+                padding: const EdgeInsets.fromLTRB(4, 20, 4, 4),
+                child: Text('$label', style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary)),
+              ),
+          };
+        },
+      ),
+    );
+  }
+
+  Widget _header(List<SpikeRow> rows) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        RunsSummary(rows: rows),
+        const SizedBox(height: 12),
+        SegmentedButton<String>(
+          showSelectedIcon: false,
+          segments: [
+            const ButtonSegment(value: _all, label: Text('All jobs')),
+            for (final job in exampleJobs) ButtonSegment(value: job.id, label: Text(job.id)),
+          ],
+          selected: {_job},
+          onSelectionChanged: (s) => setState(() => _job = s.single),
+        ),
+        if (rows.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: Text('No $_job runs in the last 24 hours.', textAlign: TextAlign.center),
+          ),
+      ]);
+}
+
+/// Runs, runs in Doze and runs without a location, for the rows shown.
+class RunsSummary extends StatelessWidget {
+  const RunsSummary({super.key, required this.rows});
+
+  final List<SpikeRow> rows;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final noLocation = rows.where((r) => r.locationStatus == 'FAILED').length;
+    Widget figure(String label, int n, {Color? color}) => Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(count(n), style: theme.textTheme.titleLarge?.copyWith(fontFeatures: tabularFigures, color: color)),
+            Text(label, style: theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+          ]),
+        );
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(children: [
+          figure('runs in 24 h', rows.length),
+          figure('in Doze', rows.where((r) => r.deviceIdle).length),
+          figure('no location', noLocation, color: noLocation > 0 ? theme.colorScheme.error : null),
+        ]),
+      ),
+    );
+  }
+}
+
+/// Shown before the first run: says how to get one.
+class RunsEmptyState extends StatelessWidget {
+  const RunsEmptyState({super.key, required this.scheduled, required this.onStart});
+
+  final bool scheduled;
+  final VoidCallback onStart;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final muted = theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 72, 16, 16),
+      child: Column(children: [
+        DecoratedBox(
+          decoration: BoxDecoration(color: theme.colorScheme.secondaryContainer, shape: BoxShape.circle),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Icon(Icons.timeline, size: 40, color: theme.colorScheme.onSecondaryContainer),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(scheduled ? 'Waiting for the first run' : 'No runs yet', style: theme.textTheme.titleLarge),
+        const SizedBox(height: 8),
+        Text(
+          scheduled
+              ? 'The spike job adds a run here every minute and the slow job every 5 minutes, '
+                  'also while the screen is off.'
+              : 'Start the jobs and every run shows up here: the spike job every minute, '
+                  'the slow job every 5 minutes, also while the screen is off.',
+          textAlign: TextAlign.center,
+          style: muted,
+        ),
+        const SizedBox(height: 8),
+        Text('For a run right away, use Run now in the Lab.', textAlign: TextAlign.center, style: muted),
+        if (!scheduled) ...[
+          const SizedBox(height: 24),
+          FilledButton.icon(
+            onPressed: onStart,
+            icon: const Icon(Icons.play_arrow_rounded),
+            label: const Text('Start jobs'),
+          ),
+        ],
+      ]),
+    );
+  }
+}
