@@ -1,5 +1,5 @@
 name: dozeless
-description: "AlarmManager-only background job runner for Flutter on Android. Job logic is written in Dart and runs in a headless engine."
+description: "Background jobs for Flutter on Android that run every minute, even in Doze, and survive reboots and app updates. No foreground service, no permanent notification."
 version: 0.1.0
 repository: https://github.com/xDaijobu/dozeless
 issue_tracker: https://github.com/xDaijobu/dozeless/issues
