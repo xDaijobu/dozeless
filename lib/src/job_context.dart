@@ -5,7 +5,7 @@ import 'wire.dart';
 /// `@pragma('vm:entry-point')`; it runs in a background FlutterEngine.
 typedef JobCallback = Future<void> Function(JobContext ctx);
 
-/// Everything the plugin knows about one run (spec §3 JobContext table).
+/// Everything the plugin knows about one run.
 class JobContext {
   const JobContext({
     required this.jobId,

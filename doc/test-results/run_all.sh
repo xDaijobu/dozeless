@@ -1,9 +1,9 @@
 #!/bin/bash
 # Runs matrix.sh on one emulator per API level, one at a time.
 # usage: run_all.sh 34 35 33 ...
-SP=/c/Users/UseR/AppData/Local/Temp/claude/D--Cris-MSN-Github-Xamarin-sato/ed8048bf-6ca7-4885-b3ff-df23da940387/scratchpad
-APK='C:/Users/UseR/AppData/Local/Temp/claude/D--Cris-MSN-Github-Xamarin-sato/ed8048bf-6ca7-4885-b3ff-df23da940387/scratchpad/bg_jobs/example/build/app/outputs/flutter-apk/app-debug.apk'
-EMU=/c/Users/UseR/AppData/Local/Android/sdk/emulator/emulator.exe
+SP=${SP:-./scratch}
+APK="$SP/bg_jobs/example/build/app/outputs/flutter-apk/app-debug.apk"
+EMU=${EMU:-emulator}
 OUT=$SP/matrix_out
 PROGRESS=$OUT/progress.log
 mkdir -p "$OUT"

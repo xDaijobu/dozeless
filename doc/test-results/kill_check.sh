@@ -1,7 +1,7 @@
 #!/bin/bash
 # Re-runs only condition 4 (process killed) on the Android 13 AVD, with the run-as -> am kill fallback.
-SP=/c/Users/UseR/AppData/Local/Temp/claude/D--Cris-MSN-Github-Xamarin-sato/ed8048bf-6ca7-4885-b3ff-df23da940387/scratchpad
-EMU=/c/Users/UseR/AppData/Local/Android/sdk/emulator/emulator.exe
+SP=${SP:-./scratch}
+EMU=${EMU:-emulator}
 OUT=$SP/matrix_out; LOG=$OUT/api33-kill.log; DB=$OUT/api33-kill.db
 PKG=com.example.bg_jobs_example; SQLITE=/d/platform-tools/sqlite3.exe
 export MSYS_NO_PATHCONV=1

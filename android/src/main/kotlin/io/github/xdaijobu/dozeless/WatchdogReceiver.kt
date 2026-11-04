@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 
-/** Hourly inexact alarm that repairs broken chains, replacing WorkManager (spec §3 WatchdogReceiver). */
+/** Hourly inexact alarm that repairs broken chains, replacing WorkManager. */
 class WatchdogReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION_WATCHDOG) check(context.applicationContext)

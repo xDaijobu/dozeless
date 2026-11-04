@@ -4,7 +4,7 @@ import 'wire.dart';
 enum JobTrigger { alarm, boot, watchdog, packageReplaced, timeChanged, prerequisiteLost, resumed, manual }
 
 /// Conditions a job needs. [batteryUnrestricted] and [notBackgroundRestricted]
-/// are enforced for every job on every Android version, requested or not (spec §4).
+/// are enforced for every job on every Android version, requested or not.
 enum Prereq { location, backgroundLocation, batteryUnrestricted, notBackgroundRestricted }
 
 /// How a job's next alarm is armed.
@@ -211,9 +211,9 @@ class SystemEvent {
 /// Text of the ordinary notification shown when jobs stop for a missing prerequisite.
 class StopNotification {
   const StopNotification({
-    this.title = 'Proses latar belakang berhenti',
-    this.body = 'Buka aplikasi untuk memperbaiki pengaturan.',
-    this.channelName = 'Status latar belakang',
+    this.title = 'Background work stopped',
+    this.body = 'Open the app to fix its permissions or battery settings.',
+    this.channelName = 'Background status',
   });
 
   final String title;

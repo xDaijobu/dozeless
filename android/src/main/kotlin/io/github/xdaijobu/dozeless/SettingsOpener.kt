@@ -9,7 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 
-/** OEM "Autostart" pages. Without Autostart these brands do not deliver BOOT_COMPLETED (spec §4). */
+/** OEM "Autostart" pages. Without Autostart these brands do not deliver BOOT_COMPLETED. */
 internal object AutostartIntents {
     fun candidates(manufacturer: String): List<Pair<String, String>> = when (manufacturer.lowercase()) {
         "xiaomi", "redmi", "poco" -> listOf(
