@@ -12,9 +12,9 @@
 - **No foreground service, no permanent notification.** Built only on `AlarmManager`, without WorkManager. A notification appears only when a job stops for a missing prerequisite.
 - **Your job logic stays in Dart.** Callbacks run in a background FlutterEngine, and dozeless waits for them with a wake lock and a timeout.
 - **Survives a killed process, a reboot and an app update.** Jobs come back without the app being opened.
-- **Recovers from a force stop.** Android blocks every alarm until a user action brings the app back, then every job is re-armed. Two opt-in helpers go further: a Quick Settings tile that does it without opening the app, and a guard that disables Settings' **Force stop** button.
+- **Recovers from a force stop.** Android blocks every alarm until a user action brings the app back. Opening the app re-arms every job; on Android 15+ other user actions that end the stopped state do too. Two opt-in helpers go further: a Quick Settings tile that re-arms them without opening the app, and a guard that disables Settings' **Force stop** button.
 
-Tested on emulators, Android 11 to 16. Real devices are still to be tested, starting with HyperOS. See [Tested](#tested).
+Tested on emulators, Android 11 to 16. Real devices are still to be tested, starting with HyperOS, where a first forced-Doze check saw late alarms. See [Tested](#tested) and [Known limits](#known-limits).
 
 ## Quick start
 
@@ -114,7 +114,7 @@ Each usual option gives up something a job that runs every minute needs:
 
 – means this comparison makes no claim about that cell.
 
-What dozeless asks in return: every job needs battery *Unrestricted* ([Prerequisites](#prerequisites)), a force stop still stops everything until a user action ([Surviving a force stop](#surviving-a-force-stop)), and the ✅ above rest on emulator tests ([Tested](#tested)).
+What dozeless asks in return: every job needs battery *Unrestricted* ([Prerequisites](#prerequisites)), a force stop still stops everything until a user action ([Surviving a force stop](#surviving-a-force-stop)), and the ✅ above rest on emulator tests ([Tested](#tested)). A first forced-Doze check on a HyperOS phone saw late alarms ([Known limits](#known-limits)).
 
 ## How it works
 
@@ -125,7 +125,7 @@ dozeless chains one-shot exact alarms (`setExactAndAllowWhileIdle`) per job. Eve
 3. It takes a wake lock and calls your callback with a `JobContext` in a cached headless FlutterEngine, one run per job at a time.
 4. It waits until the callback returns, throws or times out, records the status and releases the wake lock.
 
-Around the chain, an hourly watchdog repairs lost or late alarms, and a receiver re-arms everything after boot, app update, clock changes and a force stop.
+Around the chain, an hourly watchdog repairs lost or late alarms, and a receiver re-arms everything after boot, app update and clock changes. After a force stop, opening the app does it: see [Surviving a force stop](#surviving-a-force-stop).
 
 ## Tested
 
@@ -144,7 +144,7 @@ Emulator results (Pixel 9 / Pixel 5 profiles, battery set to *Unrestricted*). Ea
 
 ¹ Android blocks every alarm of a force-stopped app until the user brings it back. That holds for every app. dozeless recovers as soon as the app is opened and reports the stop as a `processExit` event (`USER_REQUESTED`). See [Surviving a force stop](#surviving-a-force-stop) for ways back that do not need the app to be opened.
 
-**Real devices are still to be tested, starting with HyperOS.** What the emulator results cover:
+**Real devices are still to be tested, starting with HyperOS.** So far there are only observations from one phone, not test results: see [Known limits](#known-limits) and [Force-stop guard](#force-stop-guard). What the emulator results cover:
 
 - **Short checks.** Each ✅ on Android 11 to 15 is 1 or 2 runs per condition, 13 `spike` runs per version. The two Doze runs per version fired on time, except one 19 s late on Android 15.
 - **Doze on Android 16.** Release build, screen off, unplugged, forced Doze for 7 minutes: `spike` ran 7 times (`idle=true`) with alarms 4 to 11 ms late, and the 20-second `slow` job finished twice.
@@ -210,7 +210,8 @@ Future<void> main() async {
 - Callbacks must be top-level or static functions annotated with `@pragma('vm:entry-point')`. Closures are rejected with an `ArgumentError`.
 - `Dozeless.initialize()` re-arms everything when the app starts and re-checks prerequisites every time the app is resumed. Call it before `runApp`.
 - `schedule()` limits, also enforced with an `ArgumentError`: `id` is 1 to 64 of `A-Z a-z 0-9 _ . -`, `every` is at least 1 minute, `timeout` is at most 50 s (default 45 s).
-- `StopNotification`'s default text is Indonesian, so pass your own.
+- dozeless does not request permissions. If a job `requires` location, the app must request it itself, for example with `permission_handler` as the [example app](#example-app) does. Otherwise the job stops at its first alarm.
+- `stopNotification` sets the text of the notification shown when a job stops. The default is in English; apps can pass their own `title`, `body` and `channelName`.
 - Other calls: `cancel(id)`, `status(id)`, `runNow(id)`, `checkPrerequisites()`, `openSettings(Setting)`, `disableForceStopGuard()`, and `debugFireIn`, `debugSimulateLostAlarm`, `debugRunWatchdog` for testing.
 
 ### Prerequisites
@@ -241,7 +242,7 @@ A force stop (App info → **Force stop**, and on some brands swiping the app aw
 
 | | What happens | Verified | Setup |
 |---|---|---|---|
-| **Recovery on unstop** | Opening the app, or any other user action that ends the stopped state, re-arms every job. On Android 15+ that includes actions that do not open the app: the system then sends `BOOT_COMPLETED`, and dozeless reconciles. | Android 16 | none |
+| **Recovery on unstop** | Opening the app re-arms every job. On Android 15+, other user actions that end the stopped state do too, without opening the app: the system then sends `BOOT_COMPLETED`, and dozeless reconciles. On older versions those actions re-arm nothing, apart from the tile below. | Android 16 | none |
 | **Quick Settings tile** | Pulling down Quick Settings while the tile is visible starts the app process in the background and re-arms every job. The app is not opened. | Android 16 | declare the service; the user adds the tile once |
 | **Force-stop guard** | A device admin without policies. While it is active, Settings disables the app's **Force stop** button. | Android 16 | declare the receiver; the user activates it once |
 
@@ -313,6 +314,7 @@ What to know before you use it:
 - It only disables the **Force stop** button in Settings. `adb shell am force-stop`, task killers and OEM cleaners that force-stop apps directly are not affected.
 - Android does not let the user uninstall an app with an active device admin. They have to turn it off first (Settings → Security → Device admin apps), or the app calls `disableForceStopGuard()`.
 - The admin uses no policies (`res/xml/dozeless_device_admin.xml` in the plugin), so it cannot lock, wipe or watch the device. Google Play still reviews apps that declare a device admin; check its policy before you ship it in a store build.
+- On HyperOS, the system's activation dialog is followed by a generic red **Danger** device-admin warning (erase all data, screen lock, camera; OK unlocks after 8 s), even though dozeless uses no policies. Tell users before they activate it. Observed on a POCO X6 Pro (HyperOS 3, Android 16) on 2026-11-04. That check cancelled at this screen, so the guard itself has not been tried on a real device.
 - If the app is the **device owner** (company-owned phones provisioned through an MDM or `dpm set-device-owner`), dozeless also calls `setUserControlDisabledPackages` on Android 11+, which blocks force stop and clear data on every Settings page. Not tested yet.
 
 ## Reference
@@ -353,6 +355,7 @@ What to know before you use it:
 
 - **Force stop** stops everything until a user action brings the app back (Android rule, see [Surviving a force stop](#surviving-a-force-stop)).
 - **Xiaomi/HyperOS and other OEMs** may treat "swipe away" or their cleaner like a force stop, and may block `BOOT_COMPLETED` without Autostart. Ask users to enable Autostart and lock the app in Recents.
+- **HyperOS may hold alarms in Doze** (an observation, not a test result). On a POCO X6 Pro (HyperOS 3, Android 16) on 2026-11-04, a short forced-Doze check through adb (screen on, simulated unplug) saw HyperOS freeze the app right after a run, and the next alarms ran about 4 minutes late, when Doze ended. This is not yet verified with a real screen-off run. Keep asking users for Autostart and battery *Unrestricted*, although both were already on in this check.
 - **Location in the background can be stale.** Android 8+ gives background apps a fresh location only a few times per hour, so `getCurrentPosition` may return a cached fix with no error. Record the fix time and treat old fixes as stale.
 - Runs of different jobs in one process are serialized by Android's broadcast queue. Keep timeouts short.
 
@@ -374,6 +377,8 @@ flutter build apk --debug && adb install -r build/app/outputs/flutter-apk/app-de
 adb shell dumpsys deviceidle whitelist +io.github.xdaijobu.dozeless_example
 ```
 
+Then open the app, tap **Start jobs** and fix the Setup checklist: the app schedules nothing by itself, and `spike` needs location "Allow all the time".
+
 ## Debugging
 
 ```bash
@@ -391,9 +396,9 @@ Job callbacks run in a separate engine, so hot reload does not reach them. Use h
 
 ```bash
 flutter test                                  # Dart API, models, dispatcher
-cd example && flutter test                    # example statistics and UI
-cd example && flutter build apk --config-only && cd android && ./gradlew :dozeless:testDebugUnitTest   # Kotlin (JDK 17+)
-cd example && flutter test integration_test/dozeless_test.dart -d <device> --no-uninstall
+(cd example && flutter test)                  # example statistics and UI
+(cd example && flutter build apk --config-only && cd android && ./gradlew :dozeless:testDebugUnitTest)   # Kotlin (JDK 17+)
+(cd example && flutter test integration_test/dozeless_test.dart -d <device> --no-uninstall)
 ```
 
 Integration tests need battery *Unrestricted* for the example app (`adb shell dumpsys deviceidle whitelist +io.github.xdaijobu.dozeless_example`). `--no-uninstall` keeps that setting between runs.

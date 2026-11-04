@@ -139,4 +139,12 @@ void main() {
     expect(s.runCount, 5);
     expect(s.stoppedAt!.millisecondsSinceEpoch, 1700000001000);
   });
+
+  test('StopNotification defaults to English text', () {
+    expect(const StopNotification().toMap(), {
+      'notificationTitle': 'Background work stopped',
+      'notificationBody': 'Open the app to fix its permissions or battery settings.',
+      'notificationChannel': 'Background status',
+    });
+  });
 }

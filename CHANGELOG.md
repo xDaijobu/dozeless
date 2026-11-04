@@ -1,3 +1,7 @@
+## Unreleased
+
+* The default `StopNotification` text is now English: title `Background work stopped`, body `Open the app to fix its permissions or battery settings.`, channel name `Background status`.
+
 ## 0.1.0
 
 * Exact-alarm job chain per job id with an inexact fallback, re-armed before every run.
