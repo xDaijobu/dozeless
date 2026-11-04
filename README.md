@@ -8,7 +8,7 @@
 ![Platform: Android](https://img.shields.io/badge/platform-Android-3DDC84)
 ![minSdk 24](https://img.shields.io/badge/minSdk-24-blue)
 
-- **Every minute, also in Doze.** One-shot exact alarms keep firing with the screen off and in deep idle.
+- **Every minute, even in Doze.** One-shot exact alarms keep firing with the screen off and in deep idle.
 - **No foreground service, no permanent notification.** Built only on `AlarmManager`, without WorkManager. A notification appears only when a job stops for a missing prerequisite.
 - **Your job logic stays in Dart.** Callbacks run in a background FlutterEngine, and dozeless waits for them with a wake lock and a timeout.
 - **Survives a killed process, a reboot and an app update.** Jobs come back without the app being opened.
@@ -55,14 +55,14 @@ Future<void> main() async {
 }
 ```
 
-**4. Allow it and watch it.** Every job needs battery *Unrestricted*. For a quick test, start the app and run:
+**4. Allow it and watch it.** Every job needs battery *Unrestricted*. For a quick test, start the app and run this within a minute, before the first alarm fires:
 
 ```bash
 adb shell dumpsys deviceidle whitelist +<package>   # battery Unrestricted, for tests
 adb logcat -s Dozeless:I flutter:I
 ```
 
-A job whose alarm fires without it stops and shows a notification. It resumes once the setting is fixed and the app comes back to the foreground. In a real app, ask the user: see [Prerequisites](#prerequisites).
+A job whose alarm fires without it stops, and shows a notification if the app may post them. It resumes once the setting is fixed and the app comes back to the foreground. In a real app, ask the user: see [Prerequisites](#prerequisites).
 
 ## Screenshots
 
@@ -109,7 +109,7 @@ Each usual option gives up something a job that runs every minute needs:
 | Keeps its schedule in Doze | ✅ | ❌ Doze defers it further | – | – |
 | No notification while it runs | ✅ | – | ❌ on screen for as long as it runs | – |
 | Waits for your callback | ✅ | – | – | ❌ does not wait |
-| Holds the wake lock until the callback ends | ✅ | – | – | ❌ released too early |
+| Holds the wake lock until the callback ends or times out | ✅ | – | – | ❌ released too early |
 | When exact alarms are denied | ✅ falls back to inexact | – | – | ❌ skips silently |
 
 – means this comparison makes no claim about that cell.
@@ -391,7 +391,7 @@ Job callbacks run in a separate engine, so hot reload does not reach them. Use h
 
 ```bash
 flutter test                                  # Dart API, models, dispatcher
-cd example && flutter test                    # example statistics
+cd example && flutter test                    # example statistics and UI
 cd example && flutter build apk --config-only && cd android && ./gradlew :dozeless:testDebugUnitTest   # Kotlin (JDK 17+)
 cd example && flutter test integration_test/dozeless_test.dart -d <device> --no-uninstall
 ```
